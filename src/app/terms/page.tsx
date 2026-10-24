@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Terms of Service",
-  description: "The terms governing use of the SEO Rating Shopify app.",
-};
+  description: "The terms governing use of the SEO Rating Shopify app (TNS SEO & AI Visibility): plans, billing, AI credits, acceptable use and liability.",
+  path: "/terms",
+});
 
 const SECTIONS = [
   { id: "the-service", label: "1. The service" },

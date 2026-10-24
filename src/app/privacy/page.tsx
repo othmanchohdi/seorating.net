@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Privacy Policy",
-  description: "How SEO Rating collects, uses and protects data from your Shopify store.",
-};
+  description: "How SEO Rating collects, uses and protects data from your Shopify store, which providers process it, and how to delete it.",
+  path: "/privacy",
+});
 
 const SECTIONS = [
   { id: "who-we-are", label: "1. Who we are" },

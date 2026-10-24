@@ -1,79 +1,71 @@
 import Link from "next/link";
+import { Logo } from "./Logo";
+import { APP_STORE_NAME, COMPANY_NAME, SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
+
+const COLUMNS = [
+  {
+    title: "Product",
+    links: [
+      { href: "/#features", label: "Features" },
+      { href: "/#pricing", label: "Pricing" },
+      { href: "/docs", label: "Documentation" },
+      { href: "/blog", label: "Blog" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { href: "/about", label: "About us" },
+      { href: "/contact", label: "Contact us" },
+      { href: "/support", label: "Support" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { href: "/terms", label: "Terms of Service" },
+      { href: "/privacy", label: "Privacy Policy" },
+      { href: "/data-deletion", label: "Data deletion" },
+    ],
+  },
+];
 
 export function Footer() {
   return (
-    <footer style={{ borderTop: "1px solid var(--color-border)", background: "#fff" }}>
-      <div
-        className="container"
-        style={{
-          padding: "48px 24px",
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: 32,
-        }}
-      >
+    <footer className="site-footer">
+      <div className="container footer-grid">
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-            <div style={{ width: 22, height: 22, borderRadius: 6, background: "var(--color-primary)" }} />
-            <span style={{ fontSize: 15.5, fontWeight: 600 }}>SEO Rating</span>
+            <Logo size={22} />
+            <span style={{ fontSize: 15.5, fontWeight: 600 }}>{SITE_NAME}</span>
           </div>
           <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: "var(--color-text-faint)" }}>
-            seorating.net — listed on the Shopify App Store as &ldquo;TNS SEO &amp; AI Visibility&rdquo;. A
-            product of TheNextSprout.
+            seorating.net is listed on the Shopify App Store as &ldquo;{APP_STORE_NAME}&rdquo;. A product of{" "}
+            {COMPANY_NAME}.
+          </p>
+          <p style={{ margin: "12px 0 0", fontSize: 14 }}>
+            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
           </p>
         </div>
-        <FooterColumn
-          label="Product"
-          links={[
-            { href: "/#features", label: "Features" },
-            { href: "/docs", label: "Documentation" },
-            { href: "/#pricing", label: "Pricing" },
-          ]}
-        />
-        <FooterColumn
-          label="Company"
-          links={[
-            { href: "/about", label: "About us" },
-            { href: "/contact", label: "Contact us" },
-            { href: "mailto:apps@thenextsprout.com", label: "apps@thenextsprout.com" },
-          ]}
-        />
-        <FooterColumn
-          label="Legal"
-          links={[
-            { href: "/terms", label: "Terms of Service" },
-            { href: "/privacy", label: "Privacy Policy" },
-            { href: "/support", label: "Support" },
-            { href: "/data-deletion", label: "Data Deletion" },
-          ]}
-        />
+        {COLUMNS.map((col) => (
+          <nav key={col.title} className="footer-col" aria-label={col.title}>
+            <span className="mono-label-muted" style={{ marginBottom: 2 }}>
+              {col.title}
+            </span>
+            {col.links.map((l) => (
+              <Link key={l.href} href={l.href}>
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+        ))}
       </div>
-      <div className="container" style={{ padding: "0 24px 40px" }}>
-        <span className="mono-label-muted">
-          © 2026 TheNextSprout. No ranking or traffic outcomes are guaranteed.
+      <div className="container footer-bottom">
+        <span>
+          © 2026 {COMPANY_NAME}. No ranking or traffic outcomes are guaranteed.
         </span>
+        <span>Product views shown are illustrative examples.</span>
       </div>
     </footer>
-  );
-}
-
-function FooterColumn({
-  label,
-  links,
-}: {
-  label: string;
-  links: { href: string; label: string }[];
-}) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 9, fontSize: 14 }}>
-      <span className="mono-label-muted" style={{ marginBottom: 2 }}>
-        {label}
-      </span>
-      {links.map((link) => (
-        <Link key={link.href} href={link.href} style={{ color: "var(--color-ink-soft)" }}>
-          {link.label}
-        </Link>
-      ))}
-    </div>
   );
 }

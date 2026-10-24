@@ -16,7 +16,7 @@ export function LegalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="container" style={{ padding: "64px 24px 96px" }}>
+    <div className="container container-narrow" style={{ padding: "64px 24px 96px" }}>
       {draftNote && (
         <div className="draft-banner">
           <p>Draft — requires legal review</p>
@@ -46,7 +46,7 @@ export function LegalLayout({
 
         <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>{children}</div>
       </div>
-    </main>
+    </div>
   );
 }
 

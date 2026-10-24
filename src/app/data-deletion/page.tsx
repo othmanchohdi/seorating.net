@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Data Deletion",
-  description: "How to delete your SEO Rating data and revoke Google access.",
-};
+  description: "How to delete your SEO Rating data, what happens when you uninstall the Shopify app, and how to revoke Google access.",
+  path: "/data-deletion",
+});
 
 const SECTIONS = [
   { id: "delete-store-data", label: "1. Delete your store data" },

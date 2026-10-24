@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Support",
-  description: "How to get help with SEO Rating.",
-};
+  description: "How to get help with the SEO Rating Shopify app: email support, response times, the in-app help center and common questions.",
+  path: "/support",
+});
 
 const SECTIONS = [
   { id: "how-to-get-help", label: "1. How to get help" },

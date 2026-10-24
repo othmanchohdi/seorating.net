@@ -1,375 +1,342 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { JsonLd, ORG_ID, breadcrumbs } from "@/lib/jsonld";
+import { pageMetadata } from "@/lib/metadata";
+import { CREDIT_COSTS, PLANS } from "@/lib/pricing";
+import { APP_STORE_NAME, SITE_NAME, absoluteUrl } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Documentation",
-  description: "A walkthrough of every module in SEO Rating as it works today.",
-};
+export const metadata = pageMetadata({
+  title: "Documentation: How to Use SEO Rating",
+  description:
+    "A walkthrough of every SEO Rating module as it works today: SEO tags, alt text, page optimization, structured data, Search Console, llms.txt, IndexNow, keyword research, PageSpeed audits and AI credits.",
+  path: "/docs",
+});
 
 const TOC = [
-  { href: "#getting-started", n: "01", label: "Getting started" },
-  { href: "#seo-tags", n: "02", label: "SEO Tags" },
-  { href: "#page-optimization", n: "03", label: "Page Optimization" },
-  { href: "#search-appearance", n: "04", label: "Search Appearance" },
-  { href: "#url-management", n: "05", label: "URL Management" },
-  { href: "#ai-visibility", n: "06", label: "AI Visibility" },
-  { href: "#keyword-research", n: "07", label: "Keyword Research" },
-  { href: "#store-performance", n: "08", label: "Store Performance" },
-  { href: "#ai-credits", n: "09", label: "AI Credits", highlight: true },
+  { id: "getting-started", label: "Getting started" },
+  { id: "seo-tags", label: "SEO Tags" },
+  { id: "page-optimization", label: "Page Optimization" },
+  { id: "search-appearance", label: "Search Appearance" },
+  { id: "url-management", label: "URL Management" },
+  { id: "ai-visibility", label: "AI Visibility" },
+  { id: "keyword-research", label: "Keyword Research" },
+  { id: "store-performance", label: "Store Performance" },
+  { id: "ai-credits", label: "AI Credits" },
 ];
 
-function H2({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 style={{ margin: "0 0 14px", fontSize: 28, fontWeight: 600, letterSpacing: "-0.02em" }}>{children}</h2>
-  );
-}
-
-function H3({ children }: { children: React.ReactNode }) {
-  return <h3 style={{ margin: "0 0 8px", fontSize: 17, fontWeight: 600 }}>{children}</h3>;
-}
-
-function P({ children, last }: { children: React.ReactNode; last?: boolean }) {
-  return (
-    <p style={{ margin: last ? 0 : "0 0 18px", fontSize: 16, lineHeight: 1.68, color: "var(--color-ink-soft)" }}>
-      {children}
-    </p>
-  );
-}
+const MODIFIED = "2026-10-24";
 
 export default function Documentation() {
   return (
-    <main className="container" style={{ padding: "64px 24px 96px" }}>
-      <span className="mono-label">Documentation</span>
-      <h1 style={{ margin: "14px 0 0", maxWidth: 720, fontSize: 44, lineHeight: 1.06, letterSpacing: "-0.03em", fontWeight: 600 }}>
-        How to use SEO Rating
-      </h1>
-      <p style={{ margin: "20px 0 0", maxWidth: 640, fontSize: 17.5, lineHeight: 1.6, color: "var(--color-text-soft)" }}>
-        A walkthrough of every module in the app as it works today — what each one does, when to use
-        it, and what it changes in your store. Nothing here is a roadmap item.
-      </p>
+    <>
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "TechArticle",
+            headline: `How to use ${SITE_NAME}`,
+            description: "A walkthrough of every module in the SEO Rating Shopify app.",
+            url: absoluteUrl("/docs"),
+            dateModified: MODIFIED,
+            author: { "@id": ORG_ID },
+            publisher: { "@id": ORG_ID },
+            about: { "@type": "SoftwareApplication", name: SITE_NAME },
+          },
+          breadcrumbs([{ name: "Docs", path: "/docs" }]),
+        ]}
+      />
+      <div className="container container-narrow" style={{ padding: "64px 24px 96px" }}>
+        <span className="eyebrow">Documentation</span>
+        <h1 style={{ margin: "14px 0 0", maxWidth: 720, fontSize: "clamp(34px,5vw,44px)", lineHeight: 1.06, letterSpacing: "-0.03em", fontWeight: 600 }}>
+          How to use {SITE_NAME}
+        </h1>
+        <p className="lead" style={{ maxWidth: 640, fontSize: 17.5 }}>
+          A walkthrough of every module in the app as it works today: what each one does, when to use it, and what it
+          changes in your store. Nothing here is a roadmap item.
+        </p>
 
-      <div style={{ marginTop: 52, display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 48 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
-          {TOC.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              style={{
-                border: `1px solid ${item.highlight ? "var(--color-primary-soft-border)" : "var(--color-border)"}`,
-                borderRadius: 12,
-                padding: "16px 18px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 4,
-                background: item.highlight ? "var(--color-primary-soft)" : undefined,
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 11,
-                  color: item.highlight ? "#8d84d8" : "var(--color-text-faintest)",
-                }}
-              >
-                {item.n}
-              </span>
-              <span style={{ fontSize: 15, fontWeight: 600, color: item.highlight ? "#2c2470" : "var(--color-text)" }}>
-                {item.label}
-              </span>
-            </a>
-          ))}
-        </div>
+        <nav aria-label="Documentation sections" style={{ marginTop: 52 }}>
+          <ol style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,220px),1fr))", gap: 12 }}>
+            {TOC.map((t, i) => {
+              const hl = t.id === "ai-credits";
+              return (
+                <li key={t.id}>
+                  <a href={`#${t.id}`} className={`card${hl ? " card-soft" : ""}`} style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 4, borderRadius: 12 }}>
+                    <span className="mono" style={{ fontSize: 11, color: hl ? "var(--color-primary)" : "var(--color-text-faintest)" }}>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span style={{ fontSize: 15, fontWeight: 600, color: hl ? "var(--color-primary-deep)" : "var(--color-text)" }}>{t.label}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
 
-        <div style={{ maxWidth: 760, display: "flex", flexDirection: "column", gap: 56 }}>
-          <div id="getting-started">
-            <H2>Getting started</H2>
-            <H3>Installing the app</H3>
-            <P>
-              Install SEO Rating from the Shopify App Store listing (&ldquo;TNS SEO &amp; AI
-              Visibility&rdquo;). Shopify shows you the permissions the app needs before you approve
-              — it reads and writes the SEO-related parts of your store: products, pages, blog
-              articles, uploaded files, your theme (read-only, to find images missing alt text), and
-              URL redirects. Approving the install opens the app inside your Shopify admin; there is
-              no separate account or password to create.
-            </P>
-            <H3>Connecting your store</H3>
-            <P>
-              On first open, the app scans your store to build a picture of what exists: how many
-              products and pages you have, which of them are missing meta titles or descriptions,
-              which images have no alt text, and what your current robots.txt and structured data
-              look like. The scan is read-only — nothing is changed until you approve a change
-              yourself.
-            </P>
-            <P>
-              One optional connection unlocks extra data: connecting{" "}
-              <strong style={{ fontWeight: 600 }}>Google Search Console</strong> (see Search
-              Appearance) brings your real search performance and indexing status into the app.
-            </P>
-            <div style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: "18px 20px", background: "var(--color-surface)" }}>
-              <p style={{ margin: "0 0 8px", fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.07em", textTransform: "uppercase", color: "var(--color-text-faint)" }}>
+        <div className="docs-prose" style={{ marginTop: 56, maxWidth: 760 }}>
+          <section id="getting-started">
+            <h2>Getting started</h2>
+            <h3>Installing the app</h3>
+            <p>
+              Install {SITE_NAME} from its Shopify App Store listing (&ldquo;{APP_STORE_NAME}&rdquo;). Shopify shows you the
+              permissions the app needs before you approve. It reads and writes the SEO-related parts of your store:
+              products, pages and blog articles, uploaded files, your theme (to find images missing alt text) and URL
+              redirects. Approving the install opens the app inside your Shopify admin. There&rsquo;s no separate account
+              or password to create.
+            </p>
+            <h3>What happens after install</h3>
+            <p>
+              Your catalog syncs automatically in the background: titles, descriptions, images, variants and
+              collections. Nothing in your store changes. The sync just gives every tool the data it needs, and product
+              creates, updates and deletes keep it current through Shopify webhooks, so there&rsquo;s no re-sync button to
+              remember.
+            </p>
+            <p>
+              There&rsquo;s no setup wizard. Every tool works from sensible defaults the moment you open it. Settings lets
+              you set an <strong>AI brand name</strong> (the name AI-written copy credits, if it differs from your Shopify
+              store name) and a default output language. Both are optional.
+            </p>
+            <div className="card" style={{ background: "var(--color-surface)", borderRadius: 12 }}>
+              <p className="mono-label-muted" style={{ margin: "0 0 8px" }}>
                 Suggested first session
               </p>
-              <ol style={{ margin: 0, padding: "0 0 0 18px", display: "flex", flexDirection: "column", gap: 7, fontSize: 15, lineHeight: 1.62, color: "var(--color-ink-soft)" }}>
-                <li>Let the initial scan finish, then read the dashboard summary.</li>
+              <ol style={{ paddingLeft: 18, display: "flex", flexDirection: "column", gap: 7, fontSize: 15, lineHeight: 1.62 }}>
                 <li>Run a Store Performance audit so you have a baseline.</li>
-                <li>Fix missing meta tags and alt text — the highest-volume, lowest-risk wins.</li>
-                <li>Generate your llms.txt and agents.md files.</li>
-                <li>Connect Search Console, then work through Page Optimization page by page.</li>
+                <li>Fix missing meta tags and alt text, the highest-volume and lowest-risk wins.</li>
+                <li>Turn on structured data and generate your llms.txt and agents.md files.</li>
+                <li>Connect Google Search Console, then work through Page Optimization page by page.</li>
               </ol>
             </div>
-          </div>
+          </section>
 
-          <div id="seo-tags">
-            <H2>SEO Tags</H2>
-            <P>
-              Two related tools for the tags that decide how your pages are described in search
-              results and to AI systems: meta tags and image alt tags.
-            </P>
-            <H3>Meta titles and descriptions</H3>
-            <P>
-              The app lists every product, collection, page and article with its current meta title
-              and description, flagging what&rsquo;s missing, duplicated, too long or too short. You
-              can write tags in two ways:
-            </P>
-            <ul style={{ margin: "0 0 18px", padding: "0 0 0 18px", display: "flex", flexDirection: "column", gap: 9, fontSize: 16, lineHeight: 1.68, color: "var(--color-ink-soft)" }}>
+          <section id="seo-tags">
+            <h2>SEO Tags</h2>
+            <p>
+              Two related tools for the text that decides how your pages are described in search results and to AI
+              systems: meta tags and image alt tags.
+            </p>
+            <h3>Meta titles and descriptions</h3>
+            <p>
+              Edit the meta title and description of every product, collection, page, blog and article. There are three
+              ways to fill them:
+            </p>
+            <ul style={{ paddingLeft: 18, display: "flex", flexDirection: "column", gap: 9 }}>
               <li>
-                <strong style={{ fontWeight: 600 }}>Templates.</strong> Build a pattern once using
-                store variables — for example a product-title-plus-brand pattern — and apply it
-                across a whole resource type. Fast, predictable, and free of AI credit cost.
+                <strong>Template.</strong> Build a pattern once with variables like <code className="inline-code">{"{Product title}"}</code>{" "}
+                or <code className="inline-code">{"{Shop name}"}</code> and apply it across many items at once. Templates
+                don&rsquo;t use AI credits.
               </li>
               <li>
-                <strong style={{ fontWeight: 600 }}>AI-assisted.</strong> Have the app draft tags
-                from the actual page content when a template would read poorly, or for your
-                important pages. Drafts appear next to the current value so you can compare before
-                saving.
+                <strong>AI Generate.</strong> Write unique tags for each item from its actual content. Drafts appear next to
+                the current value so you can compare before saving.
+              </li>
+              <li>
+                <strong>Import.</strong> Upload a CSV of tags you already wrote elsewhere and apply them in bulk.
               </li>
             </ul>
-            <H3>Image alt tags</H3>
-            <P>
-              The app finds images with missing or empty alt text and generates descriptions of what
-              is actually in each image, rather than repeating the product title. You can generate
-              for a single image, a product, or in bulk across the catalogue, review the results in a
-              list, edit any of them, and then save. Alt text is written back to the image record in
-              Shopify.
-            </P>
-            <P last>
-              Alt text helps accessibility first and search second — screen readers read exactly what
-              you save, so review anything that describes people, claims or context.
-            </P>
-          </div>
+            <p>
+              Applying a template can fill only empty fields or overwrite existing ones; you choose. Either way, every save
+              creates a checkpoint, and <strong>Restore previous</strong> writes the old values straight back to Shopify.
+            </p>
+            <h3>Image alt tags</h3>
+            <p>
+              The app finds images with missing or empty alt text and writes descriptions of what&rsquo;s actually in each
+              image. It looks at the picture, not just the filename. It covers product, collection and article images,
+              standalone uploads in your Files library, and images used in your theme such as banners and section images.
+              Review and edit the results in a list, then save; alt text is written back to Shopify.
+            </p>
+            <p>
+              Alt text helps accessibility first and search second. Screen readers read exactly what you save, so review
+              anything that describes people, claims or context.
+            </p>
+          </section>
 
-          <div id="page-optimization">
-            <H2>Page Optimization</H2>
-            <P>
-              A real on-page audit, one page at a time. Pick a product, collection, page or article
-              and the app checks the things that actually affect how it is understood: title and meta
-              description, heading structure, content length and depth, keyword usage and placement,
-              internal links, image alt coverage, and whether the page has the structured data it
-              should.
-            </P>
-            <P>
-              Each finding says what is wrong and why it matters. Where the fix is editorial rather
-              than technical, the <strong style={{ fontWeight: 600 }}>AI content optimizer</strong>{" "}
-              can draft improved copy for that specific section — informed by the keyword you are
-              targeting if you have one from Keyword Research.
-            </P>
-            <div style={{ borderLeft: "3px solid var(--color-primary)", background: "#f7f6fe", padding: "16px 18px", borderRadius: "0 10px 10px 0" }}>
-              <p style={{ margin: 0, fontSize: 16, lineHeight: 1.68, color: "#2c2470" }}>
-                <strong style={{ fontWeight: 600 }}>Review before publish.</strong> Nothing the
-                optimizer writes goes live on its own. You see the proposed change beside the current
-                content, edit it freely, and then choose to publish or discard. This applies to every
-                AI-assisted write in the app.
-              </p>
+          <section id="page-optimization">
+            <h2>Page Optimization</h2>
+            <p>
+              A real on-page audit for products, collections, articles, blogs, other pages and your home page. Each page
+              gets an <strong>SEO Health</strong> checklist across four categories (Basic SEO, Additional checks, Title
+              readability and Content readability), covering keyword presence and position, content length, URL length,
+              internal and outbound links, image usage and paragraph length. Each check says what&rsquo;s wrong and why it
+              matters.
+            </p>
+            <p>
+              The <strong>AI Optimizer</strong> takes a focus keyword and drafts a title, description, handle and tags for
+              that page in one go. You can carry a keyword over from Keyword Research. If you change a URL handle, the app
+              creates a redirect from the old URL automatically, so existing links keep working.
+            </p>
+            <div className="callout" style={{ borderRadius: "0 10px 10px 0", borderLeft: "3px solid var(--color-primary)" }}>
+              <strong>Review before publish.</strong> Nothing the optimizer writes goes live on its own. You see the proposed
+              change beside the current content, edit it freely, then publish or discard. This applies to every AI-assisted
+              write in the app, and every save creates a restorable checkpoint.
             </div>
-          </div>
+          </section>
 
-          <div id="search-appearance">
-            <H2>Search Appearance</H2>
-            <P>
-              Everything that controls how your store is represented to search engines at a technical
-              level.
-            </P>
-            <H3>Structured data (JSON-LD schema)</H3>
-            <P>
-              The app generates and injects JSON-LD describing your products, breadcrumbs and pages,
-              so search engines and AI assistants can read price, availability and other attributes
-              as data instead of guessing from your HTML. You choose which schema types are active,
-              and the app keeps the output aligned with your store data as it changes.
-            </P>
-            <H3>Local Business schema</H3>
-            <P>
-              If you have a physical location, enter your business name, address, phone, opening
-              hours and service area, and the app publishes Local Business structured data for it.
-              Useful for stores where local intent matters and for making the business details
-              unambiguous to AI assistants.
-            </P>
-            <H3>Google Search Console</H3>
-            <P>
-              Connect your Google account and select your store&rsquo;s property. The app then shows
-              your real Search Console data — queries, impressions, clicks and indexing status — next
-              to the pages they belong to, so you can see which pages are actually earning search
-              visibility. You can disconnect the account at any time from inside the app, which
-              permanently deletes the stored connection and tokens. Submitting a URL for faster
-              re-crawling is handled separately via IndexNow (see AI Visibility below), not through a
-              Google-specific indexing request.
-            </P>
-            <H3>Robots.txt management</H3>
-            <P last>
-              View and edit your store&rsquo;s crawler rules in the app, including rules for AI
-              crawlers. This is the one area where a mistake can hide your store from search, so the
-              app shows you the effective file before you save — read it carefully, and keep a note
-              of what you changed.
-            </P>
-          </div>
-
-          <div id="url-management">
-            <H2>URL Management</H2>
-            <H3>Sitemap</H3>
-            <P>
-              See what is in your store&rsquo;s sitemap — which products, collections, pages and
-              articles are listed for crawlers, and which of your URLs are absent. Use it as the
-              checklist for what search engines and AI crawlers can find, and pair it with Search
-              Console data to spot pages that are listed but not indexed.
-            </P>
-            <H3>Broken links</H3>
-            <P last>
-              The app scans your store for links that no longer resolve — deleted products, renamed
-              pages, dead outbound links — and lists where each broken link appears so you can fix or
-              redirect it. Broken links waste crawl budget and lose customers mid-journey, so this is
-              worth re-running after any big catalogue change.
-            </P>
-          </div>
-
-          <div id="ai-visibility">
-            <H2>AI Visibility</H2>
-            <P>
-              The part of the app that exists because people now ask assistants like ChatGPT,
-              Perplexity and Gemini what to buy. These tools make your store readable and
-              referenceable to those systems. No tool can guarantee an AI assistant will cite you —
-              what you can control is whether your store is easy to read correctly.
-            </P>
-            <H3>llms.txt and agents.md</H3>
-            <P>
-              The app generates these two files from your real store data and keeps them hosted on
-              your domain. <code className="inline-code">llms.txt</code> is a clean, structured
-              summary of what your store is and what it sells, in a form language models can ingest
-              without wading through theme markup.{" "}
-              <code className="inline-code">agents.md</code> describes your store for AI agents,
-              including the key pages and policies. You review the generated content and can edit it
-              before publishing.
-            </P>
-            <H3>IndexNow</H3>
-            <P>
-              IndexNow lets you notify participating search engines the moment a URL changes, rather
-              than waiting for a crawl. Enable it in the app and new and updated URLs are submitted
-              for you, which shortens the gap between publishing a change and having it reflected in
-              search. Google does not currently participate in the IndexNow protocol, so this applies
-              to the engines that do.
-            </P>
-            <H3>LLM Outreach</H3>
-            <P last>
-              A view of how your store reads to a language model: the app queries assistants about
-              your store and brand and shows you what comes back, so you can see what they currently
-              believe about you and where the picture is thin or wrong. Use it to decide what content
-              to strengthen — outdated details, missing product context, unclear policies — then fix
-              it with Page Optimization and re-check.
-            </P>
-          </div>
-
-          <div id="keyword-research">
-            <H2>Keyword Research</H2>
-            <P>
-              Search a term and get real keyword data — search volume, related terms and variations —
-              for the location and language you sell in. It is not a separate silo: any keyword you
-              find can be sent straight into Page Optimization as the target for a specific page, so
-              the content optimizer drafts with that term in mind.
-            </P>
-            <P last>
-              The <strong style={{ fontWeight: 600 }}>AI article idea generator</strong> turns the
-              keywords you have chosen into concrete article angles for your store&rsquo;s blog —
-              what to write, and which search intent it answers. Ideas are drafts to choose from, not
-              a publishing queue.
-            </P>
-          </div>
-
-          <div id="store-performance">
-            <H2>Store Performance</H2>
-            <P>
-              Run a real Google PageSpeed Insights audit against your live store URLs, for mobile and
-              desktop, from inside the app. You get the same Core Web Vitals and opportunity findings
-              Google reports, explained in plain language and grouped by what is actually worth acting
-              on.
-            </P>
-            <P last>
-              Performance fixes usually live in your theme or apps rather than in your SEO settings,
-              so treat this as a diagnostic: run a baseline early, re-run after theme or app changes,
-              and use the findings as the brief for whoever maintains your theme.
-            </P>
-          </div>
-
-          <div
-            id="ai-credits"
-            style={{ border: "1px solid var(--color-primary-soft-border)", background: "#f7f6fe", borderRadius: 16, padding: 32 }}
-          >
-            <h2 style={{ margin: "0 0 14px", fontSize: 28, fontWeight: 600, letterSpacing: "-0.02em", color: "#2c2470" }}>
-              AI Credits
-            </h2>
-            <p style={{ margin: "0 0 18px", fontSize: 16, lineHeight: 1.68, color: "#3a3470" }}>
-              AI work costs real money to run, so instead of hiding that behind a vague &ldquo;fair
-              use&rdquo; policy, the app meters it. Anything that calls a model — drafting meta tags,
-              generating alt text, optimizing content, generating article ideas — consumes credits.
-              Everything else, including audits, templates, structured data, robots.txt, sitemap and
-              broken-link checks, does not.
+          <section id="search-appearance">
+            <h2>Search Appearance</h2>
+            <p>Everything that controls how your store is represented to search engines at a technical level.</p>
+            <h3>Structured data (JSON-LD)</h3>
+            <p>
+              Seven schema types, each a toggle: <strong>Product</strong> and <strong>Breadcrumb</strong> on product pages,{" "}
+              <strong>Collection</strong> on collection pages, <strong>Article</strong> and <strong>Blog</strong> on your blog,
+              and <strong>Site search box</strong> and <strong>Organization</strong> on your home page. They&rsquo;re added
+              through the app&rsquo;s theme app embed, which you switch on once in the theme editor. Then use{" "}
+              <em>Run test</em> to confirm the markup appears on your live store.
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 18 }}>
-              <div style={{ background: "#fff", border: "1px solid #e2dffa", borderRadius: 12, padding: "18px 20px" }}>
-                <h3 style={{ margin: "0 0 6px", fontSize: 16.5, fontWeight: 600, color: "#2c2470" }}>
-                  You see the cost before you run it
-                </h3>
-                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65, color: "#4a4470" }}>
-                  Each AI action shows its credit cost up front, and bulk actions show the total for
-                  the batch before you confirm. Nothing runs without you agreeing to the cost.
-                </p>
-              </div>
-              <div style={{ background: "#fff", border: "1px solid #e2dffa", borderRadius: 12, padding: "18px 20px" }}>
-                <h3 style={{ margin: "0 0 6px", fontSize: 16.5, fontWeight: 600, color: "#2c2470" }}>
-                  Your balance and history are visible
-                </h3>
-                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65, color: "#4a4470" }}>
-                  The app shows your remaining balance and a log of what consumed credits, so usage is
-                  auditable rather than a surprise at the end of the month.
-                </p>
-              </div>
-              <div style={{ background: "#fff", border: "1px solid #e2dffa", borderRadius: 12, padding: "18px 20px" }}>
-                <h3 style={{ margin: "0 0 6px", fontSize: 16.5, fontWeight: 600, color: "#2c2470" }}>
-                  Included with your plan
-                </h3>
-                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65, color: "#4a4470" }}>
-                  Free includes 40 AI credits a month. Growth, Pro and Scale include progressively
-                  higher monthly allowances — see{" "}
-                  <Link href="/#pricing" style={{ color: "#4b3ecb" }}>pricing</Link> for exact
-                  numbers.
-                </p>
-              </div>
+            <h3>Local Business</h3>
+            <p>
+              If you have a physical location, enter your business name, address, phone and opening hours, and the app
+              publishes Local Business structured data for it. Useful where local intent matters, and for making your
+              business details unambiguous to AI assistants.
+            </p>
+            <h3>Google Search Console and Instant Index</h3>
+            <p>
+              Connect your Google account to see real Search Console data in the app: clicks, impressions, average
+              position, and your top queries and pages. With the same connection, <strong>Instant Index</strong> submits
+              your URLs to Google&rsquo;s Indexing API as a crawl signal. Google documents that API for job-posting and
+              livestream pages, so treat it as a request, not a guarantee. Disconnecting Google deletes the stored tokens.
+            </p>
+            <h3>Robots.txt</h3>
+            <p>
+              See your live robots.txt rules, add or remove rules per crawler (including AI crawlers), or switch to a raw
+              text editor. This is the one area where a mistake can hide your store from search, so read the effective file
+              carefully before you save.
+            </p>
+          </section>
+
+          <section id="url-management">
+            <h2>URL Management</h2>
+            <h3>HTML sitemap</h3>
+            <p>
+              Your Shopify <code className="inline-code">sitemap.xml</code> stays untouched and is still what you submit to
+              Search Console. The app adds a separate, human-readable HTML sitemap page (for example, linked from your
+              footer) that lists your products, collections, pages, blogs and articles for visitors and crawlers.
+            </p>
+            <h3>Broken links</h3>
+            <p>
+              The app scans products, collections, pages, blogs and articles for links that no longer resolve, such as
+              deleted products, mistyped URLs or dead external pages. Turn on <strong>Auto fix</strong> and internal broken
+              links get a real redirect to the destination you choose. External links can only be reported, since you
+              can&rsquo;t redirect a page you don&rsquo;t control.
+            </p>
+          </section>
+
+          <section id="ai-visibility">
+            <h2>AI Visibility</h2>
+            <p>
+              People now ask ChatGPT, Perplexity and Gemini what to buy. These tools make your store easy for those systems
+              to read and reference correctly. No tool can guarantee an assistant will cite you; what you control is whether
+              your store is easy to understand.
+            </p>
+            <h3>llms.txt and agents.md</h3>
+            <p>
+              The app generates both files from your real store data and serves them on your domain.{" "}
+              <code className="inline-code">llms.txt</code> is a clean summary of what your store is and sells, in a form
+              language models can read without wading through theme markup. <code className="inline-code">agents.md</code>{" "}
+              describes your store for AI agents, including key pages and policies. You review and can edit both before
+              publishing. Read more in{" "}
+              <Link href="/blog/what-is-llms-txt-shopify">What is llms.txt, and does your Shopify store need one?</Link>
+            </p>
+            <h3>IndexNow</h3>
+            <p>
+              IndexNow tells participating search engines the moment a URL changes instead of waiting for a recrawl.
+              Submitting through Bing relays to the other participating engines, such as Yandex, Seznam and Naver. Google
+              doesn&rsquo;t take part in IndexNow; use Instant Index for Google.
+            </p>
+            <h3>Outreach tracker</h3>
+            <p>
+              A simple tracker for your own outreach to the AI publishers, directories and data sources you&rsquo;d like to be
+              listed or cited by. Add entries, then track status and notes. It keeps you organized; it doesn&rsquo;t send
+              anything for you.
+            </p>
+          </section>
+
+          <section id="keyword-research">
+            <h2>Keyword Research</h2>
+            <p>
+              Enter a seed keyword and get real search volume, competition, trend and search intent, plus related keyword
+              suggestions, from a dedicated keyword data provider. Save the keywords you want to target, and use{" "}
+              <strong>Link to page</strong> to carry one into Page Optimization as that page&rsquo;s focus keyword.
+            </p>
+            <p>
+              <strong>Generate topics</strong> turns a keyword into six article ideas, each with a content angle like
+              &ldquo;Buying guide&rdquo; or &ldquo;Comparison&rdquo;. Pick one and the <strong>Article generator</strong> writes a
+              full draft (title, body and tags) that you review, edit and publish into the Shopify blog you choose.
+            </p>
+          </section>
+
+          <section id="store-performance">
+            <h2>Store Performance</h2>
+            <p>
+              Run a real Google PageSpeed Insights audit for four page slots you choose: your home page, a product, a
+              collection and a blog post. You get mobile and desktop Performance, Accessibility, Best practices and SEO
+              scores, plus Core Web Vitals (LCP, INP, CLS). Field data from real visitors appears when Google has enough of
+              it.
+            </p>
+            <p>
+              Testing is limited to 12 slot tests a day on every plan, because all shops share one Google quota. Speed
+              fixes usually live in your theme or apps, so treat this as a diagnostic: take a baseline, re-test after theme
+              or app changes, and hand the findings to whoever maintains your theme.
+            </p>
+          </section>
+
+          <section id="ai-credits" className="card card-soft" style={{ borderRadius: 16, padding: "clamp(22px,3vw,32px)" }}>
+            <h2 style={{ color: "var(--color-primary-deep)" }}>AI Credits</h2>
+            <p style={{ color: "var(--color-primary-deep-soft)" }}>
+              AI costs real money to run, so instead of hiding it behind a vague fair-use policy, the app meters it.
+              Anything that calls a model uses credits. Audits, templates, structured data, robots.txt, sitemaps,
+              broken-link checks, IndexNow and PageSpeed tests don&rsquo;t.
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {[
+                ["You see the cost before you run it", "Each AI action shows its credit cost up front, and bulk actions show the total before you confirm."],
+                ["Your balance is always visible", "The app shows how many credits you have left this month, so usage is never a surprise."],
+                [
+                  "Included with your plan",
+                  `Monthly allowances: ${PLANS.map((p) => `${p.name} ${p.credits.toLocaleString("en-US")}`).join(", ")}. Allowances reset each billing cycle and unused credits don’t roll over.`,
+                ],
+              ].map(([t, b]) => (
+                <div key={t} style={{ background: "#fff", border: "1px solid var(--color-primary-soft-border)", borderRadius: 12, padding: "18px 20px" }}>
+                  <h3 style={{ margin: "0 0 6px", fontSize: 16.5, color: "var(--color-primary-deep)" }}>{t}</h3>
+                  <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65, color: "var(--color-primary-deep-soft)" }}>{b}</p>
+                </div>
+              ))}
             </div>
-            <p style={{ margin: 0, fontSize: 16, lineHeight: 1.68, color: "#3a3470" }}>
-              A practical habit: use templates for the routine, high-volume work where a pattern reads
-              well, and spend credits where judgement actually helps — your top products, collection
-              pages and content you want AI assistants to understand properly.
+            <div style={{ background: "#fff", border: "1px solid var(--color-primary-soft-border)", borderRadius: 12, overflow: "hidden" }}>
+              <table className="credit-table">
+                <caption className="sr-only">Credit cost per AI action</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">AI action</th>
+                    <th scope="col">Credits</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {CREDIT_COSTS.map((c) => (
+                    <tr key={c.action}>
+                      <td>{c.action}</td>
+                      <td>{c.credits}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p style={{ color: "var(--color-primary-deep-soft)" }}>
+              A practical habit: use templates for routine, high-volume work where a pattern reads well, and spend credits
+              where judgement actually helps, like your top products, collection pages and content you want AI assistants to
+              understand properly.
             </p>
-          </div>
+          </section>
 
-          <div style={{ borderTop: "1px solid var(--color-border)", paddingTop: 32, display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", justifyContent: "space-between" }}>
-            <p style={{ margin: 0, maxWidth: 440, fontSize: 16, lineHeight: 1.65, color: "var(--color-text-soft)" }}>
-              Something here unclear, or a step not matching what you see in the app? Tell us and
-              we&rsquo;ll fix the docs.
+          <section style={{ borderTop: "1px solid var(--color-border)", paddingTop: 32, display: "flex", flexWrap: "wrap", gap: 16, alignItems: "center", justifyContent: "space-between" }}>
+            <p style={{ margin: 0, maxWidth: 440, color: "var(--color-text-soft)" }}>
+              Something unclear, or a step that doesn&rsquo;t match what you see in the app? Tell us and we&rsquo;ll fix the docs.
             </p>
-            <Link href="/contact" className="btn btn-secondary">
+            <Link href="/contact" className="btn btn-secondary" style={{ height: 44, fontSize: 15, marginTop: 0 }}>
               Contact support
             </Link>
-          </div>
+          </section>
         </div>
       </div>
-    </main>
+    </>
   );
 }

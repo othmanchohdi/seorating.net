@@ -1,6 +1,6 @@
 import { pageMetadata } from "@/lib/metadata";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
-import { APP_STORE_NAME, LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
+import { LEGAL_UPDATED, SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Data Deletion",
@@ -30,7 +30,7 @@ export default function DataDeletion() {
       <LegalSection id="delete-store-data" title="1. Delete your store data">
         <P>
           Uninstall the app from your Shopify admin: go to Settings → Apps, open the ⋯ menu next to
-          {" "}&ldquo;{APP_STORE_NAME}&rdquo;, and choose Uninstall.
+          {" "}{SITE_NAME}, and choose Uninstall.
           Shopify notifies us, and your store&rsquo;s data — products we&rsquo;ve touched, generated
           content, usage history, and any connected integrations — is fully deleted from our
           database on Shopify&rsquo;s own redaction schedule, typically within about 48 hours of
@@ -39,7 +39,7 @@ export default function DataDeletion() {
         <P>
           If you want your data deleted sooner than that, or want confirmation once it&rsquo;s done,
           email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> from the address on your Shopify account. We reply
-          within 24 hours and confirm by email once the deletion is complete, within 30 days at most.
+          within 1 business day and confirm by email once the deletion is complete, within 30 days at most.
         </P>
       </LegalSection>
 

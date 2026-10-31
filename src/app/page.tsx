@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { INSTALL_URL, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: `${SITE_NAME}: Shopify SEO & AI Visibility App`,
+  title: `${SITE_NAME}: SEO and AI visibility for Shopify`,
   absoluteTitle: true,
   description: SITE_DESCRIPTION,
   path: "/",
@@ -318,7 +318,7 @@ export default function Home() {
           {[
             ["Scan your store", "Your catalog syncs on install. Every product, collection, page and article gets checked for missing tags, alt text, schema, broken links and speed problems."],
             ["Fix with AI or templates", "Generate fixes one by one or in bulk, compare them with what’s live, and publish only what you approve. Every save can be rolled back."],
-            ["Get found everywhere", "Turn on structured data, publish llms.txt and agents.md, and push changed URLs to search engines with IndexNow and Google’s Indexing API."],
+            ["Get found everywhere", "Turn on structured data, publish llms.txt and agents.md, and notify Bing and other engines with IndexNow, and resubmit your sitemap to Google."],
           ].map(([t, b], i) => (
             <li key={t} className="card" style={{ padding: 28 }}>
               <div className="step-num">{i + 1}</div>

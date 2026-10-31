@@ -1,6 +1,6 @@
 # seorating.net
 
-Marketing site for **SEO Rating** ("TNS SEO & AI Visibility" on the Shopify App Store), a product of [TheNextSprout](https://www.thenextsprout.com).
+Marketing site for **SEO Rating**, a Shopify app by [The Next Sprout](https://www.thenextsprout.com).
 
 Next.js 16 (App Router, Cache Components), deployed on Vercel from `main`. Production domain: https://seorating.net.
 

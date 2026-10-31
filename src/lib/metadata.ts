@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_NAME } from "./site";
+import { COMPANY_NAME, SITE_NAME } from "./site";
 
 // Next merges metadata shallowly, so a page that sets `openGraph` or
 // `alternates` replaces the root's object wholesale. Build the full set here
@@ -40,7 +40,7 @@ export function pageMetadata({
       description,
       // Articles get their own generated image from blog/[slug]/opengraph-image.
       ...(type === "article"
-        ? { publishedTime, modifiedTime, tags, authors: ["TheNextSprout team"] }
+        ? { publishedTime, modifiedTime, tags, authors: [`${COMPANY_NAME} team`] }
         : { images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${SITE_NAME}: SEO and AI visibility for Shopify` }] }),
     },
     twitter: {

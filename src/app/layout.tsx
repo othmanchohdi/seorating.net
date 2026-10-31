@@ -4,7 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { JsonLd, organization, website } from "@/lib/jsonld";
-import { APP_STORE_NAME, COMPANY_NAME, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import { COMPANY_NAME, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const instrumentSans = Instrument_Sans({
   variable: "--font-instrument-sans",
@@ -25,7 +25,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME}: Shopify SEO & AI Visibility App`,
+    default: `${SITE_NAME}: SEO and AI visibility for Shopify`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -41,7 +41,6 @@ export const metadata: Metadata = {
     "Shopify meta tags",
     "structured data",
     "Generative engine optimization",
-    APP_STORE_NAME,
   ],
   // Canonical URLs and Open Graph are set per page via pageMetadata().
   twitter: { card: "summary_large_image" },

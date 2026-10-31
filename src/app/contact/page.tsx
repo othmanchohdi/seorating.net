@@ -1,12 +1,12 @@
 import { ContactForm } from "@/components/ContactForm";
-import { LocalTime, OnShiftBadge, ShiftTable } from "@/components/SupportClock";
+import { LocalTime, ShiftTable } from "@/components/SupportClock";
 import { JsonLd, ORG_ID, breadcrumbs } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/metadata";
-import { APP_STORE_NAME, COMPANY_NAME, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
+import { COMPANY_NAME, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: "Contact SEO Rating Support (24/7)",
-  description: `Reach the ${SITE_NAME} team any time. Support for the Shopify app runs 24/7 across three shifts from Chicago and Monastir. Email ${SUPPORT_EMAIL} or send a message.`,
+  title: "Contact SEO Rating Support",
+  description: `Contact the ${SITE_NAME} team about the Shopify app. Support within 1 business day from our team in Monastir and Chicago. Email ${SUPPORT_EMAIL} or send a message.`,
   path: "/contact",
 });
 
@@ -42,16 +42,15 @@ export default function Contact() {
             }}
           >
             <span className="dot" style={{ background: "#3f8a5a", boxShadow: "0 0 0 4px var(--color-ok-bg)" }} />
-            <span style={{ fontSize: 13.5, fontWeight: 600, color: "var(--color-ok)" }}>Online now</span>
-            <OnShiftBadge />
+            <span style={{ fontSize: 13.5, fontWeight: 600, color: "var(--color-ok)" }}>Support within 1 business day</span>
           </p>
           <span className="eyebrow">Contact us</span>
           <h1 className="h-display" style={{ marginTop: 14, maxWidth: 760 }}>
-            Two offices. Three shifts. Always online.
+            Two offices. One inbox. Real people.
           </h1>
           <p className="lead" style={{ maxWidth: 600 }}>
-            Support, billing, feature requests or a problem with the app: a real person from our team is on shift 24
-            hours a day, 7 days a week.
+            Support, billing, feature requests or a problem with the app: a real person from our team replies within 1
+            business day, and usually much sooner.
           </p>
         </div>
       </section>
@@ -69,13 +68,13 @@ export default function Contact() {
           <div>
             <span className="mono-label-muted">Who you&rsquo;re writing to</span>
             <p style={{ margin: "8px 0 0", maxWidth: 440, fontSize: 15.5, lineHeight: 1.6, color: "var(--color-ink-soft)" }}>
-              {COMPANY_NAME}, the company behind {SITE_NAME} (&ldquo;{APP_STORE_NAME}&rdquo; on the Shopify App Store).
+              {COMPANY_NAME}, the company behind {SITE_NAME}.
             </p>
           </div>
           <div className="card" style={{ padding: 22 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
-              <h2 style={{ margin: 0, fontSize: 16, fontWeight: 600 }}>Support hours</h2>
-              <span className="pill pill-ok">24 / 7</span>
+              <h2 style={{ margin: 0, fontSize: 16, fontWeight: 600 }}>Team shifts</h2>
+              <span className="pill pill-ok">Reply within 1 business day</span>
             </div>
             <ShiftTable />
           </div>

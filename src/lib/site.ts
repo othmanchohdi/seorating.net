@@ -3,8 +3,8 @@
 
 export const SITE_URL = "https://seorating.net";
 export const SITE_NAME = "SEO Rating";
-export const APP_STORE_NAME = "TNS SEO & AI Visibility";
-export const COMPANY_NAME = "TheNextSprout";
+export const COMPANY_NAME = "The Next Sprout";
+export const COMPANY_LOCATION = "Monastir, Tunisia";
 export const COMPANY_URL = "https://www.thenextsprout.com";
 export const INVESTOR_NAME = "1o8 Agency";
 export const INVESTOR_URL = "https://www.1o8.agency";

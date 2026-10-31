@@ -4,7 +4,7 @@ import { PostCover } from "@/components/PostCover";
 import { POSTS, formatDate, getPost, relatedPosts } from "@/content/blog";
 import { JsonLd, ORG_ID, breadcrumbs } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/metadata";
-import { absoluteUrl } from "@/lib/site";
+import { COMPANY_NAME, absoluteUrl } from "@/lib/site";
 
 export function generateStaticParams() {
   return POSTS.map((p) => ({ slug: p.slug }));
@@ -52,7 +52,7 @@ export default async function BlogPost({ params }: PageProps<"/blog/[slug]">) {
             keywords: post.tags.join(", "),
             timeRequired: `PT${post.readMinutes}M`,
             inLanguage: "en",
-            author: { "@type": "Organization", "@id": ORG_ID, name: "TheNextSprout team" },
+            author: { "@type": "Organization", "@id": ORG_ID, name: `${COMPANY_NAME} team` },
             publisher: { "@id": ORG_ID },
             isPartOf: { "@id": absoluteUrl("/blog#blog") },
           },
@@ -88,7 +88,7 @@ export default async function BlogPost({ params }: PageProps<"/blog/[slug]">) {
               TN
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <span style={{ fontSize: 14.5, fontWeight: 600 }}>TheNextSprout team</span>
+              <span style={{ fontSize: 14.5, fontWeight: 600 }}>{COMPANY_NAME} team</span>
               <span className="mono" style={{ fontSize: 12, color: "var(--color-text-faintest)" }}>
                 <time dateTime={post.published}>{formatDate(post.published)}</time>
                 {post.updated && post.updated !== post.published && (

@@ -39,14 +39,6 @@ function useNow() {
   return ts === null ? null : new Date(ts);
 }
 
-export function OnShiftBadge() {
-  const now = useNow();
-  const current = now ? SHIFTS.find((s) => isOn(s, now.getUTCHours())) : null;
-  return (
-    <span style={{ fontSize: 13.5, color: "var(--color-text-softer)" }}>· {current ? `${current.name} on duty` : "Support on duty"}</span>
-  );
-}
-
 export function ShiftTable() {
   const now = useNow();
   const utcHour = now?.getUTCHours() ?? -1;

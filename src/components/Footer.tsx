@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Logo } from "./Logo";
-import { APP_STORE_NAME, COMPANY_NAME, COMPANY_URL, INVESTOR_NAME, INVESTOR_URL, SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
+import { COMPANY_LOCATION, COMPANY_NAME, COMPANY_URL, INVESTOR_NAME, INVESTOR_URL, SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
 
 const COLUMNS = [
   {
@@ -40,7 +40,7 @@ export function Footer() {
             <span style={{ fontSize: 15.5, fontWeight: 600 }}>{SITE_NAME}</span>
           </div>
           <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: "var(--color-text-faint)" }}>
-            {SITE_NAME} (&ldquo;{APP_STORE_NAME}&rdquo; on Shopify) is a product of{" "}
+            {SITE_NAME} is a Shopify app by{" "}
             <a href={COMPANY_URL} rel="noopener">{COMPANY_NAME}</a>, with investment partner{" "}
             <a href={INVESTOR_URL} rel="noopener">{INVESTOR_NAME}</a>.
           </p>
@@ -63,7 +63,7 @@ export function Footer() {
       </div>
       <div className="container footer-bottom">
         <span>
-          © 2026 {COMPANY_NAME}. All rights reserved. No ranking or traffic outcomes are guaranteed.
+          © 2026 {COMPANY_NAME}, {COMPANY_LOCATION}. All rights reserved. No ranking or traffic outcomes are guaranteed.
         </span>
         <span>Product views shown are illustrative examples.</span>
       </div>

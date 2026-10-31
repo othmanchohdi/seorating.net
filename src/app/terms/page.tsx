@@ -1,10 +1,10 @@
 import { pageMetadata } from "@/lib/metadata";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
-import { APP_STORE_NAME, COMPANY_NAME, COMPANY_URL, GOVERNING_LAW, INVESTOR_NAME, LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
+import { COMPANY_LOCATION, COMPANY_NAME, COMPANY_URL, GOVERNING_LAW, INVESTOR_NAME, LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Terms of Service",
-  description: "The terms governing use of the SEO Rating Shopify app (TNS SEO & AI Visibility): plans, billing, AI credits, acceptable use and liability.",
+  description: "The terms governing use of the SEO Rating Shopify app: plans, billing, AI credits, acceptable use and liability.",
   path: "/terms",
 });
 
@@ -36,8 +36,7 @@ export default function Terms() {
     >
       <LegalSection id="the-service" title="1. The service">
         <P>
-          SEO Rating (seorating.net), named &ldquo;{APP_STORE_NAME}&rdquo; on the Shopify App Store, is
-          a software application provided by{" "}
+          SEO Rating (seorating.net) is a Shopify app provided by{" "}
           <a href={COMPANY_URL} rel="noopener">{COMPANY_NAME}</a> (&ldquo;we&rdquo;, &ldquo;us&rdquo;). It is installed into a Shopify store by the merchant (&ldquo;you&rdquo;)
           and provides search-optimization and AI-visibility tooling, including AI-ready discovery
           file generation, robots.txt management, SEO tag and image alt tag generation, on-page
@@ -196,7 +195,7 @@ export default function Terms() {
 
       <LegalSection id="contact" title="12. Contact">
         <P>
-          These terms are an agreement between you and {COMPANY_NAME} (
+          These terms are an agreement between you and {COMPANY_NAME}, {COMPANY_LOCATION} (
           <a href={COMPANY_URL} rel="noopener">thenextsprout.com</a>). {INVESTOR_NAME}, our investment
           partner, is not a party to them. Questions about these terms:{" "}
           <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.

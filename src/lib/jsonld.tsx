@@ -1,6 +1,5 @@
 import { PLANS } from "./pricing";
 import {
-  APP_STORE_NAME,
   COMPANY_NAME,
   COMPANY_URL,
   INSTALL_URL,
@@ -38,17 +37,12 @@ export const organization: Json = {
   funder: { "@type": "Organization", name: INVESTOR_NAME, url: INVESTOR_URL },
   logo: absoluteUrl("/icon.svg"),
   email: SUPPORT_EMAIL,
+  address: { "@type": "PostalAddress", addressLocality: "Monastir", addressCountry: "TN" },
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer support",
     email: SUPPORT_EMAIL,
     availableLanguage: ["English"],
-    hoursAvailable: {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      opens: "00:00",
-      closes: "23:59",
-    },
   },
   location: [
     { "@type": "Place", address: { "@type": "PostalAddress", addressLocality: "Chicago", addressRegion: "IL", addressCountry: "US" } },
@@ -72,7 +66,6 @@ export const softwareApp: Json = {
   "@type": "SoftwareApplication",
   "@id": APP_ID,
   name: SITE_NAME,
-  alternateName: APP_STORE_NAME,
   applicationCategory: "BusinessApplication",
   applicationSubCategory: "SEO",
   operatingSystem: "Web (Shopify admin)",
@@ -100,7 +93,7 @@ export const softwareApp: Json = {
     "AI image alt text",
     "On-page SEO audits and AI content optimizer",
     "JSON-LD structured data and Local Business schema",
-    "Google Search Console integration",
+    "Google Search Console integration: sitemap resubmission and URL index status",
     "robots.txt editor",
     "llms.txt and agents.md for AI assistants",
     "IndexNow submissions",

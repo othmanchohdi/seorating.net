@@ -61,7 +61,7 @@ export default function Support() {
 
       <LegalSection id="response-time" title="2. Response time">
         <P>
-          We reply to every message within 24 hours, seven days a week. Support runs in shifts from
+          We reply to every message within 1 business day. Support runs in shifts from
           Chicago and Monastir, so most messages get an answer much sooner. Data deletion and billing
           requests follow the same timeline.
         </P>

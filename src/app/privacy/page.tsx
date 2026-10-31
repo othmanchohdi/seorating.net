@@ -1,6 +1,6 @@
 import { pageMetadata } from "@/lib/metadata";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
-import { APP_STORE_NAME, COMPANY_NAME, COMPANY_URL, INVESTOR_NAME, LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
+import { COMPANY_LOCATION, COMPANY_NAME, COMPANY_URL, INVESTOR_NAME, LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Privacy Policy",
@@ -15,7 +15,7 @@ const SECTIONS = [
   { id: "who-we-share", label: "4. Who we share it with" },
   { id: "security", label: "5. Credentials and security" },
   { id: "retention", label: "6. Retention, deletion and your rights" },
-  { id: "google-api", label: "7. Google API Services disclosure" },
+  { id: "google-user-data", label: "7. Google user data" },
   { id: "cookies", label: "8. Cookies and this website" },
   { id: "children", label: "9. Children" },
   { id: "changes", label: "10. Changes and contact" },
@@ -34,9 +34,8 @@ export default function PrivacyPolicy() {
     >
       <LegalSection id="who-we-are" title="1. Who we are">
         <P>
-          SEO Rating (seorating.net), named &ldquo;{APP_STORE_NAME}&rdquo; on the Shopify App Store,
-          is built and operated by <a href={COMPANY_URL} rel="noopener">{COMPANY_NAME}</a>{" "}
-          (&ldquo;we&rdquo;, &ldquo;us&rdquo;), which works from Monastir, Tunisia and Chicago, USA.
+          SEO Rating (seorating.net) is a Shopify app built and operated by <a href={COMPANY_URL} rel="noopener">{COMPANY_NAME}</a>{" "}
+          (&ldquo;we&rdquo;, &ldquo;us&rdquo;), based in {COMPANY_LOCATION}, with a team in Chicago, USA.
           {" "}{COMPANY_NAME} is the controller of the data described in this policy. This policy
           explains what data the app collects from a merchant&rsquo;s store, why, who it is shared
           with, and how it can be deleted.
@@ -68,15 +67,10 @@ export default function PrivacyPolicy() {
           <div className="card">
             <h3 style={{ margin: "0 0 6px", fontSize: 16.5, fontWeight: 600 }}>Google account data (only if you connect it)</h3>
             <P>
-              If you connect Google Search Console, we request these OAuth scopes: your email
-              address (<code className="inline-code">openid</code>,{" "}
-              <code className="inline-code">userinfo.email</code>) to identify the connected account;{" "}
-              <code className="inline-code">webmasters</code> to read your Search Console property
-              data (queries, impressions, clicks, indexing status); and{" "}
-              <code className="inline-code">siteverification.verify_only</code> to confirm you own
-              the property you&rsquo;re connecting. Connecting Google is optional and can be
-              disconnected at any time from inside the app, which permanently deletes the stored
-              connection.
+              If you connect Google Search Console, we access your Google account email address and
+              the Search Console data for the property you connect. Section 7 explains exactly what we
+              access, why, how it is stored and shared, and how to delete it. Connecting Google is
+              optional and can be disconnected at any time from inside the app.
             </P>
           </div>
           <div className="card">
@@ -123,7 +117,7 @@ export default function PrivacyPolicy() {
           {[
             ["Shopify", "The platform the app runs on and bills through. Store and content data is read from and written back to Shopify; subscription charges go through Shopify's Billing API."],
             ["Anthropic", "AI generation (meta tags, alt text, content drafts, article ideas). We send the specific product/page fields needed for that request — title, vendor, type, tags, price range, stripped description. No customer data is sent."],
-            ["Google", "Search Console data retrieval and site-verification, only if you connect the integration; PageSpeed Insights audits of your public store URLs when you run a performance check. PageSpeed requests send only the public URL being tested."],
+            ["Google", "Search Console data, sitemap resubmission, URL inspection and domain verification, only if you connect the integration (see section 7); PageSpeed Insights audits of your public store URLs when you run a performance check. PageSpeed requests send only the public URL being tested."],
             ["DataForSEO", "Keyword research. Keyword terms plus location/language parameters are sent to retrieve volume and related-term data, funded by our own account, not billed to you directly."],
             ["Resend", "Transactional email. Delivers the contact-form and waitlist messages you send us from this website."],
             ["Bing IndexNow", "If enabled, submits your store's public URLs (plus a verification key) so participating search engines can re-crawl faster. Google does not currently participate in IndexNow."],
@@ -146,7 +140,7 @@ export default function PrivacyPolicy() {
           ))}
         </div>
         <P>
-          Our database (Postgres, via Prisma) is hosted by our infrastructure provider and is not a
+          Our database (Prisma Postgres, provisioned through Vercel) is part of that hosting and is not a
           separate data recipient — it stores the data described in section 2. These providers may
           process data in the United States and other countries outside your own. Where data from the
           EEA, UK or Switzerland is transferred, we rely on the safeguards our providers offer, such as
@@ -197,7 +191,7 @@ export default function PrivacyPolicy() {
           <li>
             <strong style={{ fontWeight: 600 }}>Direct requests.</strong> Merchants and their
             customers can ask us directly to access, correct, export or delete data by emailing{" "}
-            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>. We reply within 24 hours and complete requests
+            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>. We reply within 1 business day and complete requests
             within 30 days. Depending on where you live you may also have rights to object, restrict
             processing, or complain to a supervisory authority, such as Tunisia&rsquo;s Instance
             Nationale de Protection des Données Personnelles (INPDP) or your local data protection
@@ -210,16 +204,126 @@ export default function PrivacyPolicy() {
         </ul>
       </LegalSection>
 
-      <LegalSection id="google-api" title="7. Google API Services disclosure">
+      <LegalSection id="google-user-data" title="7. Google user data">
         <P>
-          SEO Rating&rsquo;s use and transfer of information received from Google APIs adheres to the{" "}
+          SEO Rating&rsquo;s use and transfer of information received from Google APIs will adhere to the{" "}
           <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">
             Google API Services User Data Policy
-          </a>
-          , including the Limited Use requirements. We use Google Search Console data only to show
-          you your own store&rsquo;s search performance inside the app, and we do not use it to train
-          AI/ML models, nor share it except as described in section 4.
+          </a>{" "}
+          (https://developers.google.com/terms/api-services-user-data-policy), including the Limited Use
+          requirements.
         </P>
+        <P>
+          This section applies only if you choose to connect a Google account inside the app. Connecting
+          Google is optional; every other feature works without it.
+        </P>
+
+        <h3 style={{ margin: "20px 0 8px", fontSize: 17, fontWeight: 600 }}>What we access</h3>
+        {/* Scope list matches GOOGLE_OAUTH_SCOPES in the app repo's app/services/google-tokens.server.ts. */}
+        <ul style={{ margin: "0 0 12px", padding: "0 0 0 18px", display: "flex", flexDirection: "column", gap: 8, fontSize: 16, lineHeight: 1.68, color: "var(--color-ink-soft)" }}>
+          <li>
+            <strong style={{ fontWeight: 600 }}>Your Google account email address</strong>, through the{" "}
+            <code className="inline-code">openid</code> and <code className="inline-code">userinfo.email</code> scopes, so we can show you which
+            account is connected.
+          </li>
+          <li>
+            <strong style={{ fontWeight: 600 }}>Google Search Console data</strong> for the property you
+            connect, through the <code className="inline-code">webmasters</code> scope: search performance (queries, pages,
+            devices, clicks, impressions, click-through rate and average position), your sitemaps and
+            their reported issues, and URL inspection results. The same scope lets the app add your store
+            as a Search Console property and resubmit your sitemap.
+          </li>
+          <li>
+            <strong style={{ fontWeight: 600 }}>Site verification</strong>, through the{" "}
+            <code className="inline-code">siteverification.verify_only</code> scope, used only when you ask the app to verify
+            your store&rsquo;s domain in Search Console. The app adds Google&rsquo;s verification tag to
+            your storefront and asks Google to check it.
+          </li>
+        </ul>
+
+        <h3 style={{ margin: "20px 0 8px", fontSize: 17, fontWeight: 600 }}>Why we use it</h3>
+        <P>
+          Only to provide features you use inside the app: showing you your own store&rsquo;s search
+          performance, verifying your domain, resubmitting your sitemaps to Google, and inspecting the
+          index status of your URLs. We do not use Google user data for any other purpose.
+        </P>
+
+        <h3 style={{ margin: "20px 0 8px", fontSize: 17, fontWeight: 600 }}>How it is stored</h3>
+        <P>
+          Google OAuth access and refresh tokens are encrypted at rest with AES-256-GCM before they are
+          stored, and are never shown back to you in full or shared with other merchants. Data moves
+          between your browser, our servers and Google over encrypted (TLS) connections.
+        </P>
+        <P>
+          Search Console data and URL inspection results are not stored. The app fetches them from
+          Google when you open the report or run an inspection, shows them to you, and keeps no copy in
+          its database. The only Google data we store is your connected account&rsquo;s email address,
+          the encrypted tokens, and the list of scopes Google granted.
+        </P>
+
+        <h3 style={{ margin: "20px 0 8px", fontSize: 17, fontWeight: 600 }}>Who it is shared with</h3>
+        <ul style={{ margin: "0 0 12px", padding: "0 0 0 18px", display: "flex", flexDirection: "column", gap: 8, fontSize: 16, lineHeight: 1.68, color: "var(--color-ink-soft)" }}>
+          <li>We never sell Google user data, and we never use it for advertising.</li>
+          <li>
+            It is processed only by the service providers we use to run the features above: Vercel,
+            which hosts the app, and Prisma Postgres, which hosts its database. If a request to Google
+            fails, our error monitoring service (Sentry) may receive Google&rsquo;s error message and
+            your store&rsquo;s identifier so we can fix the problem. Google user data is never included
+            in emails.
+          </li>
+          <li>Google user data is never sent to our AI provider.</li>
+          <li>
+            We may disclose it if the law requires, or to a successor if {COMPANY_NAME} or the app is
+            merged or sold, in which case this policy continues to apply.
+          </li>
+        </ul>
+
+        <h3 style={{ margin: "20px 0 8px", fontSize: 17, fontWeight: 600 }}>No AI training</h3>
+        <P>
+          Google user data is never used to develop, improve or train artificial intelligence or machine
+          learning models, whether ours or anyone else&rsquo;s.
+        </P>
+
+        <h3 style={{ margin: "20px 0 8px", fontSize: 17, fontWeight: 600 }}>Human access</h3>
+        <P>
+          No person at {COMPANY_NAME} reads your Google user data, except when you give us explicit
+          consent (for example, to help with a support request), when it is needed for security (such as
+          investigating abuse or a vulnerability), or when the law requires it.
+        </P>
+
+        <h3 style={{ margin: "20px 0 8px", fontSize: 17, fontWeight: 600 }}>Retention</h3>
+        <P>
+          We keep your Google tokens only while your Google account is connected. They are deleted
+          immediately when you disconnect Google in the app, when Google tells us the access was
+          revoked, and when your store&rsquo;s data is deleted after you uninstall the app (on
+          Shopify&rsquo;s redaction schedule, typically within about 48 hours). Your connected
+          account&rsquo;s email address is deleted at the same time. If you start connecting Google but
+          don&rsquo;t finish, the partial connection expires after 10 minutes and is deleted within a
+          day. Search Console data isn&rsquo;t stored, so there is nothing else to delete.
+        </P>
+
+        <h3 style={{ margin: "20px 0 8px", fontSize: 17, fontWeight: 600 }}>How to delete it</h3>
+        <ul style={{ margin: "0 0 12px", padding: "0 0 0 18px", display: "flex", flexDirection: "column", gap: 8, fontSize: 16, lineHeight: 1.68, color: "var(--color-ink-soft)" }}>
+          <li>
+            <strong style={{ fontWeight: 600 }}>Disconnect</strong> Google from Search Appearance inside
+            the app. This permanently deletes the stored connection and tokens.
+          </li>
+          <li>
+            <strong style={{ fontWeight: 600 }}>Uninstall</strong> the app from your Shopify admin. Your
+            store&rsquo;s data, including any Google connection, is then deleted.
+          </li>
+          <li>
+            <strong style={{ fontWeight: 600 }}>Revoke access</strong> from your Google Account at{" "}
+            <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer">
+              https://myaccount.google.com/permissions
+            </a>
+            .
+          </li>
+          <li>
+            Follow the steps on our <a href="/data-deletion">Data Deletion</a> page, or email{" "}
+            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
+          </li>
+        </ul>
       </LegalSection>
 
       <LegalSection id="cookies" title="8. Cookies and this website">

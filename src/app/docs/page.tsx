@@ -2,7 +2,7 @@ import Link from "next/link";
 import { JsonLd, ORG_ID, breadcrumbs } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/metadata";
 import { CREDIT_COSTS, PLANS } from "@/lib/pricing";
-import { APP_STORE_NAME, SITE_NAME, absoluteUrl } from "@/lib/site";
+import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Documentation: How to Use SEO Rating",
@@ -77,7 +77,7 @@ export default function Documentation() {
             <h2>Getting started</h2>
             <h3>Installing the app</h3>
             <p>
-              Install {SITE_NAME} from its Shopify App Store listing (&ldquo;{APP_STORE_NAME}&rdquo;). Shopify shows you the
+              Install {SITE_NAME} from the Shopify App Store. Shopify shows you the
               permissions the app needs before you approve. It reads and writes the SEO-related parts of your store:
               products, pages and blog articles, uploaded files, your theme (to find images missing alt text) and URL
               redirects. Approving the install opens the app inside your Shopify admin. There&rsquo;s no separate account
@@ -190,12 +190,14 @@ export default function Documentation() {
               publishes Local Business structured data for it. Useful where local intent matters, and for making your
               business details unambiguous to AI assistants.
             </p>
-            <h3>Google Search Console and Instant Index</h3>
+            <h3>Google Search Console</h3>
             <p>
               Connect your Google account to see real Search Console data in the app: clicks, impressions, average
-              position, and your top queries and pages. With the same connection, <strong>Instant Index</strong> submits
-              your URLs to Google&rsquo;s Indexing API as a crawl signal. Google documents that API for job-posting and
-              livestream pages, so treat it as a request, not a guarantee. Disconnecting Google deletes the stored tokens.
+              position, and your top queries and pages. If your store isn&rsquo;t verified in Search Console yet, the app
+              can verify the domain for you. With the same connection you can <strong>resubmit your sitemap to
+              Google</strong> and <strong>inspect a URL&rsquo;s index status in Google</strong>: whether it&rsquo;s indexed,
+              when Google last crawled it, and why not if it isn&rsquo;t. Google decides when and whether to crawl and
+              index a page; neither action forces that. Disconnecting Google deletes the stored tokens.
             </p>
             <h3>Robots.txt</h3>
             <p>
@@ -242,7 +244,7 @@ export default function Documentation() {
             <p>
               IndexNow tells participating search engines the moment a URL changes instead of waiting for a recrawl.
               Submitting through Bing relays to the other participating engines, such as Yandex, Seznam and Naver. Google
-              doesn&rsquo;t take part in IndexNow; use Instant Index for Google.
+              doesn&rsquo;t take part in IndexNow; for Google, resubmit your sitemap from the Search Console section.
             </p>
             <h3>Outreach tracker</h3>
             <p>

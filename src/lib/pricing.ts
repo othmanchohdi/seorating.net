@@ -1,5 +1,5 @@
 // Mirrors the app's real billing config (shopify.server.ts) and limits
-// (app/services/limits.ts) in the TNS SEO and AI Visibility repo.
+// (app/services/limits.ts) in the SEO Rating app repo.
 // Update both together.
 
 export type Plan = {

@@ -1,13 +1,13 @@
 import { POSTS } from "@/content/blog";
 import { PLANS } from "@/lib/pricing";
-import { APP_STORE_NAME, COMPANY_NAME, INSTALL_URL, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
+import { COMPANY_NAME, INSTALL_URL, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
 
 // We practise what the app preaches: a structured brief for language models.
 // https://llmstxt.org
 export function GET() {
   const body = `# ${SITE_NAME}
 
-> ${SITE_NAME} (Shopify App Store name: "${APP_STORE_NAME}") is a Shopify app by ${COMPANY_NAME} that audits a store and fixes what holds it back in Google and AI search: meta tags, image alt text, on-page content, JSON-LD structured data, robots.txt, llms.txt and agents.md, IndexNow, broken links, keyword research and Google PageSpeed audits. Every tool is on every plan, including a free plan. AI-written changes are always reviewed by the merchant before they publish.
+> ${SITE_NAME} is a Shopify app by ${COMPANY_NAME} that audits a store and fixes what holds it back in Google and AI search: meta tags, image alt text, on-page content, JSON-LD structured data, robots.txt, llms.txt and agents.md, IndexNow, broken links, keyword research and Google PageSpeed audits. Every tool is on every plan, including a free plan. AI-written changes are always reviewed by the merchant before they publish.
 
 ## Product
 - [Features and pricing](${absoluteUrl("/")}): Overview of every module, plans and FAQ
@@ -23,7 +23,7 @@ ${POSTS.map((p) => `- [${p.title}](${absoluteUrl(`/blog/${p.slug}`)}): ${p.descr
 
 ## Company
 - [About](${absoluteUrl("/about")}): Who builds ${SITE_NAME} and why
-- [Contact](${absoluteUrl("/contact")}): 24/7 support from Chicago and Monastir, ${SUPPORT_EMAIL}
+- [Contact](${absoluteUrl("/contact")}): Support within 1 business day, ${SUPPORT_EMAIL}
 - [Support](${absoluteUrl("/support")}): Response times and common questions
 
 ## Optional

@@ -69,7 +69,7 @@ export default function Contact() {
           <div>
             <span className="mono-label-muted">Who you&rsquo;re writing to</span>
             <p style={{ margin: "8px 0 0", maxWidth: 440, fontSize: 15.5, lineHeight: 1.6, color: "var(--color-ink-soft)" }}>
-              {COMPANY_NAME}, the company behind {SITE_NAME}, listed on the Shopify App Store as &ldquo;{APP_STORE_NAME}&rdquo;.
+              {COMPANY_NAME}, the company behind {SITE_NAME} (&ldquo;{APP_STORE_NAME}&rdquo; on the Shopify App Store).
             </p>
           </div>
           <div className="card" style={{ padding: 22 }}>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { JsonLd, ORG_ID, breadcrumbs } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/metadata";
-import { COMPANY_NAME, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
+import { COMPANY_NAME, COMPANY_URL, INVESTOR_NAME, INVESTOR_URL, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "About SEO Rating",
@@ -49,8 +49,15 @@ export default function About() {
             We built the tool we kept wishing we had.
           </h1>
           <p style={{ margin: "28px 0 0", maxWidth: 620, fontSize: "clamp(17px,2vw,19.5px)", lineHeight: 1.55, color: "var(--color-primary-chip)" }}>
-            {SITE_NAME} is a product of {COMPANY_NAME}, a Shopify and ecommerce agency. Every feature started as work we
-            were doing by hand for client stores.
+            {SITE_NAME} is a product of{" "}
+            <a href={COMPANY_URL} rel="noopener" style={{ color: "#fff" }}>
+              {COMPANY_NAME}
+            </a>
+            , a Shopify and ecommerce agency, backed by our investment partner{" "}
+            <a href={INVESTOR_URL} rel="noopener" style={{ color: "#fff" }}>
+              {INVESTOR_NAME}
+            </a>
+            . Every feature started as work we were doing by hand for client stores.
           </p>
         </div>
       </section>

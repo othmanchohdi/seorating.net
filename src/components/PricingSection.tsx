@@ -36,14 +36,16 @@ export function PricingSection() {
                 <li key={f}>{f}</li>
               ))}
             </ul>
-            <a
-              href={INSTALL_URL}
-              rel="noopener"
-              className={`btn btn-block ${plan.highlight ? "btn-primary" : "btn-secondary"}`}
-              style={{ marginTop: 28, height: 46, fontSize: 15 }}
-            >
-              {plan.price === 0 ? "Install free" : `Start with ${plan.name}`}
-            </a>
+            {INSTALL_URL && (
+              <a
+                href={INSTALL_URL}
+                rel="noopener"
+                className={`btn btn-block ${plan.highlight ? "btn-primary" : "btn-secondary"}`}
+                style={{ marginTop: 28, height: 46, fontSize: 15 }}
+              >
+                {plan.price === 0 ? "Install free" : `Start with ${plan.name}`}
+              </a>
+            )}
           </div>
         ))}
       </div>

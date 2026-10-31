@@ -1,5 +1,6 @@
 import { pageMetadata } from "@/lib/metadata";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
+import { APP_STORE_NAME, LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Data Deletion",
@@ -23,12 +24,13 @@ export default function DataDeletion() {
     <LegalLayout
       eyebrow="Legal"
       title="Data Deletion"
-      lastUpdated="[date placeholder]"
+      lastUpdated={LEGAL_UPDATED}
       sections={SECTIONS}
     >
       <LegalSection id="delete-store-data" title="1. Delete your store data">
         <P>
-          Uninstall SEO Rating from your Shopify admin (Settings → Apps → SEO Rating → Delete).
+          Uninstall the app from your Shopify admin: go to Settings → Apps, open the ⋯ menu next to
+          {" "}&ldquo;{APP_STORE_NAME}&rdquo;, and choose Uninstall.
           Shopify notifies us, and your store&rsquo;s data — products we&rsquo;ve touched, generated
           content, usage history, and any connected integrations — is fully deleted from our
           database on Shopify&rsquo;s own redaction schedule, typically within about 48 hours of
@@ -36,8 +38,8 @@ export default function DataDeletion() {
         </P>
         <P>
           If you want your data deleted sooner than that, or want confirmation once it&rsquo;s done,
-          email <a href="mailto:apps@thenextsprout.com">apps@thenextsprout.com</a> and we&rsquo;ll
-          handle it directly.
+          email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> from the address on your Shopify account. We reply
+          within 24 hours and confirm by email once the deletion is complete, within 30 days at most.
         </P>
       </LegalSection>
 

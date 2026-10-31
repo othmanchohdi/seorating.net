@@ -2,7 +2,10 @@ import { PLANS } from "./pricing";
 import {
   APP_STORE_NAME,
   COMPANY_NAME,
+  COMPANY_URL,
   INSTALL_URL,
+  INVESTOR_NAME,
+  INVESTOR_URL,
   SITE_DESCRIPTION,
   SITE_NAME,
   SITE_URL,
@@ -31,7 +34,8 @@ export const organization: Json = {
   "@type": "Organization",
   "@id": ORG_ID,
   name: COMPANY_NAME,
-  url: SITE_URL,
+  url: COMPANY_URL,
+  funder: { "@type": "Organization", name: INVESTOR_NAME, url: INVESTOR_URL },
   logo: absoluteUrl("/icon.svg"),
   email: SUPPORT_EMAIL,
   contactPoint: {
@@ -74,7 +78,7 @@ export const softwareApp: Json = {
   operatingSystem: "Web (Shopify admin)",
   description: SITE_DESCRIPTION,
   url: SITE_URL,
-  installUrl: INSTALL_URL,
+  ...(INSTALL_URL && { installUrl: INSTALL_URL }),
   image: absoluteUrl("/opengraph-image"),
   publisher: { "@id": ORG_ID },
   offers: PLANS.map((p) => ({

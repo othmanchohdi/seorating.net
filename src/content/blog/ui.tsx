@@ -53,9 +53,15 @@ export function AppCta({ title, body }: { title: string; body: string }) {
         <div style={{ fontSize: 18, fontWeight: 600, color: "var(--color-ink)", lineHeight: 1.3 }}>{title}</div>
         <div style={{ fontSize: 15, lineHeight: 1.55, color: "var(--color-text-softer)", marginTop: 4 }}>{body}</div>
       </div>
-      <a href={INSTALL_URL} rel="noopener" className="btn btn-primary" style={{ height: 44, fontSize: 15, textDecoration: "none" }}>
-        Install free
-      </a>
+      {INSTALL_URL ? (
+        <a href={INSTALL_URL} rel="noopener" className="btn btn-primary" style={{ height: 44, fontSize: 15, textDecoration: "none" }}>
+          Install free
+        </a>
+      ) : (
+        <Link href="/docs" className="btn btn-primary" style={{ height: 44, fontSize: 15, textDecoration: "none" }}>
+          See how it works
+        </Link>
+      )}
     </aside>
   );
 }

@@ -1,5 +1,6 @@
 import { pageMetadata } from "@/lib/metadata";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
+import { APP_STORE_NAME, COMPANY_NAME, COMPANY_URL, INVESTOR_NAME, LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Privacy Policy",
@@ -16,7 +17,8 @@ const SECTIONS = [
   { id: "retention", label: "6. Retention, deletion and your rights" },
   { id: "google-api", label: "7. Google API Services disclosure" },
   { id: "cookies", label: "8. Cookies and this website" },
-  { id: "changes", label: "9. Changes and contact" },
+  { id: "children", label: "9. Children" },
+  { id: "changes", label: "10. Changes and contact" },
 ];
 
 function P({ children }: { children: React.ReactNode }) {
@@ -27,17 +29,21 @@ export default function PrivacyPolicy() {
   return (
     <LegalLayout
       title="Privacy Policy"
-      lastUpdated="[date placeholder — set when this is finalized and published]"
+      lastUpdated={LEGAL_UPDATED}
       sections={SECTIONS}
-      draftNote="This document is built from the app's actual code and access scopes (see the facts cited throughout), but it still needs the legal entity name, registered address, governing law, and a qualified privacy-counsel review before publishing. Bracketed items are placeholders — nothing else on this page is invented."
     >
       <LegalSection id="who-we-are" title="1. Who we are">
         <P>
-          SEO Rating (seorating.net), distributed on the Shopify App Store as &ldquo;TNS SEO &amp; AI
-          Visibility&rdquo;, is built and operated by TheNextSprout. This policy explains what data
-          the app collects from a merchant&rsquo;s store, why, who it is shared with, and how it can
-          be deleted. Legal entity and registered address: [placeholder — legal entity name, country
-          of incorporation/operation, and registered address pending].
+          SEO Rating (seorating.net), named &ldquo;{APP_STORE_NAME}&rdquo; on the Shopify App Store,
+          is built and operated by <a href={COMPANY_URL} rel="noopener">{COMPANY_NAME}</a>{" "}
+          (&ldquo;we&rdquo;, &ldquo;us&rdquo;), which works from Monastir, Tunisia and Chicago, USA.
+          {" "}{COMPANY_NAME} is the controller of the data described in this policy. This policy
+          explains what data the app collects from a merchant&rsquo;s store, why, who it is shared
+          with, and how it can be deleted.
+        </P>
+        <P>
+          {INVESTOR_NAME} is an investment partner in {COMPANY_NAME}. It does not operate the app and
+          does not receive merchant or store data.
         </P>
       </LegalSection>
 
@@ -103,9 +109,12 @@ export default function PrivacyPolicy() {
           <li>To keep the service secure, prevent abuse, and comply with legal and platform obligations.</li>
         </ul>
         <P>
-          We do not sell your data, and we do not use it to advertise to your shoppers. Lawful bases
-          (contract performance, legitimate interests, consent for optional integrations): [to be
-          confirmed with counsel].
+          We do not sell or rent your data, and we do not use it to advertise to your shoppers. Where
+          data protection law requires a legal basis, we rely on: performance of our contract with you
+          (running the features you install and subscribe to); our legitimate interests (security,
+          abuse prevention, support and improving the app); your consent (connecting Google Search
+          Console, which you can withdraw at any time by disconnecting); and legal obligations (tax,
+          accounting and responding to lawful requests).
         </P>
       </LegalSection>
 
@@ -116,7 +125,7 @@ export default function PrivacyPolicy() {
             ["Anthropic", "AI generation (meta tags, alt text, content drafts, article ideas). We send the specific product/page fields needed for that request — title, vendor, type, tags, price range, stripped description. No customer data is sent."],
             ["Google", "Search Console data retrieval and site-verification, only if you connect the integration; PageSpeed Insights audits of your public store URLs when you run a performance check. PageSpeed requests send only the public URL being tested."],
             ["DataForSEO", "Keyword research. Keyword terms plus location/language parameters are sent to retrieve volume and related-term data, funded by our own account, not billed to you directly."],
-            ["Resend", "Transactional email. Used to deliver support/contact-form messages you send us."],
+            ["Resend", "Transactional email. Delivers the contact-form and waitlist messages you send us from this website."],
             ["Bing IndexNow", "If enabled, submits your store's public URLs (plus a verification key) so participating search engines can re-crawl faster. Google does not currently participate in IndexNow."],
             ["Sentry", "Error monitoring, only if configured. Receives error details and minimal context (such as which shop triggered an error) to help us fix bugs — not raw customer data."],
             ["Vercel", "Hosting and scheduled job infrastructure for the app itself."],
@@ -138,8 +147,12 @@ export default function PrivacyPolicy() {
         </div>
         <P>
           Our database (Postgres, via Prisma) is hosted by our infrastructure provider and is not a
-          separate data recipient — it stores the data described in section 2. Data may be processed
-          outside your country; transfer safeguards: [placeholder — confirm with counsel].
+          separate data recipient — it stores the data described in section 2. These providers may
+          process data in the United States and other countries outside your own. Where data from the
+          EEA, UK or Switzerland is transferred, we rely on the safeguards our providers offer, such as
+          the European Commission&rsquo;s Standard Contractual Clauses. We may also disclose data if
+          required by law, or to a successor if {COMPANY_NAME} or the app is merged or sold, in which
+          case this policy continues to apply.
         </P>
       </LegalSection>
 
@@ -153,8 +166,10 @@ export default function PrivacyPolicy() {
           deleted when you uninstall the app.
         </P>
         <P>
-          Data is transmitted over TLS. Access to production systems is restricted to personnel who
-          need it. Additional technical and organisational measures: [placeholder].
+          Data is transmitted over TLS. Access to production systems is restricted to team members who
+          need it to run and support the app, and application secrets are kept in our hosting
+          provider&rsquo;s encrypted configuration rather than in source code. If a personal data
+          breach affects you, we will notify you and the relevant authorities as the law requires.
         </P>
       </LegalSection>
 
@@ -182,13 +197,15 @@ export default function PrivacyPolicy() {
           <li>
             <strong style={{ fontWeight: 600 }}>Direct requests.</strong> Merchants and their
             customers can ask us directly to access, correct, export or delete data by emailing{" "}
-            <a href="mailto:apps@thenextsprout.com">apps@thenextsprout.com</a>. Depending on where
-            you live you may also have rights to object, restrict processing, or complain to a
-            supervisory authority.
+            <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>. We reply within 24 hours and complete requests
+            within 30 days. Depending on where you live you may also have rights to object, restrict
+            processing, or complain to a supervisory authority, such as Tunisia&rsquo;s Instance
+            Nationale de Protection des Données Personnelles (INPDP) or your local data protection
+            authority.
           </li>
           <li>
             <strong style={{ fontWeight: 600 }}>Logs.</strong> Technical logs are kept for a limited
-            period for security and debugging, then deleted. Log retention: [placeholder].
+            period for security and debugging, and are deleted automatically within 90 days.
           </li>
         </ul>
       </LegalSection>
@@ -214,12 +231,22 @@ export default function PrivacyPolicy() {
         </P>
       </LegalSection>
 
-      <LegalSection id="changes" title="9. Changes and contact">
+      <LegalSection id="children" title="9. Children">
+        <P>
+          The app and this website are for businesses running Shopify stores. They are not directed at
+          children, and we do not knowingly collect personal data from anyone under 16.
+        </P>
+      </LegalSection>
+
+      <LegalSection id="changes" title="10. Changes and contact">
         <P>
           We will update this policy as the app changes, and revise the &ldquo;last updated&rdquo;
-          date; material changes will be communicated in the app or by email. Privacy inquiries:{" "}
-          <a href="mailto:apps@thenextsprout.com">apps@thenextsprout.com</a>. Data protection contact
-          / representative, where required: [placeholder].
+          date; material changes will be communicated in the app or by email.
+        </P>
+        <P>
+          For any privacy question or request, including under the GDPR, UK GDPR, the CCPA or
+          Tunisia&rsquo;s Organic Law No. 2004-63 on personal data protection, contact{" "}
+          {COMPANY_NAME} at <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
         </P>
       </LegalSection>
     </LegalLayout>

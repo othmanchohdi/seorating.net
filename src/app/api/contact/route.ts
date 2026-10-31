@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
-
-const SUPPORT_EMAIL = "apps@thenextsprout.com";
-const FROM_ADDRESS = "SEO Rating Website <contact@send.seorating.net>";
+import { CONTACT_TO, EMAIL_FROM, SUPPORT_EMAIL } from "@/lib/site";
+import { EMAIL_PATTERN, escapeHtml, resendClient } from "@/lib/email";
 
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => null);
@@ -10,34 +8,38 @@ export async function POST(req: NextRequest) {
   const email = typeof body?.email === "string" ? body.email.trim() : "";
   const message = typeof body?.message === "string" ? body.message.trim() : "";
 
-  if (!name || !email || !message || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!name || !email || !message || email.length > 254 || !EMAIL_PATTERN.test(email)) {
     return NextResponse.json({ error: "Please fill in every field with a valid email." }, { status: 400 });
   }
+  if (name.length > 200 || message.length > 10_000) {
+    return NextResponse.json({ error: "Your message is too long. Please shorten it and try again." }, { status: 400 });
+  }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    console.error("RESEND_API_KEY is not configured — contact form submission dropped.", { name, email });
+  const resend = resendClient();
+  if (!resend) {
+    console.error("RESEND_API_KEY is not configured — contact form submission dropped.");
     return NextResponse.json(
-      { error: "Support email isn't configured yet. Please email apps@thenextsprout.com directly." },
-      { status: 503 },
+      { error: `We couldn't send your message. Please email ${SUPPORT_EMAIL} directly.` },
+      { status: 500 },
     );
   }
 
-  try {
-    const resend = new Resend(apiKey);
-    await resend.emails.send({
-      from: FROM_ADDRESS,
-      to: SUPPORT_EMAIL,
-      replyTo: email,
-      subject: `Contact form: ${name}`,
-      text: `From: ${name} <${email}>\n\n${message}`,
-    });
-    return NextResponse.json({ ok: true });
-  } catch (error) {
+  const { error } = await resend.emails.send({
+    from: EMAIL_FROM,
+    to: CONTACT_TO,
+    replyTo: email,
+    subject: `Contact form: ${name.replace(/[\r\n]+/g, " ")}`,
+    text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+    html: `<p><strong>Name:</strong> ${escapeHtml(name)}<br><strong>Email:</strong> ${escapeHtml(email)}</p><p style="white-space:pre-wrap">${escapeHtml(message)}</p>`,
+  });
+
+  if (error) {
     console.error("Failed to send contact form email", error);
     return NextResponse.json(
-      { error: "Something went wrong sending your message. Please email apps@thenextsprout.com directly." },
-      { status: 502 },
+      { error: `We couldn't send your message. Please email ${SUPPORT_EMAIL} directly.` },
+      { status: 500 },
     );
   }
+
+  return NextResponse.json({ ok: true });
 }

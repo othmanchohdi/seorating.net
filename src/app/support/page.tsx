@@ -1,6 +1,7 @@
 import { pageMetadata } from "@/lib/metadata";
 import Link from "next/link";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
+import { LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Support",
@@ -47,19 +48,23 @@ export default function Support() {
     <LegalLayout
       eyebrow="Support"
       title="Support"
-      lastUpdated="[date placeholder]"
+      lastUpdated={LEGAL_UPDATED}
       sections={SECTIONS}
     >
       <LegalSection id="how-to-get-help" title="1. How to get help">
         <P>
-          Email <a href="mailto:apps@thenextsprout.com">apps@thenextsprout.com</a> with support
+          Email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> with support
           questions, billing questions, feature requests, or a problem with the app, or use the{" "}
           <Link href="/contact">contact form</Link>. A human from the team replies to every message.
         </P>
       </LegalSection>
 
       <LegalSection id="response-time" title="2. Response time">
-        <P>Typical response time: [placeholder — confirm the SLA you want to commit to publicly].</P>
+        <P>
+          We reply to every message within 24 hours, seven days a week. Support runs in shifts from
+          Chicago and Monastir, so most messages get an answer much sooner. Data deletion and billing
+          requests follow the same timeline.
+        </P>
       </LegalSection>
 
       <LegalSection id="in-app-help" title="3. In-app help center">

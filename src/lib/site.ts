@@ -5,11 +5,23 @@ export const SITE_URL = "https://seorating.net";
 export const SITE_NAME = "SEO Rating";
 export const APP_STORE_NAME = "TNS SEO & AI Visibility";
 export const COMPANY_NAME = "TheNextSprout";
-export const SUPPORT_EMAIL = "apps@thenextsprout.com";
+export const COMPANY_URL = "https://www.thenextsprout.com";
+export const INVESTOR_NAME = "1o8 Agency";
+export const INVESTOR_URL = "https://www.1o8.agency";
+export const SUPPORT_EMAIL = "hello@seorating.net";
 export const APP_URL = "https://app.seorating.net";
 
-// TODO: replace with the app's exact App Store listing URL once it is live.
-export const INSTALL_URL = "https://apps.shopify.com/";
+// Transactional email via Resend. seorating.net is the verified sending domain.
+export const EMAIL_FROM = "SEO Rating <hello@seorating.net>";
+export const CONTACT_TO = "hello@seorating.net";
+
+// Set to the App Store listing URL once the app is approved. While it is
+// null, every "Install" button is hidden and the site points to /contact.
+export const INSTALL_URL: string | null = null;
+
+// Legal facts shared by the Terms, Privacy Policy and other policy pages.
+export const LEGAL_UPDATED = "October 31, 2026";
+export const GOVERNING_LAW = "Tunisia";
 
 export const SITE_DESCRIPTION =
   "SEO Rating is a Shopify app that audits your store and fixes what holds it back in Google and AI search: meta tags, image alt text, structured data, llms.txt, robots.txt, keyword research and PageSpeed audits.";

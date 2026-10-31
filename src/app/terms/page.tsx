@@ -1,5 +1,6 @@
 import { pageMetadata } from "@/lib/metadata";
 import { LegalLayout, LegalSection } from "@/components/LegalLayout";
+import { APP_STORE_NAME, COMPANY_NAME, COMPANY_URL, GOVERNING_LAW, INVESTOR_NAME, LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Terms of Service",
@@ -30,15 +31,14 @@ export default function Terms() {
   return (
     <LegalLayout
       title="Terms of Service"
-      lastUpdated="[date placeholder — set when this is finalized and published]"
+      lastUpdated={LEGAL_UPDATED}
       sections={SECTIONS}
-      draftNote="Plan names, prices and limits below are pulled directly from the app's live billing code. The entity name, governing law, and liability specifics still need a qualified lawyer's review before publishing. Bracketed items are placeholders."
     >
       <LegalSection id="the-service" title="1. The service">
         <P>
-          SEO Rating (seorating.net), distributed on the Shopify App Store as &ldquo;TNS SEO &amp; AI
-          Visibility&rdquo;, is a software application provided by TheNextSprout (&ldquo;we&rdquo;,
-          &ldquo;us&rdquo;). It is installed into a Shopify store by the merchant (&ldquo;you&rdquo;)
+          SEO Rating (seorating.net), named &ldquo;{APP_STORE_NAME}&rdquo; on the Shopify App Store, is
+          a software application provided by{" "}
+          <a href={COMPANY_URL} rel="noopener">{COMPANY_NAME}</a> (&ldquo;we&rdquo;, &ldquo;us&rdquo;). It is installed into a Shopify store by the merchant (&ldquo;you&rdquo;)
           and provides search-optimization and AI-visibility tooling, including AI-ready discovery
           file generation, robots.txt management, SEO tag and image alt tag generation, on-page
           audits and content optimization, structured data and search-appearance settings, keyword
@@ -85,8 +85,11 @@ export default function Terms() {
             are not currently offered.
           </li>
           <li>
-            <strong style={{ fontWeight: 600 }}>Refunds.</strong> Refund handling: [placeholder — to
-            be finalized].
+            <strong style={{ fontWeight: 600 }}>Refunds.</strong> All charges are billed through Shopify
+            and are non-refundable, except where the law requires otherwise. We do not give prorated
+            refunds for partial months, downgrades, cancellations or unused AI credits. We may, at our
+            discretion, issue a refund or credit in specific cases such as a billing error; any refund
+            is processed through Shopify.
           </li>
           <li>
             <strong style={{ fontWeight: 600 }}>Taxes.</strong> Charges may be subject to taxes as
@@ -154,9 +157,13 @@ export default function Terms() {
         </P>
         <P>
           To the maximum extent permitted by law, our total aggregate liability arising out of or
-          relating to the app is limited to the amounts you paid us for the app in the [12 months —
-          placeholder] preceding the claim. Nothing in these terms excludes liability that cannot be
-          excluded by law.
+          relating to the app is limited to the amounts you paid us for the app in the 12 months
+          preceding the claim. Nothing in these terms excludes liability that cannot be excluded by
+          law.
+        </P>
+        <P>
+          You agree to indemnify us against third-party claims arising from content you publish to your
+          store using the app, or from your breach of these terms.
         </P>
       </LegalSection>
 
@@ -179,18 +186,20 @@ export default function Terms() {
 
       <LegalSection id="governing-law" title="11. Governing law and disputes">
         <P>
-          These terms are governed by the laws of [jurisdiction placeholder], and the courts of
-          [venue placeholder] have exclusive jurisdiction over disputes. Dispute-resolution mechanism
-          (informal resolution period, arbitration or courts): [placeholder — to be finalized with
-          counsel].
+          These terms are governed by the laws of {GOVERNING_LAW}. Before starting any formal
+          proceedings, you agree to contact us at <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>{" "}
+          and give us 30 days to resolve the dispute informally. If it is not resolved, the courts of
+          Monastir, Tunisia have exclusive jurisdiction. This does not remove any mandatory protection
+          you have under the law of the country where you live.
         </P>
       </LegalSection>
 
       <LegalSection id="contact" title="12. Contact">
         <P>
-          Questions about these terms:{" "}
-          <a href="mailto:apps@thenextsprout.com">apps@thenextsprout.com</a>. Legal entity and
-          registered address: [placeholder].
+          These terms are an agreement between you and {COMPANY_NAME} (
+          <a href={COMPANY_URL} rel="noopener">thenextsprout.com</a>). {INVESTOR_NAME}, our investment
+          partner, is not a party to them. Questions about these terms:{" "}
+          <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
         </P>
       </LegalSection>
     </LegalLayout>

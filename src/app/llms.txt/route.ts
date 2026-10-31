@@ -7,12 +7,12 @@ import { APP_STORE_NAME, COMPANY_NAME, INSTALL_URL, SITE_NAME, SUPPORT_EMAIL, ab
 export function GET() {
   const body = `# ${SITE_NAME}
 
-> ${SITE_NAME} (listed on the Shopify App Store as "${APP_STORE_NAME}") is a Shopify app by ${COMPANY_NAME} that audits a store and fixes what holds it back in Google and AI search: meta tags, image alt text, on-page content, JSON-LD structured data, robots.txt, llms.txt and agents.md, IndexNow, broken links, keyword research and Google PageSpeed audits. Every tool is on every plan, including a free plan. AI-written changes are always reviewed by the merchant before they publish.
+> ${SITE_NAME} (Shopify App Store name: "${APP_STORE_NAME}") is a Shopify app by ${COMPANY_NAME} that audits a store and fixes what holds it back in Google and AI search: meta tags, image alt text, on-page content, JSON-LD structured data, robots.txt, llms.txt and agents.md, IndexNow, broken links, keyword research and Google PageSpeed audits. Every tool is on every plan, including a free plan. AI-written changes are always reviewed by the merchant before they publish.
 
 ## Product
 - [Features and pricing](${absoluteUrl("/")}): Overview of every module, plans and FAQ
 - [Documentation](${absoluteUrl("/docs")}): How each module works today, including AI credit costs
-- [Install on Shopify](${INSTALL_URL}): Shopify App Store listing
+${INSTALL_URL ? `- [Install on Shopify](${INSTALL_URL}): Shopify App Store listing` : "- Shopify App Store listing: coming soon, not yet live"}
 
 ## Pricing
 ${PLANS.map((p) => `- ${p.name}: $${p.price}/month, ${p.credits.toLocaleString("en-US")} AI credits per month`).join("\n")}

@@ -4,26 +4,17 @@ export function LegalLayout({
   eyebrow = "Legal",
   title,
   lastUpdated,
-  draftNote,
   sections,
   children,
 }: {
   eyebrow?: string;
   title: string;
   lastUpdated: string;
-  draftNote?: string;
   sections: LegalSection[];
   children: React.ReactNode;
 }) {
   return (
     <div className="container container-narrow" style={{ padding: "64px 24px 96px" }}>
-      {draftNote && (
-        <div className="draft-banner">
-          <p>Draft — requires legal review</p>
-          <p>{draftNote}</p>
-        </div>
-      )}
-
       <span className="mono-label">{eyebrow}</span>
       <h1 style={{ margin: "14px 0 0", fontSize: 44, lineHeight: 1.06, letterSpacing: "-0.03em", fontWeight: 600 }}>
         {title}

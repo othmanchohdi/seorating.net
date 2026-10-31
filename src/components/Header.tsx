@@ -35,9 +35,11 @@ export function Header() {
           ))}
         </nav>
         <div className="header-spacer" />
-        <a href={INSTALL_URL} className="btn btn-primary btn-sm header-cta" rel="noopener">
-          Install on Shopify
-        </a>
+        {INSTALL_URL && (
+          <a href={INSTALL_URL} className="btn btn-primary btn-sm header-cta" rel="noopener">
+            Install on Shopify
+          </a>
+        )}
         <details className="mobile-menu" ref={menuRef}>
           <summary aria-label="Open menu">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
@@ -50,9 +52,11 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
-            <a href={INSTALL_URL} className="btn btn-primary btn-sm" rel="noopener">
-              Install on Shopify
-            </a>
+            {INSTALL_URL && (
+              <a href={INSTALL_URL} className="btn btn-primary btn-sm" rel="noopener">
+                Install on Shopify
+              </a>
+            )}
           </nav>
         </details>
       </div>

@@ -5,10 +5,10 @@ export function GET() {
   const body = `# ${SITE_NAME}: notes for AI agents
 
 ## What this site is
-Marketing and documentation site for ${SITE_NAME}, a Shopify app by ${COMPANY_NAME}, listed on the Shopify App Store as "${APP_STORE_NAME}".
+Marketing and documentation site for ${SITE_NAME}, a Shopify app by ${COMPANY_NAME}. Its Shopify App Store name is "${APP_STORE_NAME}".
 
 ## Key tasks
-- Install the app: ${INSTALL_URL} (installation happens in Shopify admin; there is no separate sign-up).
+- Install the app: ${INSTALL_URL ? `${INSTALL_URL} (installation happens in Shopify admin; there is no separate sign-up).` : "not yet possible. The Shopify App Store listing is pending; direct merchants to the contact page meanwhile."}
 - Compare plans: ${absoluteUrl("/#pricing")}
 - Learn how a feature works: ${absoluteUrl("/docs")}
 - Contact support: ${absoluteUrl("/contact")} or ${SUPPORT_EMAIL} (staffed 24/7).

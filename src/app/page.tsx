@@ -169,9 +169,15 @@ export default function Home() {
               ChatGPT, Perplexity and Gemini.
             </p>
             <div className="cta-row" id="install">
-              <a href={INSTALL_URL} rel="noopener" className="btn btn-primary">
-                Install free on Shopify
-              </a>
+              {INSTALL_URL ? (
+                <a href={INSTALL_URL} rel="noopener" className="btn btn-primary">
+                  Install free on Shopify
+                </a>
+              ) : (
+                <a href="#pricing" className="btn btn-primary">
+                  See plans
+                </a>
+              )}
               <a href="#how" className="btn btn-secondary">
                 How it works
               </a>
@@ -678,11 +684,19 @@ export default function Home() {
             Get found by search engines and by AI.
           </h2>
           <p style={{ margin: "16px auto 0", maxWidth: 520, fontSize: 17, lineHeight: 1.6, color: "var(--color-primary-chip)" }}>
-            Install free, run your first audit, and see what your store looks like to both.
+            {INSTALL_URL
+              ? "Install free, run your first audit, and see what your store looks like to both."
+              : "Coming soon to the Shopify App Store. Questions before launch? Talk to the team."}
           </p>
-          <a href={INSTALL_URL} rel="noopener" className="btn btn-white" style={{ marginTop: 30, height: 50, fontSize: 16 }}>
-            Install on Shopify
-          </a>
+          {INSTALL_URL ? (
+            <a href={INSTALL_URL} rel="noopener" className="btn btn-white" style={{ marginTop: 30, height: 50, fontSize: 16 }}>
+              Install on Shopify
+            </a>
+          ) : (
+            <Link href="/contact" className="btn btn-white" style={{ marginTop: 30, height: 50, fontSize: 16 }}>
+              Contact us
+            </Link>
+          )}
         </div>
       </section>
     </>

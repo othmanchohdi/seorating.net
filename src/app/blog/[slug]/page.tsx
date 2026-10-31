@@ -90,14 +90,20 @@ export default async function BlogPost({ params }: PageProps<"/blog/[slug]">) {
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span style={{ fontSize: 14.5, fontWeight: 600 }}>TheNextSprout team</span>
               <span className="mono" style={{ fontSize: 12, color: "var(--color-text-faintest)" }}>
-                <time dateTime={post.published}>{formatDate(post.published)}</time> · {post.readMinutes} min read
+                <time dateTime={post.published}>{formatDate(post.published)}</time>
+                {post.updated && post.updated !== post.published && (
+                  <>
+                    {" "}· Updated <time dateTime={post.updated}>{formatDate(post.updated)}</time>
+                  </>
+                )}{" "}
+                · {post.readMinutes} min read
               </span>
             </div>
           </div>
         </header>
 
         <div className="container" style={{ maxWidth: 1100 }}>
-          <div style={{ aspectRatio: "21/9", minHeight: 220, borderRadius: 20, overflow: "hidden" }}>
+          <div style={{ width: "100%", aspectRatio: "21/9", minHeight: 220, borderRadius: 20, overflow: "hidden" }}>
             <PostCover post={post} size="lg" />
           </div>
         </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Post } from "./types";
+import { RobotsTester } from "@/components/blog/RobotsTester";
 import { AppCta, Code, CodeBlock, Note } from "./ui";
 
 function Body() {
@@ -33,21 +34,24 @@ function Body() {
       <h2 id="defaults">What Shopify blocks by default</h2>
       <p>
         Shopify&rsquo;s default file keeps crawlers away from pages that have no business in search results and would waste
-        crawl budget. That includes checkout, cart and account pages, the admin, internal search results, and the
-        near-duplicate URLs created by filtering and sorting collections. A trimmed example:
+        crawl budget. That includes checkout, cart, order and account pages, the admin, and the near-duplicate URLs
+        created by sorting collections, combining tags or stacking several filters. A trimmed example:
       </p>
       <CodeBlock file="robots.txt — excerpt of Shopify defaults">{`User-agent: *
 Disallow: /admin
-Disallow: /cart
+Disallow: /cart/
 Disallow: /checkout
+Disallow: /checkouts/
+Disallow: /orders
 Disallow: /account
-Disallow: /search
 Disallow: /collections/*sort_by*
 Disallow: /collections/*+*
+Disallow: /collections/*filter*&*filter*
 Sitemap: https://yourstore.com/sitemap.xml`}</CodeBlock>
       <p>
         Note the last line. The file also points crawlers at your sitemap, which is how they discover your products,
-        collections, pages and articles.
+        collections, pages and articles. Product, collection, page, blog and policy pages are all left open. Recent
+        versions of the file also start with comments pointing AI agents to your store&rsquo;s <Code>agents.md</Code>.
       </p>
 
       <h2 id="when-to-change">When it&rsquo;s worth changing</h2>
@@ -90,10 +94,16 @@ Sitemap: https://yourstore.com/sitemap.xml`}</CodeBlock>
 Disallow: /
 
 User-agent: Google-Extended
-Disallow: /
-
-User-agent: OAI-SearchBot
-Allow: /`}</CodeBlock>
+Disallow: /`}</CodeBlock>
+      <p>
+        There&rsquo;s no need to add a group for <Code>OAI-SearchBot</Code> or other search crawlers. Any crawler without
+        its own group follows the <Code>User-agent: *</Code> rules, which already allow your products and collections.
+      </p>
+      <Note label="Common mistake">
+        A crawler that has its own group ignores <em>every</em> rule under <Code>User-agent: *</Code>. Adding{" "}
+        <Code>User-agent: OAI-SearchBot</Code> with <Code>Allow: /</Code> quietly lets it into your cart, checkout and filter
+        URLs too. If you do give a crawler its own group, repeat the shared rules inside it.
+      </Note>
       <p>
         User agent names and their purposes change, so check each company&rsquo;s current documentation before relying on
         a rule. There&rsquo;s more on how assistants pick stores in{" "}
@@ -109,6 +119,8 @@ Allow: /`}</CodeBlock>
         <li>Check which AI crawlers are named, and whether that matches what you intend.</li>
         <li>In Google Search Console, look for pages reported as &ldquo;Blocked by robots.txt&rdquo; that you expected to rank.</li>
       </ol>
+      <p>Or paste your own rules into the tester below and try a few crawlers and paths:</p>
+      <RobotsTester />
 
       <AppCta
         title="Edit robots.txt without touching theme code"
@@ -126,7 +138,8 @@ export const post: Post = {
   category: "Technical SEO",
   tags: ["Technical SEO", "robots.txt", "AI crawlers", "Shopify"],
   published: "2026-10-06",
-  readMinutes: 5,
+  updated: "2026-10-31",
+  readMinutes: 6,
   cover: { file: "robots.txt", lines: ["User-agent: *", "Disallow: /cart", "Disallow: /checkout", "", "Sitemap: /sitemap.xml"] },
   toc: [
     { id: "what-it-does", label: "What robots.txt does" },

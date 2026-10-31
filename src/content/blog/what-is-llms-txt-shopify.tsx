@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Post } from "./types";
-import { AppCta, Code, CodeBlock, DocsLink, Note } from "./ui";
+import { LlmsTxtBuilder } from "@/components/blog/LlmsTxtBuilder";
+import { AppCta, Code, DocsLink, Note } from "./ui";
 
 function Body() {
   return (
@@ -40,16 +41,8 @@ function Body() {
         <li>Shipping, returns and other policies</li>
         <li>Anything an assistant should know to describe you accurately, like where products are made or what makes them different</li>
       </ul>
-      <CodeBlock file="llms.txt — example">{`# Northfield
-> Men’s and women’s linen clothing, made in Portugal.
-
-## Collections
-- [Shirts](/collections/shirts): Relaxed and tailored linen shirts
-- [Trousers](/collections/trousers): Drawstring and pleated linen trousers
-
-## Policies
-- [Shipping](/policies/shipping-policy): Free over $100
-- [Returns](/policies/refund-policy): 30 days`}</CodeBlock>
+      <p>Try it with your own store. The builder below writes the file as you type and flags the usual gaps:</p>
+      <LlmsTxtBuilder />
       <p>
         Keep it factual and specific. &ldquo;Linen shirts, made in Portugal, free returns within 30 days&rdquo; gives an
         assistant something it can repeat. &ldquo;The best shirts on the internet&rdquo; gives it nothing.
@@ -58,6 +51,20 @@ function Body() {
         llms.txt is still an emerging convention, and AI companies haven&rsquo;t all said whether or how they read it.
         Treat it as low-effort groundwork, not a guarantee of being cited.
       </Note>
+
+      <h2 id="shopify-default">What Shopify serves by default</h2>
+      <p>
+        Open <Code>yourstore.com/llms.txt</Code> and you may find a file is already there. Shopify now serves default{" "}
+        <Code>llms.txt</Code> and <Code>agents.md</Code> files on many storefronts. Their content is aimed at AI shopping
+        agents: how to use Shopify&rsquo;s Shop integration and the Universal Commerce Protocol to search products, build a
+        cart and check out on a shopper&rsquo;s behalf.
+      </p>
+      <p>
+        That&rsquo;s useful groundwork for agentic checkout, but it&rsquo;s a different job from the summary described
+        above. The default file doesn&rsquo;t say what your brand sells, which collections matter, or what your shipping and
+        returns terms are. Those facts still have to come from you, through your page content, structured data and any
+        store summary you publish.
+      </p>
 
       <h2 id="need">Do you need one?</h2>
       <p>
@@ -90,7 +97,7 @@ function Body() {
 
       <AppCta
         title="Generate llms.txt from your Shopify catalog"
-        body="SEO Rating builds llms.txt and agents.md from your real store data and hosts them on your domain, with a review step before they go live."
+        body="SEO Rating builds llms.txt and agents.md content from your real store data, with a review step before anything goes live."
       />
       <p style={{ fontSize: 15.5 }}>
         Want the details? See <DocsLink hash="ai-visibility">AI Visibility in the docs</DocsLink>. This site publishes its
@@ -108,11 +115,13 @@ export const post: Post = {
   category: "AI search",
   tags: ["AI search", "llms.txt", "Shopify"],
   published: "2026-10-24",
-  readMinutes: 7,
+  updated: "2026-10-31",
+  readMinutes: 8,
   cover: { file: "llms.txt", lines: ["# Your Store", "> What you sell, in one line.", "", "## Collections", "- [Shirts](/collections/shirts)"] },
   toc: [
     { id: "what", label: "What llms.txt is" },
     { id: "inside", label: "What goes inside" },
+    { id: "shopify-default", label: "Shopify’s default file" },
     { id: "need", label: "Do you need one?" },
     { id: "current", label: "Keeping it current" },
   ],

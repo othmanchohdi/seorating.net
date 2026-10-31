@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Post } from "./types";
+import { AiReadiness } from "@/components/blog/AiReadiness";
 import { AppCta, Code, Note } from "./ui";
 
 function Body() {
@@ -59,7 +60,7 @@ function Body() {
       <h2 id="access">Can they reach you at all?</h2>
       <p>
         AI companies run their own crawlers, with user agents such as <Code>GPTBot</Code>, <Code>OAI-SearchBot</Code>,{" "}
-        <Code>PerplexityBot</Code> and <Code>ClaudeBot</Code>. Some are used for training and some for live search, and
+        <Code>PerplexityBot</Code>, <Code>ClaudeBot</Code> and <Code>Claude-SearchBot</Code>. Some are used for training and some for live search, and
         companies document them separately. If your <Code>robots.txt</Code> blocks the search-related ones, your pages
         can&rsquo;t be fetched for answers, however good they are.
       </p>
@@ -87,14 +88,11 @@ function Body() {
       </Note>
 
       <h2 id="checklist">A short checklist</h2>
-      <ol>
-        <li>Make sure AI search crawlers aren&rsquo;t blocked in robots.txt (unless you mean them to be).</li>
-        <li>Put the important product facts in page text, not only in images.</li>
-        <li>Turn on Product, Organization and Breadcrumb structured data.</li>
-        <li>Write specific meta titles and descriptions for your key pages.</li>
-        <li>Publish an llms.txt that summarizes your store, and keep it current.</li>
-        <li>Notify search engines when pages change, for example with IndexNow, so fresh content is picked up sooner.</li>
-      </ol>
+      <p>
+        Each item below unblocks one stage of the answer pipeline: being found in a search index, being fetched, being
+        understood, and being trusted enough to recommend. Tick what your store already does to see where it stops.
+      </p>
+      <AiReadiness />
 
       <AppCta
         title="Check your store for AI search readiness"
@@ -112,6 +110,7 @@ export const post: Post = {
   category: "AI search",
   tags: ["AI search", "ChatGPT", "Shopify"],
   published: "2026-10-15",
+  updated: "2026-10-31",
   readMinutes: 6,
   cover: { file: "assistant.log", lines: ["> best linen shirt under $80", "search: 6 results", "fetch: northfield.com/products/…", "read: Product schema ✓", "cite: northfield.com"] },
   toc: [

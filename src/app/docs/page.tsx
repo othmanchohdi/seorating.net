@@ -179,7 +179,9 @@ export default function Documentation() {
               Seven schema types, each a toggle: <strong>Product</strong> and <strong>Breadcrumb</strong> on product pages,{" "}
               <strong>Collection</strong> on collection pages, <strong>Article</strong> and <strong>Blog</strong> on your blog,
               and <strong>Site search box</strong> and <strong>Organization</strong> on your home page. They&rsquo;re added
-              through the app&rsquo;s theme app embed, which you switch on once in the theme editor. Then use{" "}
+              through the app&rsquo;s theme app embed, which you switch on once in the theme editor. Google stopped
+              showing the sitelinks search box in its results in late 2024, so that toggle is harmless but no longer
+              changes how you appear in Google. Then use{" "}
               <em>Run test</em> to confirm the markup appears on your live store.
             </p>
             <h3>Local Business</h3>

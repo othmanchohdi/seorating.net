@@ -7,13 +7,14 @@ import { post as metaDescriptions } from "./meta-descriptions-that-get-clicked";
 import { post as altText } from "./product-image-alt-text-checklist";
 import { post as productSchema } from "./shopify-product-schema";
 import { post as pageSpeed } from "./reading-pagespeed-report";
+import { post as duplicateUrls } from "./shopify-duplicate-urls-canonical";
 
 export type { Category, Post };
 
 export const CATEGORIES: Category[] = ["AI search", "On-page", "Technical SEO", "Speed"];
 
 // Newest first.
-export const POSTS: Post[] = [llmsTxt, aiAssistants, robotsTxt, metaDescriptions, altText, productSchema, pageSpeed].sort((a, b) =>
+export const POSTS: Post[] = [duplicateUrls, llmsTxt, aiAssistants, robotsTxt, metaDescriptions, altText, productSchema, pageSpeed].sort((a, b) =>
   b.published.localeCompare(a.published),
 );
 

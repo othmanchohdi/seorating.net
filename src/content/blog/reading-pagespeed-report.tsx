@@ -1,4 +1,5 @@
 import type { Post } from "./types";
+import { VitalsMeter } from "@/components/blog/VitalsMeter";
 import { AppCta, Note } from "./ui";
 
 function Body() {
@@ -42,8 +43,9 @@ function Body() {
       </ul>
       <p>
         Each is judged at the 75th percentile of visits, so most of your visitors, not just the ones on fast Wi-Fi, need a
-        good experience.
+        good experience. Move the sliders to see how the thresholds work together:
       </p>
+      <VitalsMeter />
 
       <h2 id="score">What the big score means</h2>
       <p>
@@ -103,6 +105,7 @@ export const post: Post = {
   category: "Speed",
   tags: ["Speed", "Core Web Vitals", "PageSpeed Insights", "Shopify"],
   published: "2026-08-13",
+  updated: "2026-10-31",
   readMinutes: 6,
   cover: { file: "pagespeed.json", lines: ['"LCP": "2.1 s"   ✓ good', '"INP": "160 ms"  ✓ good', '"CLS": "0.04"    ✓ good', '"score": 92'] },
   toc: [

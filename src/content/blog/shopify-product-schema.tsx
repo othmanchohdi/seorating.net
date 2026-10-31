@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Post } from "./types";
+import { SchemaBuilder } from "@/components/blog/SchemaBuilder";
 import { AppCta, Code, CodeBlock, Note } from "./ui";
 
 function Body() {
@@ -46,7 +47,8 @@ function Body() {
       <ul>
         <li>
           <strong>Product identifiers</strong> such as <Code>gtin</Code> or <Code>mpn</Code>, which help search engines match
-          your product with the same item elsewhere.
+          your product with the same item elsewhere. On Shopify these usually come from the variant&rsquo;s barcode field,
+          so they&rsquo;re missing whenever that field is empty.
         </li>
         <li>
           <strong>Brand</strong>, sometimes left out or filled with the store name instead of the actual brand.
@@ -57,7 +59,8 @@ function Body() {
         </li>
         <li>
           <strong>Shipping and returns</strong> (<Code>shippingDetails</Code>, <Code>hasMerchantReturnPolicy</Code>), which
-          Google supports for merchant listings and almost no theme fills in.
+          Google supports for merchant listings and almost no theme fills in. Google also lets you set these once for the
+          whole store, in Search Console or in Organization markup, instead of on every product.
         </li>
         <li>
           <strong>Breadcrumbs</strong> (<Code>BreadcrumbList</Code>), which show the page&rsquo;s place in your store
@@ -67,6 +70,8 @@ function Body() {
           <strong>Organization</strong> on the home page, which ties your store name, logo and contact details together.
         </li>
       </ul>
+      <p>Toggle fields to see how the markup grows from what a typical theme outputs to a complete block:</p>
+      <SchemaBuilder />
       <Note label="Rule of thumb">
         Structured data must match what&rsquo;s visible on the page. Marking up a rating or price that shoppers can&rsquo;t
         see breaks Google&rsquo;s guidelines and can cost you rich results.
@@ -96,7 +101,7 @@ function Body() {
 
       <AppCta
         title="Turn on complete structured data, no code"
-        body="SEO Rating adds Product, Breadcrumb, Collection, Article, Blog, Site search and Organization schema, plus Local Business, through a theme app embed."
+        body="SEO Rating adds Product, Breadcrumb, Collection, Article, Blog and Organization schema, plus Local Business, through a theme app embed."
       />
     </>
   );
@@ -110,6 +115,7 @@ export const post: Post = {
   category: "Technical SEO",
   tags: ["Technical SEO", "Structured data", "Schema", "Shopify"],
   published: "2026-08-27",
+  updated: "2026-10-31",
   readMinutes: 8,
   cover: { file: "product.json-ld", lines: ['"@type": "Product",', '"brand": { … },', '"offers": { "price": "68.00" },', '"gtin": ?   ← missing'] },
   toc: [

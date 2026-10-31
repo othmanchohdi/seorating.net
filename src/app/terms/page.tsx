@@ -111,8 +111,8 @@ export default function Terms() {
       </LegalSection>
 
       <LegalSection id="ai-content" title="5. AI-generated content and no performance guarantee">
-        <div style={{ borderLeft: "3px solid var(--color-primary)", background: "#f7f6fe", padding: "16px 18px", borderRadius: "0 10px 10px 0", marginBottom: 14 }}>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.68, color: "#2c2470" }}>
+        <div style={{ borderLeft: "3px solid var(--color-primary)", background: "var(--color-primary-soft)", padding: "16px 18px", borderRadius: "0 10px 10px 0", marginBottom: 14 }}>
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.68, color: "#2a4d40" }}>
             <strong style={{ fontWeight: 600 }}>AI output is a starting point for your review, not
             guaranteed-accurate content.</strong> Meta tags, alt text, article ideas and content
             suggestions produced by the app may contain errors, omissions or claims that are

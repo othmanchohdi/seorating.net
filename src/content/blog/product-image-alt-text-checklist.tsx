@@ -1,4 +1,5 @@
 import type { Post } from "./types";
+import { AltTextChecker } from "@/components/blog/AltTextChecker";
 import { AppCta, Code, CodeBlock, Note } from "./ui";
 
 function Body() {
@@ -37,8 +38,8 @@ function Body() {
           (front, back, close-up of the fabric).
         </li>
         <li>
-          <strong>Keep it concise.</strong> One clear sentence, usually under about 125 characters, which is where some
-          screen readers start to break things up.
+          <strong>Keep it concise.</strong> One clear sentence. There&rsquo;s no hard limit, but long descriptions are
+          tiring to listen to, and around 125 characters is a common guideline.
         </li>
         <li>
           <strong>Make each image different.</strong> Five photos of the same product should have five descriptions that
@@ -62,6 +63,8 @@ function Body() {
 
 <!-- Better -->
 <img src="shirt-2.jpg" alt="Beige relaxed-fit linen shirt with mother-of-pearl buttons, laid flat">`}</CodeBlock>
+      <p>Test a few of your own against the checklist:</p>
+      <AltTextChecker />
 
       <h2 id="where">Where images hide on Shopify</h2>
       <p>Product photos are the obvious ones, but they&rsquo;re not the only images on your store:</p>
@@ -96,6 +99,7 @@ export const post: Post = {
   category: "On-page",
   tags: ["On-page", "Alt text", "Accessibility", "Shopify"],
   published: "2026-09-10",
+  updated: "2026-10-31",
   readMinutes: 4,
   cover: { file: "product-image.html", lines: ['<img src="shirt.jpg"', '  alt="Beige relaxed-fit linen', '  shirt, laid flat">'] },
   toc: [

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Post } from "./types";
+import { SerpPreview } from "@/components/blog/SerpPreview";
 import { AppCta, Code, Note } from "./ui";
 
 function Body() {
@@ -58,7 +59,9 @@ function Body() {
       </p>
       <p>
         Each one is specific and true, and tells the shopper something they&rsquo;d want to know before they click.
+        Try your own below, and watch where a desktop result would be cut off:
       </p>
+      <SerpPreview />
 
       <h2 id="titles">Don&rsquo;t forget the title tag</h2>
       <p>
@@ -106,7 +109,8 @@ export const post: Post = {
   category: "On-page",
   tags: ["On-page", "Meta tags", "Shopify"],
   published: "2026-09-22",
-  readMinutes: 4,
+  updated: "2026-10-31",
+  readMinutes: 5,
   cover: { file: "search-preview", lines: ["northfield.com › products", "Men’s Relaxed Linen Shirt | Northfield", "Lightweight 100% linen shirt with", "a relaxed fit. Free returns…"] },
   toc: [
     { id: "what-google-does", label: "What Google shows" },

@@ -97,7 +97,7 @@ function Body() {
 
       <AppCta
         title="Generate llms.txt from your Shopify catalog"
-        body="TNS SEO & AI Visibility builds llms.txt and agents.md content from your real store data, with a review step before anything goes live."
+        body="SEO Rating builds llms.txt and agents.md content from your real store data, with a review step before anything goes live."
       />
       <p style={{ fontSize: 15.5 }}>
         Want the details? See <DocsLink hash="ai-visibility">AI Visibility in the docs</DocsLink>. This site publishes its

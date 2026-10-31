@@ -4,7 +4,7 @@ import { LEGAL_UPDATED, SITE_NAME, SUPPORT_EMAIL } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Data Deletion",
-  description: "How to delete your TNS SEO & AI Visibility data, what happens when you uninstall the Shopify app, and how to revoke Google access.",
+  description: "How to delete your SEO Rating data, what happens when you uninstall the Shopify app, and how to revoke Google access.",
   path: "/data-deletion",
 });
 
@@ -73,10 +73,10 @@ export default function DataDeletion() {
 
       <LegalSection id="customer-requests" title="4. Requests from your customers">
         <P>
-          TNS SEO &amp; AI Visibility works on your store&rsquo;s catalogue and content, not on your shoppers&rsquo;
+          SEO Rating works on your store&rsquo;s catalogue and content, not on your shoppers&rsquo;
           personal data — it doesn&rsquo;t read or store customer or order records. If one of your
           customers asks you about data held by apps on your store, there is nothing of theirs held
-          by TNS SEO &amp; AI Visibility to locate or delete. We still acknowledge Shopify&rsquo;s mandatory{" "}
+          by SEO Rating to locate or delete. We still acknowledge Shopify&rsquo;s mandatory{" "}
           <code className="inline-code">customers/data_request</code> and{" "}
           <code className="inline-code">customers/redact</code> webhooks for exactly this reason —
           see the <a href="/privacy">Privacy Policy</a> for detail.

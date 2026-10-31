@@ -63,7 +63,7 @@ const SPEED = [
 const FAQS = [
   {
     q: "Does it work with my Shopify theme?",
-    a: "Yes. TNS SEO & AI Visibility runs inside your Shopify admin and works with your existing theme and products. Structured data is added through a theme app embed you switch on once in the theme editor, so no theme code is edited.",
+    a: "Yes. SEO Rating runs inside your Shopify admin and works with your existing theme and products. Structured data is added through a theme app embed you switch on once in the theme editor, so no theme code is edited.",
   },
   {
     q: "Will it change my store without asking?",
@@ -83,7 +83,7 @@ const FAQS = [
   },
   {
     q: "Does it guarantee rankings or AI citations?",
-    a: "No tool honestly can. TNS SEO & AI Visibility fixes the technical and content issues that hold stores back and makes your store easy for search engines and AI assistants to read. Results depend on your market and competition.",
+    a: "No tool honestly can. SEO Rating fixes the technical and content issues that hold stores back and makes your store easy for search engines and AI assistants to read. Results depend on your market and competition.",
   },
 ];
 
@@ -190,7 +190,7 @@ export default function Home() {
           </div>
 
           {/* Product mockup: pure HTML/CSS, so it costs no image bytes. */}
-          <div style={{ position: "relative", minWidth: 0 }} aria-label="Example TNS SEO & AI Visibility dashboard" role="img">
+          <div style={{ position: "relative", minWidth: 0 }} aria-label="Example SEO Rating dashboard" role="img">
             <div className="mock" style={{ borderRadius: 16, boxShadow: "0 30px 60px -30px rgba(10,61,43,0.35),0 2px 6px rgba(23,23,29,0.05)" }}>
               <div
                 style={{

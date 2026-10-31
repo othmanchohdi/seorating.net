@@ -124,7 +124,7 @@ Disallow: /`}</CodeBlock>
 
       <AppCta
         title="Edit robots.txt without touching theme code"
-        body="TNS SEO & AI Visibility shows your live rules, lets you add rules per crawler, including AI crawlers, and has a raw editor for full control."
+        body="SEO Rating shows your live rules, lets you add rules per crawler, including AI crawlers, and has a raw editor for full control."
       />
     </>
   );

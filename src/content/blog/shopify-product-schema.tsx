@@ -101,7 +101,7 @@ function Body() {
 
       <AppCta
         title="Turn on complete structured data, no code"
-        body="TNS SEO & AI Visibility adds Product, Breadcrumb, Collection, Article, Blog and Organization schema, plus Local Business, through a theme app embed."
+        body="SEO Rating adds Product, Breadcrumb, Collection, Article, Blog and Organization schema, plus Local Business, through a theme app embed."
       />
     </>
   );

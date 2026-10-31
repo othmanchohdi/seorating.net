@@ -4,7 +4,7 @@ import { COMPANY_LOCATION, COMPANY_NAME, COMPANY_URL, INVESTOR_NAME, LEGAL_UPDAT
 
 export const metadata = pageMetadata({
   title: "Privacy Policy",
-  description: "How TNS SEO & AI Visibility collects, uses and protects data from your Shopify store, which providers process it, and how to delete it.",
+  description: "How SEO Rating collects, uses and protects data from your Shopify store, which providers process it, and how to delete it.",
   path: "/privacy",
 });
 
@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
     >
       <LegalSection id="who-we-are" title="1. Who we are">
         <P>
-          TNS SEO &amp; AI Visibility (seorating.net) is a Shopify app built and operated by <a href={COMPANY_URL} rel="noopener">{COMPANY_NAME}</a>{" "}
+          SEO Rating (seorating.net) is a Shopify app built and operated by <a href={COMPANY_URL} rel="noopener">{COMPANY_NAME}</a>{" "}
           (&ldquo;we&rdquo;, &ldquo;us&rdquo;), based in {COMPANY_LOCATION}, with a team in Chicago, USA.
           {" "}{COMPANY_NAME} is the controller of the data described in this policy. This policy
           explains what data the app collects from a merchant&rsquo;s store, why, who it is shared
@@ -206,7 +206,7 @@ export default function PrivacyPolicy() {
 
       <LegalSection id="google-user-data" title="7. Google user data">
         <P>
-          TNS SEO &amp; AI Visibility&rsquo;s use and transfer of information received from Google APIs will adhere to the{" "}
+          SEO Rating&rsquo;s use and transfer of information received from Google APIs will adhere to the{" "}
           <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener noreferrer">
             Google API Services User Data Policy
           </a>{" "}

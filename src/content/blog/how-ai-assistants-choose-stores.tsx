@@ -96,7 +96,7 @@ function Body() {
 
       <AppCta
         title="Check your store for AI search readiness"
-        body="TNS SEO & AI Visibility covers every item on this list, from robots.txt rules and schema to llms.txt and IndexNow, inside your Shopify admin."
+        body="SEO Rating covers every item on this list, from robots.txt rules and schema to llms.txt and IndexNow, inside your Shopify admin."
       />
     </>
   );

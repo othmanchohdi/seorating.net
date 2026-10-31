@@ -107,7 +107,7 @@ function Body() {
 
       <AppCta
         title="Find broken links and redirect them in one place"
-        body="TNS SEO & AI Visibility scans your products, collections, pages and articles for links that no longer resolve, and creates redirects automatically when a handle changes."
+        body="SEO Rating scans your products, collections, pages and articles for links that no longer resolve, and creates redirects automatically when a handle changes."
       />
     </>
   );

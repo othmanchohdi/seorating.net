@@ -9,7 +9,7 @@ import { SITE_NAME, absoluteUrl } from "@/lib/site";
 export const metadata = pageMetadata({
   title: "Shopify SEO & AI Search Blog",
   description:
-    "Practical guides to Shopify SEO and AI search: llms.txt, robots.txt, meta descriptions, alt text, product schema and PageSpeed, from the team behind SEO Rating.",
+    "Practical guides to Shopify SEO and AI search: llms.txt, robots.txt, meta descriptions, alt text, product schema and PageSpeed, from the team behind TNS SEO & AI Visibility.",
   path: "/blog",
 });
 

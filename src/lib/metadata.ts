@@ -41,7 +41,7 @@ export function pageMetadata({
       // Articles get their own generated image from blog/[slug]/opengraph-image.
       ...(type === "article"
         ? { publishedTime, modifiedTime, tags, authors: [`${COMPANY_NAME} team`] }
-        : { images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${SITE_NAME}: SEO and AI visibility for Shopify` }] }),
+        : { images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: `${SITE_NAME}: SEO and AI search for Shopify` }] }),
     },
     twitter: {
       card: "summary_large_image",

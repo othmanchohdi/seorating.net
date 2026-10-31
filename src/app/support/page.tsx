@@ -5,7 +5,7 @@ import { LEGAL_UPDATED, SUPPORT_EMAIL } from "@/lib/site";
 
 export const metadata = pageMetadata({
   title: "Support",
-  description: "How to get help with the SEO Rating Shopify app: email support, response times, the in-app help center and common questions.",
+  description: "How to get help with the TNS SEO & AI Visibility Shopify app: email support, response times, the in-app help center and common questions.",
   path: "/support",
 });
 

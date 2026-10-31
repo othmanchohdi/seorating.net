@@ -85,7 +85,7 @@ function Body() {
 
       <AppCta
         title="Write alt text for every image, from what’s in it"
-        body="SEO Rating looks at each image and drafts a specific description across products, collections, articles, Files and theme images. You review before saving."
+        body="TNS SEO & AI Visibility looks at each image and drafts a specific description across products, collections, articles, Files and theme images. You review before saving."
       />
     </>
   );

@@ -95,7 +95,7 @@ function Body() {
 
       <AppCta
         title="Fix missing and duplicate meta tags in bulk"
-        body="SEO Rating flags every missing, duplicate or overlong tag, then fills them with templates, AI or a CSV import, with a search preview before anything publishes."
+        body="TNS SEO & AI Visibility flags every missing, duplicate or overlong tag, then fills them with templates, AI or a CSV import, with a search preview before anything publishes."
       />
     </>
   );

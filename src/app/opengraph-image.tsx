@@ -1,6 +1,6 @@
 import { OG_SIZE, ogImage } from "@/lib/og";
 
-export const alt = "SEO Rating: SEO and AI visibility for Shopify stores";
+export const alt = "TNS SEO & AI Visibility: SEO and AI search for Shopify stores";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

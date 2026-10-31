@@ -35,7 +35,7 @@ export function ogImage({ eyebrow, title, footer }: { eyebrow: string; title: st
         <div style={{ position: "absolute", right: -60, top: -60, width: 420, height: 420, borderRadius: 999, border: "2px solid rgba(255,255,255,0.12)", display: "flex" }} />
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <Radar size={56} />
-          <span style={{ fontSize: 34, fontWeight: 600, letterSpacing: -0.5 }}>SEO Rating</span>
+          <span style={{ fontSize: 34, fontWeight: 600, letterSpacing: -0.5 }}>TNS SEO &amp; AI Visibility</span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 22, maxWidth: 980 }}>
           <span style={{ fontSize: 24, letterSpacing: 3, textTransform: "uppercase", color: "#c9f2dd" }}>{eyebrow}</span>

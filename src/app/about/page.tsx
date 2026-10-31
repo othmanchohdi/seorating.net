@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { COMPANY_NAME, COMPANY_URL, INVESTOR_NAME, INVESTOR_URL, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: "About SEO Rating",
+  title: "About us",
   description: `${SITE_NAME} is built by ${COMPANY_NAME}, a Shopify and ecommerce agency. Every feature started as SEO work we did by hand for client stores, now with AI search built in.`,
   path: "/about",
 });

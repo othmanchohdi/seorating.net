@@ -25,7 +25,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME}: SEO and AI visibility for Shopify`,
+    default: `${SITE_NAME}: Shopify SEO and AI search app`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,

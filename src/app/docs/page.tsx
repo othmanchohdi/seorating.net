@@ -5,9 +5,9 @@ import { CREDIT_COSTS, PLANS } from "@/lib/pricing";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: "Documentation: How to Use SEO Rating",
+  title: "Documentation",
   description:
-    "A walkthrough of every SEO Rating module as it works today: SEO tags, alt text, page optimization, structured data, Search Console, llms.txt, IndexNow, keyword research, PageSpeed audits and AI credits.",
+    "A walkthrough of every TNS SEO & AI Visibility module as it works today: SEO tags, alt text, page optimization, structured data, Search Console, llms.txt, IndexNow, keyword research, PageSpeed audits and AI credits.",
   path: "/docs",
 });
 
@@ -34,7 +34,7 @@ export default function Documentation() {
             "@context": "https://schema.org",
             "@type": "TechArticle",
             headline: `How to use ${SITE_NAME}`,
-            description: "A walkthrough of every module in the SEO Rating Shopify app.",
+            description: "A walkthrough of every module in the TNS SEO & AI Visibility Shopify app.",
             url: absoluteUrl("/docs"),
             dateModified: MODIFIED,
             author: { "@id": ORG_ID },

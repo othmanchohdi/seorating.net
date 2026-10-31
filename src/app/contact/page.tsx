@@ -5,7 +5,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { COMPANY_NAME, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
 
 export const metadata = pageMetadata({
-  title: "Contact SEO Rating Support",
+  title: "Contact support",
   description: `Contact the ${SITE_NAME} team about the Shopify app. Support within 1 business day from our team in Monastir and Chicago. Email ${SUPPORT_EMAIL} or send a message.`,
   path: "/contact",
 });

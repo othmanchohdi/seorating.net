@@ -91,7 +91,7 @@ function Body() {
 
       <AppCta
         title="Run PageSpeed audits from inside Shopify"
-        body="SEO Rating tests your home page, a product, a collection and a blog post for mobile and desktop, with Core Web Vitals explained in plain language."
+        body="TNS SEO & AI Visibility tests your home page, a product, a collection and a blog post for mobile and desktop, with Core Web Vitals explained in plain language."
       />
     </>
   );

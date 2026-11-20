@@ -12,6 +12,7 @@ export function GET() {
 ## Product
 - [Features and pricing](${absoluteUrl("/")}): Overview of every module, plans and FAQ
 - [Documentation](${absoluteUrl("/docs")}): How each module works today, including AI credit costs
+- [Free AI tools](${absoluteUrl("/ai-tools")}): AI visibility checker, llms.txt generator, robots.txt tester for AI crawlers
 ${INSTALL_URL ? `- [Install on Shopify](${INSTALL_URL}): Shopify App Store listing` : "- Shopify App Store listing: coming soon, not yet live"}
 
 ## Pricing

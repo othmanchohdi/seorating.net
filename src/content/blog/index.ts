@@ -8,15 +8,28 @@ import { post as altText } from "./product-image-alt-text-checklist";
 import { post as productSchema } from "./shopify-product-schema";
 import { post as pageSpeed } from "./reading-pagespeed-report";
 import { post as duplicateUrls } from "./shopify-duplicate-urls-canonical";
+import { post as seoChecklist } from "./shopify-seo-checklist-2026";
+import { post as aiVisibility101 } from "./ai-visibility-101-shopify";
+import { post as searchConsole } from "./google-search-console-shopify-guide";
 
 export type { Category, Post };
 
-export const CATEGORIES: Category[] = ["AI search", "On-page", "Technical SEO", "Speed"];
+export const CATEGORIES: Category[] = ["Strategy", "AI search", "On-page", "Technical SEO", "Speed"];
 
 // Newest first.
-export const POSTS: Post[] = [duplicateUrls, llmsTxt, aiAssistants, robotsTxt, metaDescriptions, altText, productSchema, pageSpeed].sort((a, b) =>
-  b.published.localeCompare(a.published),
-);
+export const POSTS: Post[] = [
+  duplicateUrls,
+  llmsTxt,
+  aiAssistants,
+  robotsTxt,
+  metaDescriptions,
+  altText,
+  productSchema,
+  pageSpeed,
+  seoChecklist,
+  aiVisibility101,
+  searchConsole,
+].sort((a, b) => b.published.localeCompare(a.published));
 
 const missing = POSTS.map((p) => p.slug).filter((s) => !(POST_SLUGS as readonly string[]).includes(s));
 if (missing.length || POSTS.length !== POST_SLUGS.length) {

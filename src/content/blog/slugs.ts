@@ -9,4 +9,7 @@ export const POST_SLUGS = [
   "product-image-alt-text-checklist",
   "shopify-product-schema",
   "reading-pagespeed-report",
+  "shopify-seo-checklist-2026",
+  "ai-visibility-101-shopify",
+  "google-search-console-shopify-guide",
 ] as const;

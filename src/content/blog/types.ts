@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 
-export type Category = "AI search" | "On-page" | "Technical SEO" | "Speed";
+export type Category = "AI search" | "On-page" | "Technical SEO" | "Speed" | "Strategy";
 
 export type Post = {
   slug: string;

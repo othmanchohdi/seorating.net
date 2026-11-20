@@ -3,10 +3,14 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ScoreRing } from "@/components/blog/WidgetFrame";
 import { CheckForm } from "@/components/ai-tools/CheckForm";
+import { CitationCheck } from "@/components/ai-tools/CitationCheck";
 import { BotTable, CategoryBars, CheckList, SectionCard, SectionSkeleton } from "@/components/ai-tools/ReportParts";
+import { RecheckButton } from "@/components/ai-tools/RecheckButton";
+import { ReportViewed } from "@/components/ai-tools/ReportViewed";
 import { ReviewForm } from "@/components/ai-tools/ReviewForm";
 import { ShareBar } from "@/components/ai-tools/ShareBar";
 import { GROUPS, botRows, groupScore, homepageChecks, verdict } from "@/lib/ai-check/checks";
+import { citationsEnabled } from "@/lib/ai-check/citations";
 import { HOSTNAME_PATTERN } from "@/lib/ai-check/net";
 import { loadAccess, loadFiles, loadHome, loadProduct, loadSummary } from "@/lib/ai-check/report";
 import { pageMetadata } from "@/lib/metadata";
@@ -80,7 +84,7 @@ function ReportShell({ host }: { host: string | null }) {
           </Suspense>
           <div className="report-card" style={{ padding: 22 }}>
             <p style={{ margin: "0 0 12px", fontSize: 16, fontWeight: 600 }}>Check another site</p>
-            <CheckForm size="sm" buttonLabel="Run report" />
+            <CheckForm size="sm" buttonLabel="Run report" source="report" />
           </div>
           <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: "var(--color-text-faint)" }}>
             Reports are cached for about an hour. We fetch public pages only, identify ourselves as SEORatingBot, and store
@@ -119,7 +123,7 @@ async function SummaryBlock({ host }: { host: string }) {
         <p style={{ margin: "8px 0 16px", fontSize: 14.5, color: "var(--color-text-faint)" }}>
           If the site loads in your browser, it may block automated requests, which would block AI crawlers too.
         </p>
-        <CheckForm size="sm" initial={host} buttonLabel="Try again" />
+        <CheckForm size="sm" initial={host} buttonLabel="Try again" source="report-error" />
       </div>
     );
   }
@@ -170,11 +174,14 @@ async function SummaryBlock({ host }: { host: string }) {
       )}
 
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-        <span style={{ fontSize: 14, color: "var(--color-text-faint)" }}>Share this report with your developer or team.</span>
+        <RecheckButton host={host} />
         <ShareBar host={host} />
       </div>
 
+      {citationsEnabled() && <CitationCheck host={host} brand={home.siteName} />}
+
       <ReviewForm host={host} score={summary.score} isShopify={home.isShopify} />
+      <ReportViewed score={summary.score} shopify={home.isShopify} />
     </>
   );
 }

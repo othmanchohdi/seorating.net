@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { track } from "@/lib/analytics";
 import { INSTALL_URL } from "@/lib/site";
 
 type Status = { kind: "idle" } | { kind: "sending" } | { kind: "sent" } | { kind: "error"; message: string };
@@ -25,6 +26,7 @@ export function ReviewForm({ host, score, isShopify }: { host: string; score: nu
         throw new Error(body.error ?? "Something went wrong. Please try again.");
       }
       setStatus({ kind: "sent" });
+      track("review_requested", { score });
     } catch (err) {
       setStatus({ kind: "error", message: err instanceof Error ? err.message : "Something went wrong." });
     }

@@ -1,4 +1,4 @@
-import { cacheLife } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import {
   type JsonLdNode,
   internalLinks,
@@ -47,9 +47,14 @@ export type HomeData =
       logo: string | null;
     };
 
+// Every cached piece of a report carries this tag, so "Re-check now" can
+// expire them all at once.
+export const siteTag = (hostname: string) => `site:${hostname}`;
+
 export async function getHome(host: string): Promise<HomeData> {
   "use cache";
   cacheLife("hours");
+  cacheTag(siteTag(host));
   try {
     const res = await safeFetch(new URL(`https://${host}/`));
     if (!res) return { ok: false, error: `We couldn't reach ${host}. The site may be down, or it may block automated requests.` };
@@ -132,6 +137,7 @@ const isShopifyAgentFile = (text: string) => /Universal Commerce Protocol|shop\.
 export async function getFiles(origin: string): Promise<FilesData> {
   "use cache";
   cacheLife("hours");
+  cacheTag(siteTag(new URL(origin).hostname));
   const [robotsRes, llmsRes, agentsRes, sitemapRes] = await Promise.all(
     ["/robots.txt", "/llms.txt", "/agents.md", "/sitemap.xml"].map((p) => safeFetch(new URL(p, origin), { maxBytes: 300_000 }).catch(() => null)),
   );
@@ -180,6 +186,7 @@ const rejected = (status: number | null, challenged: boolean) => challenged || s
 export async function getProbes(origin: string): Promise<ProbeData> {
   "use cache";
   cacheLife("hours");
+  cacheTag(siteTag(new URL(origin).hostname));
   const hit = async (ua: string) => {
     const res = await safeFetch(new URL("/", origin), { userAgent: ua, maxBytes: 0 }).catch(() => null);
     return { status: res?.status ?? null, challenged: res?.headers["cf-mitigated"] === "challenge" };
@@ -230,6 +237,7 @@ export async function getProduct(url: string | null): Promise<ProductData> {
   "use cache";
   cacheLife("hours");
   if (!url) return { found: false };
+  cacheTag(siteTag(new URL(url).hostname));
   const res = await safeFetch(new URL(url)).catch(() => null);
   if (!res || res.status !== 200 || !/html/i.test(res.contentType)) return { found: false };
   const html = res.body;

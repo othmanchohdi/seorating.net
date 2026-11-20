@@ -59,7 +59,7 @@ function FixPanel({ check }: { check: Check }) {
             ))}
           </ul>
         )}
-        {fix.code && <CodeBlock label={fix.code.lang} code={fix.code.text} />}
+        {fix.code && <CodeBlock label={fix.code.lang} code={fix.code.text} trackCheck={check.id} />}
       </div>
     </details>
   );

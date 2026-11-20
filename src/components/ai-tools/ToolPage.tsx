@@ -70,7 +70,7 @@ export function ToolPage({
           <p style={{ margin: "0 0 14px", fontSize: 14, color: "var(--color-text-faint)" }}>
             The free AI visibility report tests robots.txt, your firewall, llms.txt, schema and product pages, and writes the fixes.
           </p>
-          <CheckForm size="sm" buttonLabel="Run free report" />
+          <CheckForm size="sm" buttonLabel="Run free report" source={`tool:${path}`} />
         </div>
 
         <section style={{ marginTop: 56 }}>

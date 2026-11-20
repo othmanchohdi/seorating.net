@@ -186,7 +186,7 @@ export default async function CrawlerPage({ params }: PageProps<"/ai-tools/ai-cr
           <p style={{ margin: "0 0 14px", fontSize: 14, color: "var(--color-text-faint)" }}>
             The free report checks your robots.txt against the major AI crawlers and tests whether your firewall lets them through.
           </p>
-          <CheckForm size="sm" buttonLabel="Check my site" />
+          <CheckForm size="sm" buttonLabel="Check my site" source="directory" />
         </div>
 
         {siblings.length > 0 && (

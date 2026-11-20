@@ -79,7 +79,7 @@ export default function AiCrawlers() {
 
         <div className="report-card" style={{ padding: 22, marginTop: 32 }}>
           <p style={{ margin: "0 0 12px", fontSize: 16, fontWeight: 600 }}>Which of these can reach your site?</p>
-          <CheckForm size="sm" buttonLabel="Check my site" />
+          <CheckForm size="sm" buttonLabel="Check my site" source="directory" />
         </div>
 
         <h2 className="h-section" style={{ margin: "64px 0 8px", fontSize: "clamp(24px,3.5vw,30px)" }}>

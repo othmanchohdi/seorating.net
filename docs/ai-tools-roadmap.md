@@ -45,8 +45,11 @@ The best tools in this space (Lighthouse, PageSpeed Insights, Ahrefs' free tools
 - [x] Per-IP throttle on report generation (in proxy); cached reports cost nothing.
 - [x] Redirect notice when a domain redirects to a different host (e.g. gymshark.com →
       us.checkout.gymshark.com), with a link to check the www host instead.
-- [ ] Shared rate limiter (Upstash Redis) instead of per-instance memory.
-- [ ] Analytics events: check run → report viewed → review requested → install.
+- [x] Shared rate limiter (Upstash Redis REST) with per-instance memory fallback; turns on
+      when `UPSTASH_REDIS_REST_URL/TOKEN` (or Vercel KV names) are set.
+- [x] Vercel Web Analytics with funnel events: report_requested (by source), report_viewed
+      (score band), fix_copied (which check), report_shared, report_rechecked,
+      review_requested, citations_requested/viewed. Needs Analytics enabled in Vercel.
 
 ### Design
 - [x] Results ranked by priority: big score, category scores (Access, AI files, Homepage,
@@ -54,7 +57,8 @@ The best tools in this space (Lighthouse, PageSpeed Insights, Ahrefs' free tools
 - [x] Staged progress: each section shows its own loading state and fills in as it finishes.
 - [x] Mobile-first results: crawler table becomes stacked cards on small screens.
 - [x] Share bar: copy link, share on LinkedIn, check another site.
-- [ ] "Re-check now" button that bypasses the one-hour report cache.
+- [x] "Re-check now" button: expires the report's cache tags (min. 5 minutes between
+      re-checks per site, 6 per visitor per hour).
 - [ ] **"How AI sees you"** panel: raw HTML text next to what a visitor sees (needs a
       headless browser, e.g. Browserless; consider in Phase 2).
 
@@ -71,10 +75,12 @@ The best tools in this space (Lighthouse, PageSpeed Insights, Ahrefs' free tools
 
 ## Phase 2 — measure the outcome
 
-- [ ] **AI citation check** (email-gated lead magnet): visitor enters their category; we
-      ask ChatGPT, Perplexity and Claude (web search on) 3–5 buyer questions and show
-      whether they're mentioned, which competitors are, and which sources were cited.
-      ~$0.05–0.20 per check. Needs a provider decision and API keys.
+- [x] **AI citation check, Perplexity** (email-gated lead magnet, built 2026-11-21): two
+      unbranded buyer questions plus one brand question via the Agent API (`effort: fast`,
+      the documented Sonar replacement). Shows mentioned / cited / seen-not-cited, the
+      competitors cited instead, and the answer. Cached 24 h per site+category; 3 per
+      visitor per hour, `CITATION_DAILY_CAP` per day. Hidden until `PERPLEXITY_API_KEY` is set.
+- [ ] Add ChatGPT, Claude and Gemini to the citation check.
 - [ ] Competitor comparison: your site vs two others, side by side.
 - [ ] Emailed PDF report, designed to be forwarded to a boss or agency.
 - [ ] "How AI sees you" rendered-vs-raw view.

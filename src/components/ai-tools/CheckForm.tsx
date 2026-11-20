@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { track } from "@/lib/analytics";
 
 // Mirrors toHostname() in lib/ai-check/net.ts, without the Node imports.
 function toHost(input: string): string | null {
@@ -15,7 +16,18 @@ function toHost(input: string): string | null {
   }
 }
 
-export function CheckForm({ initial = "", size = "lg", buttonLabel = "Check my site" }: { initial?: string; size?: "lg" | "sm"; buttonLabel?: string }) {
+export function CheckForm({
+  initial = "",
+  size = "lg",
+  buttonLabel = "Check my site",
+  source = "hub",
+}: {
+  initial?: string;
+  size?: "lg" | "sm";
+  buttonLabel?: string;
+  // Where the form sits, for analytics.
+  source?: string;
+}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -29,6 +41,7 @@ export function CheckForm({ initial = "", size = "lg", buttonLabel = "Check my s
         if (!host) return setError("Enter a website address, like yourstore.com.");
         setError(null);
         setPending(true);
+        track("report_requested", { source });
         router.push(`/ai-tools/report/${host}`);
       }}
       style={{ display: "flex", flexDirection: "column", gap: 6 }}

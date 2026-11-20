@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CONTACT_TO, EMAIL_FROM, SUPPORT_EMAIL } from "@/lib/site";
 import { EMAIL_PATTERN, escapeHtml, resendClient } from "@/lib/email";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 // Lead capture from the AI visibility checker: someone ran a check and asked
 // the team for a free review. Like the waitlist, it lands in the inbox.
 export async function POST(req: NextRequest) {
+  if ((await rateLimit(`review:${clientIp(req.headers)}`, 5, 3600)).limited) {
+    return NextResponse.json({ error: `Too many requests. Please email ${SUPPORT_EMAIL} instead.` }, { status: 429 });
+  }
   const body = await req.json().catch(() => null);
   const email = typeof body?.email === "string" ? body.email.trim() : "";
   const site = typeof body?.site === "string" ? body.site.trim().slice(0, 300) : "";

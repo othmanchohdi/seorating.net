@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/next";
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Instrument_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
@@ -73,6 +75,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <Footer />
         </div>
         <JsonLd data={[organization, website]} />
+        {/* Reads the URL, so it needs a boundary for dynamic routes to prerender. */}
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
       </body>
     </html>
   );

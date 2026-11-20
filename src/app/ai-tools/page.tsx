@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AiVisibilityChecker } from "@/components/AiVisibilityChecker";
+import { CheckForm } from "@/components/ai-tools/CheckForm";
 import { AiReadiness } from "@/components/blog/AiReadiness";
 import { LlmsTxtBuilder } from "@/components/blog/LlmsTxtBuilder";
 import { RobotsTester } from "@/components/blog/RobotsTester";
@@ -16,7 +16,7 @@ export const metadata = pageMetadata({
 });
 
 const TOOLS = [
-  { id: "checker", label: "AI visibility checker", text: "Scan any site for AI crawler access, AI files and homepage signals." },
+  { id: "checker", label: "AI visibility checker", text: "Full report: crawler access, firewall, AI files, homepage and product pages." },
   { id: "llms-txt", label: "llms.txt generator", text: "Build a valid llms.txt that summarises your store for AI assistants." },
   { id: "robots", label: "robots.txt tester", text: "See exactly which AI and search bots your rules allow or block." },
   { id: "readiness", label: "AI readiness score", text: "A checklist of what it takes to get recommended in AI answers." },
@@ -29,7 +29,7 @@ const FAQS = [
   },
   {
     q: "How does the AI visibility checker work?",
-    a: "It fetches your homepage, robots.txt, llms.txt, agents.md and XML sitemap the way an AI crawler would, then checks which AI bots your robots.txt allows, whether your AI files exist and follow the expected format, and whether the homepage has a title, meta description, JSON-LD schema, canonical URL and readable text. Nothing about your site is stored.",
+    a: "It fetches your homepage, a product page, robots.txt, llms.txt, agents.md and XML sitemap the way an AI crawler would. It checks which of 10 AI bots your robots.txt allows, requests your homepage as GPTBot, OAI-SearchBot, ClaudeBot and PerplexityBot to catch firewalls that block them, and checks your structured data, meta tags and how much text is readable without JavaScript. You get a score, your top fixes and copy-paste code. Nothing about your site is stored.",
   },
   {
     q: "Should I block GPTBot or ClaudeBot?",
@@ -95,8 +95,22 @@ export default function AiTools() {
           it has llms.txt and agents.md, and what assistants read on its homepage. No signup.
         </p>
 
-        <div id="checker" style={{ scrollMarginTop: 90 }}>
-          <AiVisibilityChecker />
+        <div id="checker" className="widget" style={{ scrollMarginTop: 90 }}>
+          <div className="widget-card" style={{ padding: "clamp(18px,3vw,28px)" }}>
+            <p style={{ margin: "0 0 14px", fontSize: 17, fontWeight: 600 }}>Get your free AI visibility report</p>
+            <CheckForm />
+            <ul className="hero-ticks" style={{ marginTop: 18 }}>
+              <li>10 AI crawlers vs. your robots.txt</li>
+              <li>Live firewall test as GPTBot, ClaudeBot and PerplexityBot</li>
+              <li>llms.txt, agents.md and sitemap</li>
+              <li>Homepage and product page schema</li>
+              <li>Copy-paste fixes built from your site</li>
+            </ul>
+          </div>
+          <p className="widget-caption">
+            Takes 5–15 seconds. You get a shareable report with a score, your top fixes and the code to fix them. Nothing
+            about your site is stored.
+          </p>
         </div>
 
         <nav aria-label="Free AI tools" style={{ marginTop: 48 }}>

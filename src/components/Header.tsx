@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { Logo } from "./Logo";
 import { INSTALL_URL, NAV, SITE_NAME } from "@/lib/site";
 
@@ -11,14 +11,29 @@ function isCurrent(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function Header() {
+// The current-page highlight needs the URL, which isn't known while
+// prerendering dynamic routes (like AI reports). Plain links are the fallback.
+function NavLinks({ menuRef }: { menuRef?: React.RefObject<HTMLDetailsElement | null> }) {
   const pathname = usePathname();
-  const menuRef = useRef<HTMLDetailsElement>(null);
 
   // Close the mobile menu after client-side navigation.
   useEffect(() => {
-    if (menuRef.current) menuRef.current.open = false;
-  }, [pathname]);
+    if (menuRef?.current) menuRef.current.open = false;
+  }, [pathname, menuRef]);
+
+  return <Links pathname={pathname} />;
+}
+
+function Links({ pathname }: { pathname: string | null }) {
+  return NAV.map((item) => (
+    <Link key={item.href} href={item.href} aria-current={pathname && isCurrent(pathname, item.href) ? "page" : undefined}>
+      {item.label}
+    </Link>
+  ));
+}
+
+export function Header() {
+  const menuRef = useRef<HTMLDetailsElement>(null);
 
   return (
     <header className="site-header">
@@ -28,11 +43,9 @@ export function Header() {
           <span className="brand-name">{SITE_NAME}</span>
         </Link>
         <nav className="site-nav" aria-label="Main">
-          {NAV.map((item) => (
-            <Link key={item.href} href={item.href} aria-current={isCurrent(pathname, item.href) ? "page" : undefined}>
-              {item.label}
-            </Link>
-          ))}
+          <Suspense fallback={<Links pathname={null} />}>
+            <NavLinks />
+          </Suspense>
         </nav>
         <div className="header-spacer" />
         {INSTALL_URL && (
@@ -47,11 +60,9 @@ export function Header() {
             </svg>
           </summary>
           <nav className="mobile-menu-panel" aria-label="Mobile">
-            {NAV.map((item) => (
-              <Link key={item.href} href={item.href} aria-current={isCurrent(pathname, item.href) ? "page" : undefined}>
-                {item.label}
-              </Link>
-            ))}
+            <Suspense fallback={<Links pathname={null} />}>
+              <NavLinks menuRef={menuRef} />
+            </Suspense>
             {INSTALL_URL && (
               <a href={INSTALL_URL} className="btn btn-primary btn-sm" rel="noopener">
                 Install on Shopify

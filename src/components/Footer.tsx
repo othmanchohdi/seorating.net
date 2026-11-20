@@ -18,6 +18,7 @@ const COLUMNS = [
       { href: "/about", label: "About us" },
       { href: "/contact", label: "Contact us" },
       { href: "/support", label: "Support" },
+      { href: "/ai-tools", label: "Free AI tools" },
     ],
   },
   {

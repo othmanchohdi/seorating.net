@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { CheckForm } from "@/components/ai-tools/CheckForm";
-import { AiReadiness } from "@/components/blog/AiReadiness";
-import { LlmsTxtBuilder } from "@/components/blog/LlmsTxtBuilder";
-import { RobotsTester } from "@/components/blog/RobotsTester";
 import { Faq } from "@/components/Faq";
+import { AI_TOOLS } from "@/content/ai-tools";
 import { JsonLd, ORG_ID, breadcrumbs, faqPage } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/metadata";
 import { INSTALL_URL, SITE_NAME, absoluteUrl } from "@/lib/site";
@@ -14,13 +12,6 @@ export const metadata = pageMetadata({
     "Free tools to check if ChatGPT, Claude, Perplexity and Google AI can read your website: test AI crawler access in robots.txt, validate llms.txt and agents.md, and check structured data.",
   path: "/ai-tools",
 });
-
-const TOOLS = [
-  { id: "checker", label: "AI visibility checker", text: "Full report: crawler access, firewall, AI files, homepage and product pages." },
-  { id: "llms-txt", label: "llms.txt generator", text: "Build a valid llms.txt that summarises your store for AI assistants." },
-  { id: "robots", label: "robots.txt tester", text: "See exactly which AI and search bots your rules allow or block." },
-  { id: "readiness", label: "AI readiness score", text: "A checklist of what it takes to get recommended in AI answers." },
-];
 
 const FAQS = [
   {
@@ -48,20 +39,6 @@ const FAQS = [
     a: `Yes. There's no signup and no limit beyond a short throttle to prevent abuse. ${SITE_NAME} builds them because the same checks run inside our Shopify app, which also fixes what it finds.`,
   },
 ];
-
-function SectionHead({ id, eyebrow, title, children }: { id: string; eyebrow: string; title: string; children: React.ReactNode }) {
-  return (
-    <div id={id} style={{ scrollMarginTop: 90, marginTop: 80 }}>
-      <span className="eyebrow">{eyebrow}</span>
-      <h2 className="h-section" style={{ margin: "12px 0 0", maxWidth: 680 }}>
-        {title}
-      </h2>
-      <p className="lead" style={{ maxWidth: 640, fontSize: 16.5 }}>
-        {children}
-      </p>
-    </div>
-  );
-}
 
 export default function AiTools() {
   return (
@@ -113,37 +90,22 @@ export default function AiTools() {
           </p>
         </div>
 
-        <nav aria-label="Free AI tools" style={{ marginTop: 48 }}>
-          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,200px),1fr))", gap: 12 }}>
-            {TOOLS.map((t) => (
-              <li key={t.id}>
-                <a href={`#${t.id}`} className="card" style={{ padding: "16px 18px", display: "flex", flexDirection: "column", gap: 4, borderRadius: 12, height: "100%" }}>
-                  <span style={{ fontSize: 15, fontWeight: 600, color: "var(--color-text)" }}>{t.label}</span>
-                  <span style={{ fontSize: 13.5, lineHeight: 1.5, color: "var(--color-text-softer)" }}>{t.text}</span>
-                </a>
+        <section style={{ marginTop: 64 }} aria-labelledby="tools-title">
+          <span className="eyebrow">The toolkit</span>
+          <h2 id="tools-title" className="h-section" style={{ margin: "12px 0 24px" }}>
+            Everything you need to get found by AI
+          </h2>
+          <ul className="crawler-grid">
+            {AI_TOOLS.filter((t) => !t.href.startsWith("/ai-tools#")).map((t) => (
+              <li key={t.href}>
+                <Link href={t.href} className="card crawler-card" style={{ padding: "20px 22px" }}>
+                  <span style={{ fontSize: 16.5, fontWeight: 600, color: "var(--color-text)" }}>{t.label} →</span>
+                  <span style={{ fontSize: 14.5, lineHeight: 1.55, color: "var(--color-text-softer)" }}>{t.text}</span>
+                </Link>
               </li>
             ))}
           </ul>
-        </nav>
-
-        <SectionHead id="llms-txt" eyebrow="Generator" title="llms.txt generator">
-          Fill in your store&rsquo;s basics and get a valid llms.txt to upload. Read{" "}
-          <Link href="/blog/what-is-llms-txt-shopify">what llms.txt is and how to use it</Link>.
-        </SectionHead>
-        <LlmsTxtBuilder />
-
-        <SectionHead id="robots" eyebrow="Tester" title="robots.txt tester for AI crawlers">
-          Paste your robots.txt and test any crawler against any path, using the same matching rules Google and OpenAI
-          follow. See the <Link href="/blog/shopify-robots-txt-guide">robots.txt guide</Link> for what to allow.
-        </SectionHead>
-        <RobotsTester />
-
-        <SectionHead id="readiness" eyebrow="Checklist" title="AI search readiness score">
-          An assistant has to find, fetch and understand a page before it can recommend it. Tick what your site already
-          does to see where the chain breaks. More in{" "}
-          <Link href="/blog/how-ai-assistants-choose-stores">how AI assistants choose stores</Link>.
-        </SectionHead>
-        <AiReadiness />
+        </section>
 
         <div style={{ marginTop: 80 }}>
           <span className="eyebrow">FAQ</span>

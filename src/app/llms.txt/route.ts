@@ -1,3 +1,4 @@
+import { CRAWLERS } from "@/content/ai-crawlers";
 import { POSTS } from "@/content/blog";
 import { PLANS } from "@/lib/pricing";
 import { COMPANY_NAME, INSTALL_URL, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
@@ -12,7 +13,10 @@ export function GET() {
 ## Product
 - [Features and pricing](${absoluteUrl("/")}): Overview of every module, plans and FAQ
 - [Documentation](${absoluteUrl("/docs")}): How each module works today, including AI credit costs
-- [Free AI tools](${absoluteUrl("/ai-tools")}): AI visibility checker, llms.txt generator, robots.txt tester for AI crawlers
+- [Free AI tools](${absoluteUrl("/ai-tools")}): AI visibility report for any site (crawler access, firewall test, AI files, schema, product pages)
+- [AI crawler directory](${absoluteUrl("/ai-tools/ai-crawlers")}): What ${CRAWLERS.length} AI bots do, their user agents and IP lists, and whether to block them
+- [llms.txt generator](${absoluteUrl("/ai-tools/llms-txt-generator")}): Build a valid llms.txt
+- [robots.txt tester](${absoluteUrl("/ai-tools/robots-txt-tester")}): Test AI and search crawlers against robots.txt rules
 ${INSTALL_URL ? `- [Install on Shopify](${INSTALL_URL}): Shopify App Store listing` : "- Shopify App Store listing: coming soon, not yet live"}
 
 ## Pricing

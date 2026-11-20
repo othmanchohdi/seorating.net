@@ -59,10 +59,15 @@ The best tools in this space (Lighthouse, PageSpeed Insights, Ahrefs' free tools
       headless browser, e.g. Browserless; consider in Phase 2).
 
 ### SEO
-- [ ] One URL per tool: `/ai-tools/llms-txt-generator`, `/ai-tools/robots-txt-tester`,
-      `/ai-tools/ai-readiness`, with the hub linking to each.
-- [ ] **AI crawler directory**: `/ai-tools/ai-crawlers` and a page per bot (user agent,
-      operator, purpose, how to allow/block, verified IP ranges).
+- [x] One URL per tool: `/ai-tools/llms-txt-generator`, `/ai-tools/robots-txt-tester`,
+      `/ai-tools/ai-readiness-checklist`, each with a guide, FAQ schema and cross-links; the
+      hub links to each.
+- [x] **AI crawler directory**: `/ai-tools/ai-crawlers` and a page for each of 20 bots
+      (user agent, operator, robots.txt behaviour, IP list, allow/block rules, FAQ), all
+      checked against operator docs on 2026-11-21. The report's crawler table reads the same
+      data (`src/content/ai-crawlers.ts`). Re-verify quarterly.
+- [x] Recognise Shopify's default llms.txt / agents.md (written for shopping agents via the
+      Shop skill and UCP) and explain that it isn't a brand summary.
 
 ## Phase 2 — measure the outcome
 

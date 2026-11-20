@@ -119,10 +119,15 @@ export async function getHome(host: string): Promise<HomeData> {
 
 export type FilesData = {
   robots: string | null;
-  llms: { found: false } | { found: true; hasTitle: boolean; hasSummary: boolean; links: number };
+  llms: { found: false } | { found: true; hasTitle: boolean; hasSummary: boolean; links: number; shopifyDefault: boolean };
   agents: boolean;
+  agentsShopifyDefault: boolean;
   sitemapAtRoot: boolean;
 };
+
+// Shopify serves default llms.txt and agents.md files written for shopping
+// agents (Shop skill, Universal Commerce Protocol), not a brand summary.
+const isShopifyAgentFile = (text: string) => /Universal Commerce Protocol|shop\.com\/SKILL\.md|\/\.well-known\/ucp/i.test(text);
 
 export async function getFiles(origin: string): Promise<FilesData> {
   "use cache";
@@ -131,6 +136,7 @@ export async function getFiles(origin: string): Promise<FilesData> {
     ["/robots.txt", "/llms.txt", "/agents.md", "/sitemap.xml"].map((p) => safeFetch(new URL(p, origin), { maxBytes: 300_000 }).catch(() => null)),
   );
   const llms = textFile(llmsRes);
+  const agents = textFile(agentsRes);
   return {
     robots: textFile(robotsRes)?.slice(0, 100_000) ?? null,
     llms:
@@ -141,8 +147,10 @@ export async function getFiles(origin: string): Promise<FilesData> {
             hasTitle: /^#\s+\S/m.test(llms),
             hasSummary: /^>\s*\S/m.test(llms),
             links: (llms.match(/\]\(https?:\/\/[^)]+\)/g) ?? []).length,
+            shopifyDefault: isShopifyAgentFile(llms),
           },
-    agents: textFile(agentsRes) !== null,
+    agents: agents !== null,
+    agentsShopifyDefault: agents !== null && isShopifyAgentFile(agents),
     sitemapAtRoot: !!sitemapRes && sitemapRes.status === 200 && /<(urlset|sitemapindex)\b/i.test(sitemapRes.body),
   };
 }
@@ -152,11 +160,14 @@ export async function getFiles(origin: string): Promise<FilesData> {
 // compare with a browser. robots.txt can say "allowed" while a CDN or bot
 // manager rejects the crawler outright.
 
+// Official user agent strings where the operator publishes one (see the AI
+// crawler directory). Anthropic publishes tokens only, so ClaudeBot uses the
+// commonly seen form; servers match on the token either way.
 export const PROBES = [
-  { name: "GPTBot", ua: "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.1; +https://openai.com/gptbot)" },
-  { name: "OAI-SearchBot", ua: "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; OAI-SearchBot/1.0; +https://openai.com/searchbot)" },
+  { name: "GPTBot", ua: "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.4; +https://openai.com/gptbot" },
+  { name: "OAI-SearchBot", ua: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36; compatible; OAI-SearchBot/1.4; +https://openai.com/searchbot" },
   { name: "ClaudeBot", ua: "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; ClaudeBot/1.0; +claudebot@anthropic.com)" },
-  { name: "PerplexityBot", ua: "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)" },
+  { name: "PerplexityBot", ua: "Mozilla/5.0 (compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)" },
 ] as const;
 
 const BROWSER_UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";

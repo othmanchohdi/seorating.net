@@ -1,6 +1,8 @@
+import Link from "next/link";
+import { KIND_LABEL } from "@/content/ai-crawlers";
 import type { BotRow, Check, Group, Summary } from "@/lib/ai-check/checks";
 import { TONE_COLOR } from "../blog/WidgetFrame";
-import { CopyButton } from "./CopyButton";
+import { CodeBlock } from "./CodeBlock";
 
 const TONE_LABEL = { ok: "Pass", warn: "Warning", bad: "Problem" } as const;
 
@@ -57,17 +59,7 @@ function FixPanel({ check }: { check: Check }) {
             ))}
           </ul>
         )}
-        {fix.code && (
-          <div className="code-panel">
-            <div className="code-panel-head">
-              <span>{fix.code.lang}</span>
-              <CopyButton text={fix.code.text} />
-            </div>
-            <pre>
-              <code>{fix.code.text}</code>
-            </pre>
-          </div>
-        )}
+        {fix.code && <CodeBlock label={fix.code.lang} code={fix.code.text} />}
       </div>
     </details>
   );
@@ -104,7 +96,7 @@ export function BotTable({ rows }: { rows: BotRow[] }) {
       <thead>
         <tr>
           <th scope="col">Crawler</th>
-          <th scope="col">Used for</th>
+          <th scope="col">Type</th>
           <th scope="col">robots.txt</th>
           <th scope="col">Firewall</th>
         </tr>
@@ -115,11 +107,13 @@ export function BotTable({ rows }: { rows: BotRow[] }) {
           return (
             <tr key={r.name}>
               <td data-label="Crawler">
-                <span className="mono" style={{ fontSize: 13 }}>{r.name}</span>
+                <Link href={`/ai-tools/ai-crawlers/${r.slug}`} className="mono" style={{ fontSize: 13 }}>
+                  {r.name}
+                </Link>
                 <span style={{ display: "block", fontSize: 12, color: "var(--color-text-faintest)" }}>{r.owner}</span>
               </td>
-              <td data-label="Used for">
-                {r.purpose}
+              <td data-label="Type">
+                {KIND_LABEL[r.kind].short}
                 {!r.answers && <span style={{ display: "block", fontSize: 12, color: "var(--color-text-faintest)" }}>Blocking is a choice; doesn&rsquo;t affect citations</span>}
               </td>
               <td data-label="robots.txt">

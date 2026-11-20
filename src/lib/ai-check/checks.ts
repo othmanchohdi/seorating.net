@@ -1,4 +1,5 @@
 import { evaluate } from "@/components/blog/robots";
+import { CRAWLERS, affectsAnswers } from "@/content/ai-crawlers";
 import { SITE_NAME } from "../site";
 import type { FilesData, HomeData, ProbeData, ProductData } from "./data";
 
@@ -19,19 +20,14 @@ export const GROUPS: Record<Group, { label: string; weight: number }> = {
   products: { label: "Product pages", weight: 20 },
 };
 
-// Crawlers that decide whether a site can appear in AI answers.
-export const BOTS = [
-  { name: "OAI-SearchBot", owner: "OpenAI", purpose: "ChatGPT search", answers: true },
-  { name: "ChatGPT-User", owner: "OpenAI", purpose: "Pages users ask ChatGPT about", answers: true },
-  { name: "GPTBot", owner: "OpenAI", purpose: "Model training", answers: false },
-  { name: "Claude-SearchBot", owner: "Anthropic", purpose: "Claude search", answers: true },
-  { name: "ClaudeBot", owner: "Anthropic", purpose: "Model training", answers: false },
-  { name: "PerplexityBot", owner: "Perplexity", purpose: "Perplexity search", answers: true },
-  { name: "Google-Extended", owner: "Google", purpose: "Gemini training and grounding", answers: false },
-  { name: "Googlebot", owner: "Google", purpose: "Google Search and AI Overviews", answers: true },
-  { name: "Bingbot", owner: "Microsoft", purpose: "Bing and Copilot", answers: true },
-  { name: "Applebot-Extended", owner: "Apple", purpose: "Apple Intelligence training", answers: false },
-] as const;
+// The report's crawler table comes from the AI crawler directory.
+export const BOTS = CRAWLERS.filter((c) => c.inReport).map((c) => ({
+  slug: c.slug,
+  name: c.token,
+  owner: c.operator,
+  kind: c.kind,
+  answers: affectsAnswers(c),
+}));
 
 export type BotRow = (typeof BOTS)[number] & { robots: "allowed" | "blocked" | "no-rules"; firewall: "ok" | "blocked" | null };
 
@@ -161,6 +157,18 @@ export function fileChecks(home: Home | null, files: FilesData): Check[] {
           }
         : undefined,
     });
+  } else if (files.llms.shopifyDefault) {
+    checks.push({
+      id: "llms", group: "files", tone: "warn", impact: "medium", label: "llms.txt",
+      detail: `This is Shopify's default llms.txt. It tells AI shopping agents how to search and check out, but doesn't say what ${home?.siteName ?? "you"} sells, which collections matter, or your shipping and returns terms.`,
+      fix: home
+        ? {
+            title: "Add a brand summary (draft built from your site)",
+            code: { lang: "llms.txt", text: llmsDraft(home) },
+            steps: ["Assistants need these facts from you: through your llms.txt, page content and structured data.", "SEO Rating publishes and maintains your store summary on Shopify."],
+          }
+        : undefined,
+    });
   } else {
     const l = files.llms;
     const issues = [!l.hasTitle && "no # title", !l.hasSummary && "no > summary line", l.links === 0 && "no links"].filter(Boolean);
@@ -173,7 +181,12 @@ export function fileChecks(home: Home | null, files: FilesData): Check[] {
 
   checks.push(
     files.agents
-      ? { id: "agents", group: "files", tone: "ok", impact: "low", label: "agents.md", detail: "Found. AI agents have instructions for working with your site." }
+      ? {
+          id: "agents", group: "files", tone: "ok", impact: "low", label: "agents.md",
+          detail: files.agentsShopifyDefault
+            ? "Found: Shopify's default, which tells AI shopping agents how to browse, build a cart and check out."
+            : "Found. AI agents have instructions for working with your site.",
+        }
       : {
           id: "agents", group: "files", tone: "warn", impact: "low", label: "agents.md",
           detail: "Not found. agents.md tells AI agents what they can do on your site, where your policies live and who to contact.",

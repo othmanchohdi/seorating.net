@@ -1,7 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { CRAWLER_SLUGS } from "@/content/ai-crawlers";
 import { POST_SLUGS } from "@/content/blog/slugs";
 
 const KNOWN = new Set<string>([...POST_SLUGS, "rss.xml"]);
+const CRAWLERS = new Set<string>(CRAWLER_SLUGS);
 const HOSTNAME = /^(?=.{4,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/;
 
 // Best-effort throttle on AI visibility reports, which crawl third-party
@@ -38,6 +40,12 @@ export function proxy(request: NextRequest) {
     return;
   }
 
+  if (pathname.startsWith("/ai-tools/ai-crawlers/")) {
+    const slug = pathname.split("/")[3];
+    if (slug && !CRAWLERS.has(slug)) return notFound(request);
+    return;
+  }
+
   // Blog pages stream, so a notFound() inside the page would arrive after a
   // 200 status was already sent (a "soft 404"). Reject unknown slugs here,
   // before rendering starts, so they get a real 404.
@@ -46,5 +54,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/blog/:slug", "/ai-tools/report/:path*"],
+  matcher: ["/blog/:slug", "/ai-tools/report/:path*", "/ai-tools/ai-crawlers/:slug"],
 };

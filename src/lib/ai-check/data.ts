@@ -1,6 +1,9 @@
 import { cacheLife, cacheTag } from "next/cache";
 import {
   type JsonLdNode,
+  headings,
+  imageStats,
+  looksLikeAppShell,
   internalLinks,
   jsonLd,
   linkHref,
@@ -40,6 +43,11 @@ export type HomeData =
       schemaTypes: string[];
       schemaInvalid: boolean;
       words: number;
+      // "How AI sees you": the page as a crawler reads it, without JavaScript.
+      outline: { level: number; text: string }[];
+      excerpt: string;
+      images: { total: number; missingAlt: number };
+      appShell: boolean;
       isShopify: boolean;
       productUrl: string | null;
       links: { url: string; text: string }[];
@@ -55,6 +63,12 @@ export async function getHome(host: string): Promise<HomeData> {
   "use cache";
   cacheLife("hours");
   cacheTag(siteTag(host));
+  return fetchHome(host);
+}
+
+// Uncached versions (fetch*) are for the weekly monitor, which must see the
+// site as it is now; pages use the cached get* wrappers.
+export async function fetchHome(host: string): Promise<HomeData> {
   try {
     const res = await safeFetch(new URL(`https://${host}/`));
     if (!res) return { ok: false, error: `We couldn't reach ${host}. The site may be down, or it may block automated requests.` };
@@ -63,6 +77,8 @@ export async function getHome(host: string): Promise<HomeData> {
     const html = res.status === 200 && isHtml ? res.body : "";
     const ld = jsonLd(html);
     const title = titleTag(html);
+    const text = visibleText(html);
+    const words = wordCount(text);
     const ogSiteName = metaContent(html, "og:site_name");
     const isShopify =
       !!res.headers["x-shopid"] || /shopify/i.test(res.headers["x-powered-by"] ?? "") || /cdn\.shopify\.com|Shopify\.shop\s*=/.test(html);
@@ -106,7 +122,11 @@ export async function getHome(host: string): Promise<HomeData> {
       siteName: ogSiteName || title.split(/\s[|–—-]\s/)[0] || host,
       schemaTypes: [...new Set(ld.nodes.flatMap(typesOf))],
       schemaInvalid: ld.invalid,
-      words: wordCount(visibleText(html)),
+      words,
+      outline: headings(html),
+      excerpt: text.slice(0, 900),
+      images: imageStats(html),
+      appShell: looksLikeAppShell(html, words),
       isShopify,
       productUrl,
       links: internalLinks(html, origin),
@@ -138,6 +158,10 @@ export async function getFiles(origin: string): Promise<FilesData> {
   "use cache";
   cacheLife("hours");
   cacheTag(siteTag(new URL(origin).hostname));
+  return fetchFiles(origin);
+}
+
+export async function fetchFiles(origin: string): Promise<FilesData> {
   const [robotsRes, llmsRes, agentsRes, sitemapRes] = await Promise.all(
     ["/robots.txt", "/llms.txt", "/agents.md", "/sitemap.xml"].map((p) => safeFetch(new URL(p, origin), { maxBytes: 300_000 }).catch(() => null)),
   );
@@ -187,6 +211,10 @@ export async function getProbes(origin: string): Promise<ProbeData> {
   "use cache";
   cacheLife("hours");
   cacheTag(siteTag(new URL(origin).hostname));
+  return fetchProbes(origin);
+}
+
+export async function fetchProbes(origin: string): Promise<ProbeData> {
   const hit = async (ua: string) => {
     const res = await safeFetch(new URL("/", origin), { userAgent: ua, maxBytes: 0 }).catch(() => null);
     return { status: res?.status ?? null, challenged: res?.headers["cf-mitigated"] === "challenge" };
@@ -236,8 +264,12 @@ const has = (v: unknown) => v !== undefined && v !== null && v !== "" && !(Array
 export async function getProduct(url: string | null): Promise<ProductData> {
   "use cache";
   cacheLife("hours");
+  if (url) cacheTag(siteTag(new URL(url).hostname));
+  return fetchProduct(url);
+}
+
+export async function fetchProduct(url: string | null): Promise<ProductData> {
   if (!url) return { found: false };
-  cacheTag(siteTag(new URL(url).hostname));
   const res = await safeFetch(new URL(url)).catch(() => null);
   if (!res || res.status !== 200 || !/html/i.test(res.contentType)) return { found: false };
   const html = res.body;

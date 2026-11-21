@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { track } from "@/lib/analytics";
 
 // Mirrors toHostname() in lib/ai-check/net.ts, without the Node imports.
-function toHost(input: string): string | null {
+export function toHost(input: string): string | null {
   const raw = input.trim();
   if (!raw) return null;
   try {

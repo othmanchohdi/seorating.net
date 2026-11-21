@@ -155,3 +155,40 @@ export function CategoryBars({ groups }: { groups: Summary["groups"] }) {
     </ul>
   );
 }
+
+// "How AI sees you": the homepage as a crawler reads it, with no JavaScript.
+export function CrawlerView({ outline, excerpt, words }: { outline: { level: number; text: string }[]; excerpt: string; words: number }) {
+  return (
+    <details className="fix crawler-view">
+      <summary>See your homepage the way AI crawlers do</summary>
+      <div className="fix-body">
+        <p style={{ margin: 0 }}>
+          This is the raw HTML, before any JavaScript runs: what most AI crawlers read. If something important is missing
+          here, assume they can&rsquo;t see it.
+        </p>
+        <div>
+          <h3 className="mono-label-muted" style={{ margin: "4px 0 8px", fontSize: 11 }}>
+            Page outline
+          </h3>
+          {outline.length ? (
+            <ul className="outline">
+              {outline.map((h, i) => (
+                <li key={i} style={{ paddingLeft: (h.level - 1) * 16 }}>
+                  <span className="mono">H{h.level}</span> {h.text}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p style={{ margin: 0, color: "var(--color-bad)" }}>No H1–H3 headings in the HTML.</p>
+          )}
+        </div>
+        <div>
+          <h3 className="mono-label-muted" style={{ margin: "4px 0 8px", fontSize: 11 }}>
+            Text a crawler reads ({words.toLocaleString("en-US")} words)
+          </h3>
+          <div className="crawler-text">{excerpt ? `${excerpt}${excerpt.length >= 900 ? " …" : ""}` : "(no readable text)"}</div>
+        </div>
+      </div>
+    </details>
+  );
+}

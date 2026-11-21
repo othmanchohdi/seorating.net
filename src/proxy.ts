@@ -30,6 +30,15 @@ export async function proxy(request: NextRequest) {
     return;
   }
 
+  if (pathname === "/ai-tools/compare") {
+    // Each compared site is a crawl, so it counts like a report.
+    const sites = (request.nextUrl.searchParams.get("sites") ?? "").split(",").filter(Boolean).length;
+    if (sites >= 2 && request.method === "GET" && !request.headers.has("rsc") && (await rateLimit(`report:${clientIp(request.headers)}`, MAX_REPORTS_PER_MINUTE, 60, Math.min(sites, 3))).limited) {
+      return new NextResponse("Too many checks in a short time. Please wait a minute and try again.", { status: 429, headers: { "Retry-After": "60" } });
+    }
+    return;
+  }
+
   if (pathname.startsWith("/ai-tools/ai-crawlers/")) {
     const slug = pathname.split("/")[3];
     if (slug && !CRAWLERS.has(slug)) return notFound(request);
@@ -44,5 +53,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/blog/:slug", "/ai-tools/report/:path*", "/ai-tools/ai-crawlers/:slug"],
+  matcher: ["/blog/:slug", "/ai-tools/report/:path*", "/ai-tools/ai-crawlers/:slug", "/ai-tools/compare"],
 };

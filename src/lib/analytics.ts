@@ -6,6 +6,9 @@ type Events = {
   report_requested: { source: string };
   report_viewed: { score: number; band: string; shopify: boolean };
   report_rechecked: Record<string, never>;
+  report_emailed: Record<string, never>;
+  compare_requested: { sites: number };
+  monitor_requested: Record<string, never>;
   fix_copied: { check: string };
   report_shared: { method: string };
   review_requested: { score: number };

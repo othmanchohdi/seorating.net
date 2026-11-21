@@ -12,6 +12,7 @@ const PAGES: { path: string; priority: number; changeFrequency: "weekly" | "mont
   { path: "/docs", priority: 0.8, changeFrequency: "monthly" },
   { path: "/blog", priority: 0.8, changeFrequency: "weekly", lastModified: POSTS[0]?.published },
   { path: "/ai-tools", priority: 0.8, changeFrequency: "monthly", lastModified: "2026-11-21" },
+  { path: "/ai-tools/compare", priority: 0.6, changeFrequency: "monthly", lastModified: "2026-11-21" },
   { path: "/ai-tools/ai-crawlers", priority: 0.7, changeFrequency: "monthly", lastModified: VERIFIED },
   { path: "/ai-tools/llms-txt-generator", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-11-21" },
   { path: "/ai-tools/robots-txt-tester", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-11-21" },

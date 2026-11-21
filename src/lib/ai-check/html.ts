@@ -1,6 +1,11 @@
 // Small, dependency-free HTML readers for the checker. They work on the raw
 // HTML an AI crawler receives, which is the point: no JavaScript is run.
 
+// A tag, allowing ">" inside quoted attribute values (Alpine/Vue attributes
+// like @click="a => b" are common on storefronts).
+const TAG = /<(?:[^>"']|"[^"]*"|'[^']*')*>/g;
+const stripTags = (s: string) => s.replace(TAG, " ");
+
 export const attr = (tag: string, name: string) =>
   tag.match(new RegExp(`\\b${name}\\s*=\\s*("([^"]*)"|'([^']*)'|([^\\s"'>]+))`, "i"))?.slice(2).find((v) => v !== undefined) ?? null;
 
@@ -71,12 +76,15 @@ export const typesOf = (node: JsonLdNode): string[] => {
 // one, so navigation menus and footers don't inflate the count.
 export function visibleText(html: string): string {
   const main = html.match(/<main\b[^>]*>([\s\S]*)<\/main>/i)?.[1];
+  // Decode the common entities first, then blank out any others.
   return decode(
     (main ?? html)
       .replace(/<(script|style|noscript|svg|template|head)\b[\s\S]*?<\/\1>/gi, " ")
-      .replace(/<[^>]+>/g, " ")
-      .replace(/&[a-z#0-9]+;/gi, " "),
-  );
+      .replace(TAG, " "),
+  )
+    .replace(/&[a-z#0-9]+;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export const wordCount = (text: string) => text.split(/\s+/).filter((w) => /\p{L}/u.test(w)).length;
@@ -85,9 +93,9 @@ export const wordCount = (text: string) => text.split(/\s+/).filter((w) => /\p{L
 export function internalLinks(html: string, origin: string, max = 14): { url: string; text: string }[] {
   const seen = new Set<string>();
   const out: { url: string; text: string }[] = [];
-  for (const m of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+  for (const m of html.matchAll(/<a\b((?:[^>"']|"[^"]*"|'[^']*')*)>([\s\S]*?)<\/a>/gi)) {
     const href = attr(m[1], "href");
-    const text = decode(m[2].replace(/<[^>]+>/g, " "));
+    const text = decode(stripTags(m[2]));
     if (!href || text.length < 2 || text.length > 60) continue;
     let url: URL;
     try {
@@ -126,4 +134,27 @@ export function productLink(html: string, origin: string): string | null {
     } catch {}
   }
   return null;
+}
+
+// h1–h3 in document order, as a crawler sees the page structure.
+export function headings(html: string, max = 16): { level: number; text: string }[] {
+  const out: { level: number; text: string }[] = [];
+  for (const m of html.matchAll(/<h([1-3])\b[^>]*>([\s\S]*?)<\/h\1>/gi)) {
+    const text = decode(stripTags(m[2]));
+    if (text) out.push({ level: Number(m[1]), text: text.slice(0, 120) });
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
+export function imageStats(html: string) {
+  const imgs = html.match(/<img\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi) ?? [];
+  // An empty alt is fine for decorative images; only a missing one is a gap.
+  return { total: imgs.length, missingAlt: imgs.filter((t) => attr(t, "alt") === null).length };
+}
+
+// True when the HTML is mostly an empty shell that JavaScript fills in later.
+export function looksLikeAppShell(html: string, words: number) {
+  const scripts = (html.match(/<script\b/gi) ?? []).length;
+  return words < 80 && (scripts >= 5 || /<div id=["'](root|app|__next|__nuxt)["'][^>]*>\s*<\/div>/i.test(html));
 }

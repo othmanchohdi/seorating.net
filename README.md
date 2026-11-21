@@ -28,6 +28,7 @@ Environment variables (Vercel, Production + Preview):
 | `PERPLEXITY_API_KEY` | Turns on the AI citation check in reports (Perplexity Agent API). Hidden while unset. |
 | `PERPLEXITY_EFFORT` | Optional. Agent API effort preset for citation checks; defaults to `fast`. |
 | `CITATION_DAILY_CAP` | Optional. Max citation checks per day across the site; defaults to `100`. |
-| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Optional. Shared rate limits across instances (the Vercel Upstash integration's `KV_REST_API_URL` / `KV_REST_API_TOKEN` also work). Falls back to per-instance memory. |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Shared rate limits across instances, and storage for weekly monitoring (the Vercel Upstash integration's `KV_REST_API_URL` / `KV_REST_API_TOKEN` also work). Without it, rate limits fall back to per-instance memory and weekly alerts are hidden. |
+| `CRON_SECRET` | Protects `/api/cron/monitor`, the weekly alert run scheduled in `vercel.json` (Mondays 08:00 UTC). Vercel sends it automatically; any random string. |
 
 Vercel Web Analytics must be enabled in the project dashboard for page views; custom funnel events (`src/lib/analytics.ts`) need a Pro plan.

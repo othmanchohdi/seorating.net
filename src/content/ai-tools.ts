@@ -7,6 +7,11 @@ export const AI_TOOLS = [
     text: "Crawler access, firewall test, AI files, homepage and product pages, with copy-paste fixes.",
   },
   {
+    href: "/ai-tools/compare",
+    label: "Competitor comparison",
+    text: "Your site against up to two competitors on every AI visibility check.",
+  },
+  {
     href: "/ai-tools/ai-crawlers",
     label: "AI crawler directory",
     text: "What every AI bot does, its user agent and IP list, and whether to block it.",

@@ -59,8 +59,9 @@ The best tools in this space (Lighthouse, PageSpeed Insights, Ahrefs' free tools
 - [x] Share bar: copy link, share on LinkedIn, check another site.
 - [x] "Re-check now" button: expires the report's cache tags (min. 5 minutes between
       re-checks per site, 6 per visitor per hour).
-- [ ] **"How AI sees you"** panel: raw HTML text next to what a visitor sees (needs a
-      headless browser, e.g. Browserless; consider in Phase 2).
+- [x] **"How AI sees you"** panel: the homepage's heading outline and readable text as a
+      crawler gets them (raw HTML, no JavaScript), plus an app-shell warning and an image
+      alt-text check. A side-by-side with the rendered page would need a headless browser.
 
 ### SEO
 - [x] One URL per tool: `/ai-tools/llms-txt-generator`, `/ai-tools/robots-txt-tester`,
@@ -81,13 +82,17 @@ The best tools in this space (Lighthouse, PageSpeed Insights, Ahrefs' free tools
       competitors cited instead, and the answer. Cached 24 h per site+category; 3 per
       visitor per hour, `CITATION_DAILY_CAP` per day. Hidden until `PERPLEXITY_API_KEY` is set.
 - [ ] Add ChatGPT, Claude and Gemini to the citation check.
-- [ ] Competitor comparison: your site vs two others, side by side.
-- [ ] Emailed PDF report, designed to be forwarded to a boss or agency.
-- [ ] "How AI sees you" rendered-vs-raw view.
+- [x] Competitor comparison at `/ai-tools/compare?sites=a,b,c`: scores, section scores and
+      12 key checks side by side; linked from every report.
+- [x] Emailed report: "Email me this report" sends score, sections, top fixes and a link
+      (HTML email rather than PDF); the team gets a lead notification.
+- [ ] Rendered-vs-raw view in "How AI sees you" (needs a headless browser).
 
 ## Phase 3 — keep people coming back
 
-- [ ] Weekly monitoring: free email alert when the score drops or a bot gets blocked.
+- [x] Weekly monitoring: double opt-in, Vercel cron every Monday, re-crawls without cache
+      and emails only on change (score ±5, new problem, fixed problem), with one-click
+      unsubscribe. Needs Upstash Redis, `RESEND_API_KEY` and `CRON_SECRET`.
 - [ ] Public benchmark: "AI visibility of the top 1,000 Shopify stores", quarterly.
       Press- and backlink-worthy.
 - [ ] Chrome extension / public API, if demand shows up.

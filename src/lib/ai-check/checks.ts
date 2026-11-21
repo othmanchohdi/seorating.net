@@ -266,7 +266,7 @@ export function homepageChecks(home: HomeData): Check[] {
 
   checks.push(
     home.words < 80
-      ? { id: "text", group: g, tone: "bad", impact: "high", label: "Readable text", detail: `Only about ${plural(home.words, "word")} in the raw HTML. AI crawlers mostly don't run JavaScript, so content rendered in the browser is invisible to them.`, fix: { title: "Put your key content in the HTML", steps: ["Make sure your headline, what you sell and key selling points are in the server-rendered HTML, not loaded by JavaScript.", "View the page source (not the inspector) to see what crawlers see."] } }
+      ? { id: "text", group: g, tone: "bad", impact: "high", label: "Readable text", detail: `Only about ${plural(home.words, "word")} in the raw HTML${home.appShell ? ", which looks like an app shell that JavaScript fills in later" : ""}. AI crawlers mostly don't run JavaScript, so content rendered in the browser is invisible to them.`, fix: { title: "Put your key content in the HTML", steps: ["Make sure your headline, what you sell and key selling points are in the server-rendered HTML, not loaded by JavaScript.", "View the page source (not the inspector) to see what crawlers see."] } }
       : home.words < 250
         ? { id: "text", group: g, tone: "warn", impact: "medium", label: "Readable text", detail: `About ${home.words} words in the raw HTML. A few more sentences on what you offer helps assistants describe you.` }
         : { id: "text", group: g, tone: "ok", impact: "medium", label: "Readable text", detail: `About ${home.words} words readable without JavaScript.` },
@@ -283,6 +283,15 @@ export function homepageChecks(home: HomeData): Check[] {
       ? { id: "canonical", group: g, tone: "ok", impact: "low", label: "Canonical URL", detail: `Points to ${home.canonical}.` }
       : { id: "canonical", group: g, tone: "warn", impact: "low", label: "Canonical URL", detail: "Not set. A canonical tag tells crawlers which address is the real one.", fix: { title: "Add a canonical tag", code: { lang: "html", text: `<link rel="canonical" href="${home.origin}/">` } } },
   );
+
+  if (home.images.total > 0) {
+    const { total, missingAlt } = home.images;
+    checks.push(
+      missingAlt === 0
+        ? { id: "alt", group: g, tone: "ok", impact: "low", label: "Image alt text", detail: total === 1 ? "The image has an alt attribute." : `All ${total} images have alt attributes.` }
+        : { id: "alt", group: g, tone: "warn", impact: "low", label: "Image alt text", detail: `${missingAlt} of ${plural(total, "image")} have no alt text, so crawlers can't tell what they show.`, fix: { title: "Describe your images", steps: ["Add a short alt attribute describing each meaningful image: the product, colour and context.", ...shopifyNote(home, "SEO Rating writes alt text for every product image for you to approve.")] } },
+    );
+  }
 
   checks.push(
     home.hasLang

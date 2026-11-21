@@ -4,13 +4,17 @@ import { Suspense } from "react";
 import { ScoreRing } from "@/components/blog/WidgetFrame";
 import { CheckForm } from "@/components/ai-tools/CheckForm";
 import { CitationCheck } from "@/components/ai-tools/CitationCheck";
-import { BotTable, CategoryBars, CheckList, SectionCard, SectionSkeleton } from "@/components/ai-tools/ReportParts";
+import { CompareForm } from "@/components/ai-tools/CompareForm";
+import { BotTable, CategoryBars, CheckList, CrawlerView, SectionCard, SectionSkeleton } from "@/components/ai-tools/ReportParts";
+import { EmailReport } from "@/components/ai-tools/EmailReport";
 import { RecheckButton } from "@/components/ai-tools/RecheckButton";
 import { ReportViewed } from "@/components/ai-tools/ReportViewed";
 import { ReviewForm } from "@/components/ai-tools/ReviewForm";
 import { ShareBar } from "@/components/ai-tools/ShareBar";
+import { WatchForm } from "@/components/ai-tools/WatchForm";
 import { GROUPS, botRows, groupScore, homepageChecks, verdict } from "@/lib/ai-check/checks";
 import { citationsEnabled } from "@/lib/ai-check/citations";
+import { monitorEnabled } from "@/lib/ai-check/monitor";
 import { HOSTNAME_PATTERN } from "@/lib/ai-check/net";
 import { loadAccess, loadFiles, loadHome, loadProduct, loadSummary } from "@/lib/ai-check/report";
 import { pageMetadata } from "@/lib/metadata";
@@ -82,6 +86,11 @@ function ReportShell({ host }: { host: string | null }) {
           <Suspense fallback={<SectionSkeleton id="products" title={GROUPS.products.label} note="Finding a product page and checking its schema…" />}>
             <ProductSection host={host} />
           </Suspense>
+          <div className="report-card" style={{ padding: 22 }}>
+            <p style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 600 }}>How do your competitors compare?</p>
+            <p style={{ margin: "0 0 12px", fontSize: 14, color: "var(--color-text-faint)" }}>See {host} side by side with up to two competitors.</p>
+            <CompareForm initial={[host]} compact />
+          </div>
           <div className="report-card" style={{ padding: 22 }}>
             <p style={{ margin: "0 0 12px", fontSize: 16, fontWeight: 600 }}>Check another site</p>
             <CheckForm size="sm" buttonLabel="Run report" source="report" />
@@ -174,13 +183,17 @@ async function SummaryBlock({ host }: { host: string }) {
       )}
 
       <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
-        <RecheckButton host={host} />
+        <span style={{ display: "inline-flex", flexWrap: "wrap", gap: 8 }}>
+          <RecheckButton host={host} />
+          <EmailReport host={host} />
+        </span>
         <ShareBar host={host} />
       </div>
 
       {citationsEnabled() && <CitationCheck host={host} brand={home.siteName} />}
 
       <ReviewForm host={host} score={summary.score} isShopify={home.isShopify} />
+      {monitorEnabled() && <WatchForm host={host} />}
       <ReportViewed score={summary.score} shopify={home.isShopify} />
     </>
   );
@@ -214,6 +227,7 @@ async function HomepageSection({ host }: { host: string }) {
   return (
     <SectionCard id="homepage" title={GROUPS.homepage.label} score={groupScore(checks)} sub={`What an AI crawler reads at ${home.origin}, without running JavaScript.`}>
       <CheckList checks={checks} />
+      {home.isHtml && home.status === 200 && <CrawlerView outline={home.outline} excerpt={home.excerpt} words={home.words} />}
     </SectionCard>
   );
 }

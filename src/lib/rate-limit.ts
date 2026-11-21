@@ -9,25 +9,25 @@ const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_
 
 const memory = new Map<string, { count: number; resetAt: number }>();
 
-function memoryHit(key: string, windowSec: number) {
+function memoryHit(key: string, windowSec: number, weight: number) {
   const now = Date.now();
   const entry = memory.get(key);
   if (!entry || entry.resetAt <= now) {
     if (memory.size > 10_000) memory.clear();
-    memory.set(key, { count: 1, resetAt: now + windowSec * 1000 });
-    return 1;
+    memory.set(key, { count: weight, resetAt: now + windowSec * 1000 });
+    return weight;
   }
-  entry.count += 1;
+  entry.count += weight;
   return entry.count;
 }
 
-async function redisHit(key: string, windowSec: number): Promise<number | null> {
+async function redisHit(key: string, windowSec: number, weight: number): Promise<number | null> {
   try {
     const res = await fetch(`${REDIS_URL}/pipeline`, {
       method: "POST",
       headers: { Authorization: `Bearer ${REDIS_TOKEN}`, "Content-Type": "application/json" },
       body: JSON.stringify([
-        ["INCR", key],
+        ["INCRBY", key, String(weight)],
         ["EXPIRE", key, String(windowSec), "NX"],
       ]),
       signal: AbortSignal.timeout(1500),
@@ -41,11 +41,11 @@ async function redisHit(key: string, windowSec: number): Promise<number | null> 
   }
 }
 
-// Counts one hit against `key` and reports whether it's over `max` per
+// Counts `weight` hits against `key` and reports whether it's over `max` per
 // `windowSec`. If Redis is unreachable it fails open to the memory limiter.
-export async function rateLimit(key: string, max: number, windowSec: number): Promise<{ limited: boolean; count: number }> {
+export async function rateLimit(key: string, max: number, windowSec: number, weight = 1): Promise<{ limited: boolean; count: number }> {
   const scoped = `rl:${key}`;
-  const count = (REDIS_URL && REDIS_TOKEN ? await redisHit(scoped, windowSec) : null) ?? memoryHit(scoped, windowSec);
+  const count = (REDIS_URL && REDIS_TOKEN ? await redisHit(scoped, windowSec, weight) : null) ?? memoryHit(scoped, windowSec, weight);
   return { limited: count > max, count };
 }
 

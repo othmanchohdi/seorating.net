@@ -14,15 +14,30 @@ import { post as searchConsole } from "./google-search-console-shopify-guide";
 import { post as internalLinking } from "./shopify-internal-linking-guide";
 import { post as backlinks } from "./backlinks-for-small-shopify-brands";
 import { post as coreWebVitalsLcp } from "./core-web-vitals-lcp-shopify";
+import { post as orphanPages } from "./shopify-orphan-pages";
+import { post as appScriptsSpeed } from "./shopify-app-scripts-speed";
+import { post as productDescriptions } from "./product-descriptions-that-rank-and-convert";
 
 export type { Category, Post };
 
-export const CATEGORIES: Category[] = ["Strategy", "AI search", "On-page", "Technical SEO", "Speed", "Internal linking", "Backlinks"];
+export const CATEGORIES: Category[] = [
+  "Strategy",
+  "AI search",
+  "On-page",
+  "Technical SEO",
+  "Speed",
+  "Internal linking",
+  "Backlinks",
+  "Conversion",
+];
 
 // Newest first.
 export const POSTS: Post[] = [
+  productDescriptions,
   coreWebVitalsLcp,
+  appScriptsSpeed,
   backlinks,
+  orphanPages,
   internalLinking,
   duplicateUrls,
   llmsTxt,

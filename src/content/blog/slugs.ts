@@ -2,8 +2,11 @@
 // import it cheaply to gate access by schedule. index.ts fails the build if
 // this drifts from POSTS (slugs or dates).
 export const POST_SCHEDULE = [
+  { slug: "product-descriptions-that-rank-and-convert", published: "2026-12-09" },
   { slug: "core-web-vitals-lcp-shopify", published: "2026-12-07" },
+  { slug: "shopify-app-scripts-speed", published: "2026-12-03" },
   { slug: "backlinks-for-small-shopify-brands", published: "2026-11-30" },
+  { slug: "shopify-orphan-pages", published: "2026-11-27" },
   { slug: "shopify-internal-linking-guide", published: "2026-11-23" },
   { slug: "shopify-duplicate-urls-canonical", published: "2026-10-31" },
   { slug: "what-is-llms-txt-shopify", published: "2026-10-24" },

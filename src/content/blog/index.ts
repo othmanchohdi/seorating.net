@@ -11,13 +11,19 @@ import { post as duplicateUrls } from "./shopify-duplicate-urls-canonical";
 import { post as seoChecklist } from "./shopify-seo-checklist-2026";
 import { post as aiVisibility101 } from "./ai-visibility-101-shopify";
 import { post as searchConsole } from "./google-search-console-shopify-guide";
+import { post as internalLinking } from "./shopify-internal-linking-guide";
+import { post as backlinks } from "./backlinks-for-small-shopify-brands";
+import { post as coreWebVitalsLcp } from "./core-web-vitals-lcp-shopify";
 
 export type { Category, Post };
 
-export const CATEGORIES: Category[] = ["Strategy", "AI search", "On-page", "Technical SEO", "Speed"];
+export const CATEGORIES: Category[] = ["Strategy", "AI search", "On-page", "Technical SEO", "Speed", "Internal linking", "Backlinks"];
 
 // Newest first.
 export const POSTS: Post[] = [
+  coreWebVitalsLcp,
+  backlinks,
+  internalLinking,
   duplicateUrls,
   llmsTxt,
   aiAssistants,

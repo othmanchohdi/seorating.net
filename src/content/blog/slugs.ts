@@ -1,6 +1,9 @@
 // Plain list of published slugs, kept free of React so src/proxy.ts can
 // import it cheaply. index.ts fails the build if this drifts from POSTS.
 export const POST_SLUGS = [
+  "core-web-vitals-lcp-shopify",
+  "backlinks-for-small-shopify-brands",
+  "shopify-internal-linking-guide",
   "shopify-duplicate-urls-canonical",
   "what-is-llms-txt-shopify",
   "how-ai-assistants-choose-stores",

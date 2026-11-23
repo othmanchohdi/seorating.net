@@ -1,10 +1,14 @@
-import { POSTS } from "@/content/blog";
+import { connection } from "next/server";
+import { livePosts } from "@/content/blog";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-export function GET() {
-  const items = POSTS.map(
+export async function GET() {
+  // Scheduled posts have future `published` dates; connection() opts this
+  // route out of static generation so "now" is re-checked on every request.
+  await connection();
+  const items = livePosts().map(
     (p) => `    <item>
       <title>${esc(p.title)}</title>
       <link>${absoluteUrl(`/blog/${p.slug}`)}</link>

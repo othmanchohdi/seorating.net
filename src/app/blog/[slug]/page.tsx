@@ -30,6 +30,7 @@ export default async function BlogPost({ params }: PageProps<"/blog/[slug]">) {
   const post = getPost(slug);
   if (!post) notFound();
 
+  const related = relatedPosts(post);
   const url = absoluteUrl(`/blog/${post.slug}`);
   const { Body } = post;
 
@@ -145,7 +146,7 @@ export default async function BlogPost({ params }: PageProps<"/blog/[slug]">) {
             </Link>
           </div>
           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,300px),1fr))", gap: 24 }}>
-            {relatedPosts(post).map((p) => (
+            {related.map((p) => (
               <li key={p.slug} style={{ display: "flex" }}>
                 <Link href={`/blog/${p.slug}`} className="card" style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column", width: "100%" }}>
                   <div style={{ aspectRatio: "16/9" }}>

@@ -1,11 +1,16 @@
+import { connection } from "next/server";
 import { CRAWLERS } from "@/content/ai-crawlers";
-import { POSTS } from "@/content/blog";
+import { livePosts } from "@/content/blog";
 import { PLANS } from "@/lib/pricing";
 import { COMPANY_NAME, INSTALL_URL, SITE_NAME, SUPPORT_EMAIL, absoluteUrl } from "@/lib/site";
 
 // We practise what the app preaches: a structured brief for language models.
 // https://llmstxt.org
-export function GET() {
+export async function GET() {
+  // Scheduled posts have future `published` dates; connection() opts this
+  // route out of static generation so "now" is re-checked on every request.
+  await connection();
+  const POSTS = livePosts();
   const body = `# ${SITE_NAME}
 
 > ${SITE_NAME} is a Shopify app by ${COMPANY_NAME} that audits a store and fixes what holds it back in Google and AI search: meta tags, image alt text, on-page content, JSON-LD structured data, robots.txt, llms.txt and agents.md, IndexNow, broken links, keyword research and Google PageSpeed audits. Every tool is on every plan, including a free plan. AI-written changes are always reviewed by the merchant before they publish.

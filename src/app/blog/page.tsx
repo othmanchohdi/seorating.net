@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { BlogGrid } from "@/components/BlogGrid";
 import { PostCover } from "@/components/PostCover";
-import { CATEGORIES, POSTS, formatDate } from "@/content/blog";
+import { CATEGORIES, formatDate, livePosts } from "@/content/blog";
 import { JsonLd, ORG_ID, breadcrumbs } from "@/lib/jsonld";
 import { pageMetadata } from "@/lib/metadata";
 import { SITE_NAME, absoluteUrl } from "@/lib/site";
@@ -13,7 +14,18 @@ export const metadata = pageMetadata({
   path: "/blog",
 });
 
-export default function Blog() {
+// connection() below means this whole page blocks on render instead of
+// having a static shell — intentional for a low-traffic listing page that
+// needs to reflect scheduled posts exactly, so opt out of the instant-nav
+// shell requirement rather than add a Suspense boundary.
+export const instant = false;
+
+export default async function Blog() {
+  // Scheduled posts have future `published` dates; connection() opts this
+  // page out of static generation so "now" is re-checked on every request,
+  // not baked in at build time.
+  await connection();
+  const POSTS = livePosts();
   const [featured, ...rest] = POSTS;
 
   return (

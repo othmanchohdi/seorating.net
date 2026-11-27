@@ -36,6 +36,18 @@ const EXAMPLES = [
 
 type Finding = { tone: Tone; text: string };
 
+// Compares two canonical URLs by path + query only, ignoring the domain —
+// a live canonical is on the real store's domain, the heuristic one is on
+// the fake "yourstore.com" placeholder.
+function pathOf(u: string): string {
+  try {
+    const p = new URL(u);
+    return (p.pathname.replace(/\/+$/, "") || "/") + p.search;
+  } catch {
+    return u;
+  }
+}
+
 function inspect(input: string) {
   let url: URL;
   try {
@@ -104,31 +116,108 @@ function inspect(input: string) {
   return { canonical, isCanonical, crawlable: robots.allowed, rule: robots.rule, findings };
 }
 
+type Live = { host: string; canonical: string | null; robots: string | null; finalUrl: string };
+type FetchStatus = { kind: "idle" } | { kind: "loading" } | { kind: "error"; message: string } | { kind: "done"; host: string };
+
 export function CanonicalInspector() {
   const id = useId();
   const [input, setInput] = useState(EXAMPLES[1]);
+  const [url, setUrl] = useState("");
+  const [live, setLive] = useState<Live | null>(null);
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>({ kind: "idle" });
   const r = inspect(input);
+
+  async function fetchUrl(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const target = url.trim();
+    if (!target || fetchStatus.kind === "loading") return;
+    setFetchStatus({ kind: "loading" });
+    try {
+      const res = await fetch(`/api/url-inspect?url=${encodeURIComponent(target)}`);
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error ?? "Couldn't read that page.");
+      setInput(body.path || "/");
+      setLive({ host: body.host, canonical: body.canonical, robots: body.robots, finalUrl: body.finalUrl });
+      setFetchStatus({ kind: "done", host: body.host });
+    } catch (err) {
+      setFetchStatus({ kind: "error", message: err instanceof Error ? err.message : "Couldn't read that page." });
+    }
+  }
+
+  const liveRobots = live && (live.robots !== null ? evaluate(live.robots, "Googlebot", input) : { allowed: true, rule: null, group: null });
+  const canonicalMatches = live && r && live.canonical && pathOf(live.canonical) === pathOf(r.canonical);
 
   return (
     <WidgetFrame
       title="Shopify URL inspector"
       badge={
-        r &&
-        (!r.crawlable ? (
-          <span className="pill pill-bad">Not crawled</span>
+        live ? (
+          <span className={`pill pill-${liveRobots?.allowed ? "ok" : "bad"}`}>{liveRobots?.allowed ? "Crawlable" : "Not crawled"}</span>
         ) : (
-          <span className={`pill pill-${r.isCanonical ? "ok" : "warn"}`}>{r.isCanonical ? "Canonical" : "Duplicate URL"}</span>
-        ))
+          r &&
+          (!r.crawlable ? (
+            <span className="pill pill-bad">Not crawled</span>
+          ) : (
+            <span className={`pill pill-${r.isCanonical ? "ok" : "warn"}`}>{r.isCanonical ? "Canonical" : "Duplicate URL"}</span>
+          ))
+        )
       }
-      caption="Paste a path from your own store or pick an example. Results describe Shopify’s default behaviour; heavily customised themes and apps can change it, so confirm with URL Inspection in Search Console."
+      caption={
+        live
+          ? "Showing the real canonical tag and real robots.txt read from the live page above, not a simulation."
+          : "Paste a path from your own store or pick an example. Results describe Shopify’s default behaviour; heavily customised themes and apps can change it. Fetch a real URL above for your store’s actual behaviour."
+      }
     >
+      <form onSubmit={fetchUrl} className="field">
+        <label htmlFor={`${id}-fetch`}>Fetch from a live site</label>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <input
+            id={`${id}-fetch`}
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="yourstore.com/collections/shirts/products/linen-shirt"
+            spellCheck={false}
+            style={{ flex: "1 1 280px", fontFamily: "var(--font-mono)", fontSize: 13.5 }}
+          />
+          <button type="submit" className="btn btn-secondary btn-sm" disabled={fetchStatus.kind === "loading" || !url.trim()}>
+            {fetchStatus.kind === "loading" ? "Reading…" : "Check URL"}
+          </button>
+        </div>
+        <span role="status" style={{ fontSize: 12.5, color: fetchStatus.kind === "error" ? "var(--color-bad)" : "var(--color-text-faintest)" }}>
+          {fetchStatus.kind === "error"
+            ? fetchStatus.message
+            : fetchStatus.kind === "done"
+              ? `Read ${fetchStatus.host} live. Nothing is saved on our end.`
+              : "Works on any store, Shopify or not. Leave empty to explore the examples below instead."}
+        </span>
+      </form>
+
       <div className="field">
         <label htmlFor={`${id}-url`}>Store URL or path</label>
-        <input id={`${id}-url`} value={input} onChange={(e) => setInput(e.target.value)} spellCheck={false} style={{ fontFamily: "var(--font-mono)", fontSize: 13.5 }} />
+        <input
+          id={`${id}-url`}
+          value={input}
+          onChange={(e) => {
+            setInput(e.target.value);
+            setLive(null);
+            setFetchStatus({ kind: "idle" });
+          }}
+          spellCheck={false}
+          style={{ fontFamily: "var(--font-mono)", fontSize: 13.5 }}
+        />
       </div>
       <div className="seg" role="group" aria-label="Examples">
         {EXAMPLES.map((e, i) => (
-          <button key={e} type="button" aria-pressed={input === e} onClick={() => setInput(e)}>
+          <button
+            key={e}
+            type="button"
+            aria-pressed={input === e}
+            onClick={() => {
+              setInput(e);
+              setLive(null);
+              setFetchStatus({ kind: "idle" });
+            }}
+          >
             Example {i + 1}
           </button>
         ))}
@@ -138,22 +227,35 @@ export function CanonicalInspector() {
         <div aria-live="polite" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10 }}>
             <div className="stat-tile" style={{ minWidth: 0 }}>
-              <div className="stat-tile-label">Canonical URL</div>
+              <div className="stat-tile-label">Canonical URL{live && " (live)"}</div>
               <div className="mono" style={{ fontSize: 12.5, marginTop: 6, overflowWrap: "anywhere", color: "var(--color-primary-deep)" }}>
-                {r.canonical}
+                {live ? (live.canonical ?? "No canonical tag found") : r.canonical}
               </div>
+              {live && live.canonical && (
+                <div style={{ fontSize: 11.5, marginTop: 6, color: "var(--color-text-faint)" }}>
+                  {canonicalMatches ? "Matches Shopify’s default behaviour." : `Shopify’s default behaviour would point to ${r.canonical}.`}
+                </div>
+              )}
             </div>
             <div className="stat-tile">
-              <div className="stat-tile-label">Default robots.txt</div>
+              <div className="stat-tile-label">{live ? "robots.txt (live)" : "Default robots.txt"}</div>
               <div style={{ marginTop: 6, display: "flex", flexDirection: "column", gap: 4 }}>
-                <span className={`pill pill-${r.crawlable ? "ok" : "bad"}`} style={{ alignSelf: "flex-start" }}>
-                  {r.crawlable ? "Crawlable" : "Blocked"}
+                <span className={`pill pill-${(live ? liveRobots?.allowed : r.crawlable) ? "ok" : "bad"}`} style={{ alignSelf: "flex-start" }}>
+                  {(live ? liveRobots?.allowed : r.crawlable) ? "Crawlable" : "Blocked"}
                 </span>
-                {r.rule && (
-                  <span className="mono" style={{ fontSize: 11.5, color: "var(--color-text-faint)", overflowWrap: "anywhere" }}>
-                    {r.rule.allow ? "Allow" : "Disallow"}: {r.rule.pattern}
-                  </span>
-                )}
+                {live
+                  ? live.robots === null
+                    ? <span style={{ fontSize: 11.5, color: "var(--color-text-faint)" }}>No robots.txt found; everything is allowed.</span>
+                    : liveRobots?.rule && (
+                        <span className="mono" style={{ fontSize: 11.5, color: "var(--color-text-faint)", overflowWrap: "anywhere" }}>
+                          {liveRobots.rule.allow ? "Allow" : "Disallow"}: {liveRobots.rule.pattern}
+                        </span>
+                      )
+                  : r.rule && (
+                      <span className="mono" style={{ fontSize: 11.5, color: "var(--color-text-faint)", overflowWrap: "anywhere" }}>
+                        {r.rule.allow ? "Allow" : "Disallow"}: {r.rule.pattern}
+                      </span>
+                    )}
               </div>
             </div>
           </div>

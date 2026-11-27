@@ -1,5 +1,5 @@
 import type { Category, Post } from "./types";
-import { POST_SLUGS } from "./slugs";
+import { POST_SCHEDULE, POST_SLUGS } from "./slugs";
 import { post as llmsTxt } from "./what-is-llms-txt-shopify";
 import { post as aiAssistants } from "./how-ai-assistants-choose-stores";
 import { post as robotsTxt } from "./shopify-robots-txt-guide";
@@ -11,13 +11,34 @@ import { post as duplicateUrls } from "./shopify-duplicate-urls-canonical";
 import { post as seoChecklist } from "./shopify-seo-checklist-2026";
 import { post as aiVisibility101 } from "./ai-visibility-101-shopify";
 import { post as searchConsole } from "./google-search-console-shopify-guide";
+import { post as internalLinking } from "./shopify-internal-linking-guide";
+import { post as backlinks } from "./backlinks-for-small-shopify-brands";
+import { post as coreWebVitalsLcp } from "./core-web-vitals-lcp-shopify";
+import { post as orphanPages } from "./shopify-orphan-pages";
+import { post as appScriptsSpeed } from "./shopify-app-scripts-speed";
+import { post as productDescriptions } from "./product-descriptions-that-rank-and-convert";
 
 export type { Category, Post };
 
-export const CATEGORIES: Category[] = ["Strategy", "AI search", "On-page", "Technical SEO", "Speed"];
+export const CATEGORIES: Category[] = [
+  "Strategy",
+  "AI search",
+  "On-page",
+  "Technical SEO",
+  "Speed",
+  "Internal linking",
+  "Backlinks",
+  "Conversion",
+];
 
 // Newest first.
 export const POSTS: Post[] = [
+  productDescriptions,
+  coreWebVitalsLcp,
+  appScriptsSpeed,
+  backlinks,
+  orphanPages,
+  internalLinking,
   duplicateUrls,
   llmsTxt,
   aiAssistants,
@@ -36,13 +57,43 @@ if (missing.length || POSTS.length !== POST_SLUGS.length) {
   throw new Error(`content/blog/slugs.ts is out of sync with POSTS: ${missing.join(", ") || "count mismatch"}`);
 }
 
+const dateMismatch = POSTS.filter((p) => POST_SCHEDULE.find((s) => s.slug === p.slug)?.published !== p.published);
+if (dateMismatch.length) {
+  throw new Error(`content/blog/slugs.ts published dates are out of sync with POSTS: ${dateMismatch.map((p) => p.slug).join(", ")}`);
+}
+
+// A post's `published` date is a schedule, not just a sort key: proxy.ts
+// blocks its URL with a real 404 until this date, so scheduling a post just
+// means giving it a future date — no other step needed.
+export function isPublished(published: string, now: Date = new Date()) {
+  return published <= now.toISOString().slice(0, 10);
+}
+
+// Posts that are live right now. Use this (not POSTS) for anything that
+// lists, links to or advertises posts — the blog index, sitemap, RSS and
+// llms.txt all call this after `await connection()` so a scheduled post
+// appears the moment its date arrives, without a rebuild.
+export function livePosts(now: Date = new Date()) {
+  return POSTS.filter((p) => isPublished(p.published, now));
+}
+
 export function getPost(slug: string) {
   return POSTS.find((p) => p.slug === slug);
 }
 
+// The article page itself stays statically prerendered (see
+// /blog/[slug]/page.tsx), so this freezes "now" once at build/module-load
+// time instead of reading Date() during that page's render — Next's
+// prerenderer rejects a fresh, non-deterministic Date() read inside a
+// static page, and correctly so: the alternative is this value silently
+// going stale between builds, which is an acceptable trade for a
+// related-posts widget.
+const BUILD_TIME = new Date();
+
 export function relatedPosts(post: Post, count = 3) {
-  const same = POSTS.filter((p) => p.slug !== post.slug && p.category === post.category);
-  const rest = POSTS.filter((p) => p.slug !== post.slug && p.category !== post.category);
+  const live = livePosts(BUILD_TIME).filter((p) => p.slug !== post.slug);
+  const same = live.filter((p) => p.category === post.category);
+  const rest = live.filter((p) => p.category !== post.category);
   return [...same, ...rest].slice(0, count);
 }
 

@@ -1,9 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { CRAWLER_SLUGS } from "@/content/ai-crawlers";
-import { POST_SLUGS } from "@/content/blog/slugs";
+import { POST_SCHEDULE } from "@/content/blog/slugs";
 
-const KNOWN = new Set<string>([...POST_SLUGS, "rss.xml"]);
+// slug -> publish date. A slug not in here, or whose date hasn't arrived
+// yet, 404s — this is what makes scheduling a post actually work.
+const PUBLISHED = new Map<string, string>(POST_SCHEDULE.map((p) => [p.slug, p.published]));
+const todayUTC = () => new Date().toISOString().slice(0, 10);
 const CRAWLERS = new Set<string>(CRAWLER_SLUGS);
 const HOSTNAME = /^(?=.{4,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/;
 
@@ -46,10 +49,14 @@ export async function proxy(request: NextRequest) {
   }
 
   // Blog pages stream, so a notFound() inside the page would arrive after a
-  // 200 status was already sent (a "soft 404"). Reject unknown slugs here,
-  // before rendering starts, so they get a real 404.
+  // 200 status was already sent (a "soft 404"). Reject unknown and
+  // not-yet-scheduled slugs here, before rendering starts, so they get a
+  // real 404 — including on their statically pre-built HTML.
   const slug = pathname.split("/")[2];
-  if (slug && !KNOWN.has(slug)) return notFound(request);
+  if (slug && slug !== "rss.xml") {
+    const published = PUBLISHED.get(slug);
+    if (!published || published > todayUTC()) return notFound(request);
+  }
 }
 
 export const config = {

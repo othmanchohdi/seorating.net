@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Post } from "./types";
 import { VitalsMeter } from "@/components/blog/VitalsMeter";
 import { AppCta, Note } from "./ui";
@@ -80,6 +81,10 @@ function Body() {
         &ldquo;Reduce unused JavaScript&rdquo; warnings pointing at Shopify&rsquo;s own checkout or analytics scripts. You
         can&rsquo;t remove those, and they&rsquo;re loaded efficiently.
       </Note>
+      <p>
+        LCP is usually the most-failed of the three and the one worth fixing first &mdash; see our deeper walkthrough on{" "}
+        <Link href="/blog/core-web-vitals-lcp-shopify">fixing LCP on Shopify</Link>.
+      </p>
 
       <h2 id="routine">A simple routine</h2>
       <ol>

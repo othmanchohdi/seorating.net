@@ -60,7 +60,10 @@ function Body() {
           Content depth where it matters — a near-empty collection page gives both search engines and
           shoppers nothing to go on.
         </li>
-        <li>Internal links between related products and content.</li>
+        <li>
+          Internal links between related products and content &mdash; see our{" "}
+          <Link href="/blog/shopify-internal-linking-guide">guide to internal linking</Link>.
+        </li>
         <li>
           Alt text that describes the image, not just the product name repeated — our{" "}
           <Link href="/blog/product-image-alt-text-checklist">alt text checklist</Link> covers it.

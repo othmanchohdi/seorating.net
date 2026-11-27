@@ -22,8 +22,33 @@ export const AI_TOOLS = [
     text: "Test any crawler against any path, with the same rules Google and OpenAI follow.",
   },
   {
+    href: "/ai-tools/product-schema-generator",
+    label: "Product schema generator",
+    text: "Build valid Product JSON-LD: price, GTIN, brand, reviews, shipping and returns.",
+  },
+  {
     href: "/ai-tools/ai-readiness-checklist",
     label: "AI readiness checklist",
     text: "Find where the chain from crawl to recommendation breaks for your store.",
+  },
+  {
+    href: "/ai-tools/serp-snippet-preview",
+    label: "Search snippet preview",
+    text: "See how your title and meta description render in Google, and where they get cut.",
+  },
+  {
+    href: "/ai-tools/core-web-vitals-checker",
+    label: "Core Web Vitals checker",
+    text: "Test LCP, INP and CLS against Google's thresholds at the 75th percentile.",
+  },
+  {
+    href: "/ai-tools/alt-text-checker",
+    label: "Alt text checker",
+    text: "Catch file names, keyword stuffing and vague wording in product image alt text.",
+  },
+  {
+    href: "/ai-tools/shopify-url-inspector",
+    label: "Shopify URL inspector",
+    text: "Check a path's canonical URL and whether Shopify's default robots.txt lets crawlers in.",
   },
 ] as const;

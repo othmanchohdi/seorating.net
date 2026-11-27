@@ -22,6 +22,8 @@ const staticPages = (blogLastModified?: string): { path: string; priority: numbe
   { path: "/ai-tools/core-web-vitals-checker", priority: 0.6, changeFrequency: "monthly", lastModified: "2026-11-27" },
   { path: "/ai-tools/alt-text-checker", priority: 0.6, changeFrequency: "monthly", lastModified: "2026-11-27" },
   { path: "/ai-tools/shopify-url-inspector", priority: 0.6, changeFrequency: "monthly", lastModified: "2026-11-27" },
+  { path: "/ai-tools/llms-txt-checker", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-11-27" },
+  { path: "/ai-tools/structured-data-checker", priority: 0.7, changeFrequency: "monthly", lastModified: "2026-11-27" },
   { path: "/about", priority: 0.6, changeFrequency: "monthly" },
   { path: "/contact", priority: 0.6, changeFrequency: "yearly" },
   { path: "/support", priority: 0.5, changeFrequency: "monthly" },

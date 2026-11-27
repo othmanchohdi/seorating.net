@@ -51,4 +51,14 @@ export const AI_TOOLS = [
     label: "Shopify URL inspector",
     text: "Check a path's canonical URL and whether Shopify's default robots.txt lets crawlers in.",
   },
+  {
+    href: "/ai-tools/llms-txt-checker",
+    label: "llms.txt checker",
+    text: "Fetch any site's live llms.txt and check it against the llmstxt.org format.",
+  },
+  {
+    href: "/ai-tools/structured-data-checker",
+    label: "Structured data checker",
+    text: "Fetch any page's live JSON-LD and see what's missing for merchant listings.",
+  },
 ] as const;

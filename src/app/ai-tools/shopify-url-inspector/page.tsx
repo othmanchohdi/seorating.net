@@ -7,11 +7,15 @@ const PATH = "/ai-tools/shopify-url-inspector";
 
 export const metadata = pageMetadata({
   title: "Shopify URL & Canonical Inspector",
-  description: "Paste a path from your Shopify store to see its canonical URL, whether Shopify's default robots.txt lets crawlers in, and why. Free, no signup.",
+  description: "Fetch a live URL to see its real canonical tag and real robots.txt rules, or explore a path against Shopify's default behaviour. Free, no signup.",
   path: PATH,
 });
 
 const FAQS = [
+  {
+    q: "What does \"Fetch from a live site\" actually check?",
+    a: "It reads the canonical tag your page currently sends and fetches your store's actual robots.txt, the same way a search crawler sees them, no JavaScript run. That's ground truth for your store, not a simulation of Shopify's defaults.",
+  },
   {
     q: "Where do Shopify's duplicate URLs come from?",
     a: "Collection-scoped product URLs (/collections/x/products/y), sort and filter parameters, tag pages, and tracking or campaign parameters all produce multiple addresses for the same content. Shopify's canonical_url Liquid object and default robots.txt handle most of it automatically.",
@@ -21,8 +25,8 @@ const FAQS = [
     a: "Google treats the canonical tag as a strong hint, not a command. It also weighs which URL your internal links point to and which one is in your sitemap. When those signals disagree with the tag, Google can pick a different URL than the one you declared.",
   },
   {
-    q: "This shows Shopify's default behaviour. What if I've customised my theme or robots.txt?",
-    a: "Customised themes and apps can change canonical tags and crawl rules, so treat this as what Shopify ships out of the box, not a guarantee for your store. Confirm your actual pages with URL Inspection in Search Console, or test your real robots.txt in the robots.txt tester.",
+    q: "The example paths show Shopify's default behaviour. What if I've customised my theme or robots.txt?",
+    a: "Customised themes and apps can change canonical tags and crawl rules, so the example paths (with no live fetch) show what Shopify ships out of the box, not a guarantee for your store. Fetch your real URL above to see what your store actually does, or confirm in Search Console's URL Inspection.",
   },
 ];
 
@@ -32,7 +36,7 @@ export default function ShopifyUrlInspector() {
       path={PATH}
       name="Shopify URL inspector"
       title="Shopify URL &amp; canonical inspector"
-      lead="Paste a path from your store or pick an example to see its canonical version, whether Shopify's default robots.txt lets crawlers in, and why."
+      lead="Fetch a real URL to see its actual canonical tag and actual robots.txt rules, or paste a path to see how Shopify behaves by default."
       faqs={FAQS}
       widget={<CanonicalInspector />}
       guide={

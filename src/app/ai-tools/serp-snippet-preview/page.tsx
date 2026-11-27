@@ -7,11 +7,15 @@ const PATH = "/ai-tools/serp-snippet-preview";
 
 export const metadata = pageMetadata({
   title: "Free Google Snippet Preview Tool (SERP Preview)",
-  description: "Preview how your title tag and meta description will look in Google search results, and see exactly where desktop truncates them. Free, no signup.",
+  description: "Fetch a live page's real title and meta description, or type your own, and preview exactly how they'll look in Google search results. Free, no signup.",
   path: PATH,
 });
 
 const FAQS = [
+  {
+    q: "Can I pull the title and description from a real page instead of typing them?",
+    a: "Yes. Enter a URL in \"Fetch from a live page\" and it reads the title tag and meta description a crawler actually receives, no JavaScript run, the same way the robots.txt tester and llms.txt checker work. It fills in the preview below, which you can then edit freely.",
+  },
   {
     q: "How many characters can a title or description be?",
     a: "There's no fixed character limit. Google truncates by rendered pixel width, so a title full of wide capital letters gets cut sooner than one in lowercase. As a rough guide, keep titles under ~60 characters and descriptions under ~155 to avoid truncation on most desktop results.",
@@ -32,7 +36,7 @@ export default function SerpSnippetPreview() {
       path={PATH}
       name="search snippet preview"
       title="Google search snippet preview"
-      lead="Type your title and meta description and see exactly how they'd render in Google, with the point where desktop results get cut off."
+      lead="Fetch a live page's title and meta description, or type your own, and see exactly how they'd render in Google, with the point where desktop results get cut off."
       faqs={FAQS}
       widget={<SerpPreview />}
       guide={

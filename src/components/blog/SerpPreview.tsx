@@ -46,6 +46,8 @@ const PRESETS = {
   },
 };
 
+const DEFAULT_BREADCRUMB = "northfield.com › products › linen-shirt";
+
 function lengthTone(px: number, max: number, min: number): Tone {
   if (px === 0) return "bad";
   if (px > max) return "warn";
@@ -79,10 +81,33 @@ function Bar({ label, chars, px, max, min }: { label: string; chars: number; px:
   );
 }
 
+type FetchStatus = { kind: "idle" } | { kind: "loading" } | { kind: "error"; message: string } | { kind: "done"; host: string };
+
 export function SerpPreview() {
   const id = useId();
   const [title, setTitle] = useState(PRESETS.after.title);
   const [desc, setDesc] = useState(PRESETS.after.desc);
+  const [breadcrumb, setBreadcrumb] = useState(DEFAULT_BREADCRUMB);
+  const [url, setUrl] = useState("");
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>({ kind: "idle" });
+
+  async function fetchMeta(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const target = url.trim();
+    if (!target || fetchStatus.kind === "loading") return;
+    setFetchStatus({ kind: "loading" });
+    try {
+      const res = await fetch(`/api/meta-fetch?url=${encodeURIComponent(target)}`);
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error ?? "Couldn't read that page.");
+      setTitle(body.title || "");
+      setDesc(body.description || "");
+      setBreadcrumb(`${body.host}${body.path && body.path !== "/" ? ` › ${body.path.split("/").filter(Boolean).join(" › ")}` : ""}`);
+      setFetchStatus({ kind: "done", host: body.host });
+    } catch (err) {
+      setFetchStatus({ kind: "error", message: err instanceof Error ? err.message : "Couldn't read that page." });
+    }
+  }
 
   const titlePx = emWidth(title) * TITLE_PX;
   const descPx = emWidth(desc) * DESC_PX;
@@ -103,6 +128,8 @@ export function SerpPreview() {
               onClick={() => {
                 setTitle(PRESETS[k].title);
                 setDesc(PRESETS[k].desc);
+                setBreadcrumb(DEFAULT_BREADCRUMB);
+                setFetchStatus({ kind: "idle" });
               }}
             >
               {k === "before" ? "Before" : k === "after" ? "After" : "Too long"}
@@ -112,6 +139,30 @@ export function SerpPreview() {
       }
       caption="Widths are approximate. Google truncates by pixels and may rewrite your description for some queries, so treat this as a guide, not a guarantee."
     >
+      <form onSubmit={fetchMeta} className="field">
+        <label htmlFor={`${id}-url`}>Fetch from a live page</label>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <input
+            id={`${id}-url`}
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="yourstore.com/products/linen-shirt"
+            spellCheck={false}
+            style={{ flex: "1 1 260px", fontFamily: "var(--font-mono)", fontSize: 13.5 }}
+          />
+          <button type="submit" className="btn btn-secondary btn-sm" disabled={fetchStatus.kind === "loading" || !url.trim()}>
+            {fetchStatus.kind === "loading" ? "Fetching…" : "Fetch page"}
+          </button>
+        </div>
+        <span role="status" style={{ fontSize: 12.5, color: fetchStatus.kind === "error" ? "var(--color-bad)" : "var(--color-text-faintest)" }}>
+          {fetchStatus.kind === "error"
+            ? fetchStatus.message
+            : fetchStatus.kind === "done"
+              ? `Loaded the live title and meta description from ${fetchStatus.host} below.`
+              : "Works on any Shopify store or site: a product, collection or home page. Nothing is saved on our end."}
+        </span>
+      </form>
+
       <div className="field">
         <label htmlFor={`${id}-t`}>Meta title</label>
         <input id={`${id}-t`} value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -125,7 +176,7 @@ export function SerpPreview() {
       <Bar label="Description" chars={desc.length} px={descPx} max={DESC_MAX} min={400} />
 
       <div aria-live="polite" style={{ border: "1px solid var(--color-border-soft)", borderRadius: 12, padding: "14px 16px", fontFamily: "Arial, sans-serif" }}>
-        <div style={{ fontSize: 12.5, color: "#4d5156" }}>northfield.com › products › linen-shirt</div>
+        <div style={{ fontSize: 12.5, color: "#4d5156", overflowWrap: "anywhere" }}>{breadcrumb}</div>
         <div style={{ fontSize: 19, lineHeight: 1.3, color: "#1a0dab", margin: "4px 0 3px", overflowWrap: "anywhere" }}>
           {truncate(title || "Untitled", TITLE_PX, TITLE_MAX)}
         </div>

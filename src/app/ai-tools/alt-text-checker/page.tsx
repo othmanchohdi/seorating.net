@@ -6,8 +6,8 @@ import { pageMetadata } from "@/lib/metadata";
 const PATH = "/ai-tools/alt-text-checker";
 
 export const metadata = pageMetadata({
-  title: "Free Alt Text Checker for Product Images",
-  description: "Paste alt text for a product photo and catch the common mistakes: file names, keyword stuffing, missing detail, and redundant phrasing. Free, no signup.",
+  title: "Free Alt Text Checker: Audit Every Image on a Page",
+  description: "Enter a page URL to check the alt text of every image on it, or paste one alt text. Catches missing alt, file names, keyword stuffing, duplicates and vague wording. Free, no signup.",
   path: PATH,
 });
 
@@ -32,7 +32,7 @@ export default function AltTextCheckerPage() {
       path={PATH}
       name="alt text checker"
       title="Alt text checker"
-      lead="Paste the alt text for a product photo and get an instant score plus the specific mistakes to fix: file names, stuffing, vague wording, and more."
+      lead="Enter a page URL to audit the alt text of every image on it, or paste a single alt text for an instant score plus the specific mistakes to fix: missing alt, file names, stuffing, vague wording, and more."
       faqs={FAQS}
       widget={<AltTextChecker />}
       guide={

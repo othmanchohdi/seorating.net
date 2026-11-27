@@ -158,3 +158,28 @@ export function looksLikeAppShell(html: string, words: number) {
   const scripts = (html.match(/<script\b/gi) ?? []).length;
   return words < 80 && (scripts >= 5 || /<div id=["'](root|app|__next|__nuxt)["'][^>]*>\s*<\/div>/i.test(html));
 }
+
+// Every content image with its alt as written (null = no alt attribute,
+// "" = marked decorative), deduped by URL. Lazy-loading themes keep the real
+// URL in data-src/srcset, and tracking pixels and inline data: images are skipped,
+// as are <img> strings inside scripts (client-side templates, not real images).
+export function pageImages(html: string, base: string, max = 80): { src: string; alt: string | null }[] {
+  const out = new Map<string, string | null>();
+  const markup = html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ");
+  for (const tag of markup.match(/<img\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi) ?? []) {
+    if (attr(tag, "width") === "1" || attr(tag, "height") === "1") continue;
+    const raw = attr(tag, "src") ?? attr(tag, "data-src") ?? attr(tag, "srcset")?.split(/\s+/)[0] ?? attr(tag, "data-srcset")?.split(/\s+/)[0];
+    if (!raw || raw.startsWith("data:")) continue;
+    let src: string;
+    try {
+      src = new URL(decode(raw), base).toString();
+    } catch {
+      continue;
+    }
+    if (out.has(src)) continue;
+    const alt = attr(tag, "alt");
+    out.set(src, alt === null ? null : decode(alt));
+    if (out.size >= max) break;
+  }
+  return [...out].map(([src, alt]) => ({ src, alt }));
+}

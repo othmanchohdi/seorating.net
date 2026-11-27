@@ -45,13 +45,76 @@ function check(alt: string): Check[] {
 
 const SCORE: Record<Tone, number> = { ok: 20, warn: 10, bad: 0 };
 
+// Any outright problem caps the score, so one serious mistake can't hide behind passes.
+function scoreOf(alt: string, results: Check[]) {
+  const raw = alt.trim() ? results.reduce((s, r) => s + SCORE[r.tone], 0) : 0;
+  return results.some((r) => r.tone === "bad") ? Math.min(raw, 40) : raw;
+}
+
+type LiveImage = { src: string; alt: string | null };
+type Graded = LiveImage & { tone: Tone; score: number; issue: string };
+type FetchStatus = { kind: "idle" } | { kind: "loading" } | { kind: "error"; message: string };
+
+function grade(images: LiveImage[]): Graded[] {
+  const uses = new Map<string, number>();
+  for (const { alt } of images) if (alt?.trim()) uses.set(alt.trim().toLowerCase(), (uses.get(alt.trim().toLowerCase()) ?? 0) + 1);
+  return images
+    .map((img): Graded => {
+      if (img.alt === null) return { ...img, tone: "bad", score: 0, issue: "No alt attribute. Screen readers fall back to the file name." };
+      if (!img.alt.trim()) return { ...img, tone: "warn", score: 50, issue: "Empty alt, so it’s treated as decorative. Fine for icons and backgrounds, not for product photos." };
+      const results = check(img.alt);
+      const score = scoreOf(img.alt, results);
+      const worst = results.find((r) => r.tone === "bad") ?? results.find((r) => r.tone === "warn");
+      const dupes = uses.get(img.alt.trim().toLowerCase()) ?? 0;
+      if (worst) return { ...img, tone: worst.tone, score, issue: worst.text };
+      if (dupes > 1) return { ...img, tone: "warn", score: Math.min(score, 80), issue: `Same alt text on ${dupes} images. Say what’s different about each shot.` };
+      return { ...img, tone: "ok", score, issue: "Looks good." };
+    })
+    .sort((a, b) => a.score - b.score);
+}
+
+const fileName = (src: string) => {
+  try {
+    return decodeURIComponent(new URL(src).pathname.split("/").pop() || src);
+  } catch {
+    return src;
+  }
+};
+
 export function AltTextChecker() {
   const id = useId();
   const [alt, setAlt] = useState(PRESETS.Stuffed);
+  const [url, setUrl] = useState("");
+  const [live, setLive] = useState<{ url: string; images: Graded[]; capped: boolean } | null>(null);
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>({ kind: "idle" });
   const results = check(alt);
-  // Any outright problem caps the score, so one serious mistake can't hide behind passes.
-  const raw = alt.trim() ? results.reduce((s, r) => s + SCORE[r.tone], 0) : 0;
-  const score = results.some((r) => r.tone === "bad") ? Math.min(raw, 40) : raw;
+  const score = scoreOf(alt, results);
+
+  async function fetchUrl(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const target = url.trim();
+    if (!target || fetchStatus.kind === "loading") return;
+    setFetchStatus({ kind: "loading" });
+    try {
+      const res = await fetch(`/api/alt-fetch?url=${encodeURIComponent(target)}`);
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error ?? "Couldn't read that page.");
+      const images = grade(body.images ?? []);
+      setLive({ url: body.url, images, capped: !!body.capped });
+      const first = images.find((i) => i.alt?.trim());
+      if (first) setAlt(first.alt!);
+      setFetchStatus({ kind: "idle" });
+    } catch (err) {
+      setFetchStatus({ kind: "error", message: err instanceof Error ? err.message : "Couldn't read that page." });
+    }
+  }
+
+  const counts = live && {
+    missing: live.images.filter((i) => i.alt === null).length,
+    empty: live.images.filter((i) => i.alt !== null && !i.alt.trim()).length,
+    problems: live.images.filter((i) => i.alt?.trim() && i.tone !== "ok").length,
+    good: live.images.filter((i) => i.tone === "ok").length,
+  };
 
   return (
     <WidgetFrame
@@ -67,6 +130,75 @@ export function AltTextChecker() {
       }
       caption="These checks catch the common mistakes. Only a person looking at the image can confirm the description is actually right."
     >
+      <form onSubmit={fetchUrl} className="field">
+        <label htmlFor={`${id}-fetch`}>Check every image on a live page</label>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <input
+            id={`${id}-fetch`}
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="yourstore.com/products/linen-shirt"
+            spellCheck={false}
+            style={{ flex: "1 1 280px", fontFamily: "var(--font-mono)", fontSize: 13.5 }}
+          />
+          <button type="submit" className="btn btn-secondary btn-sm" disabled={fetchStatus.kind === "loading" || !url.trim()}>
+            {fetchStatus.kind === "loading" ? "Reading…" : "Check images"}
+          </button>
+        </div>
+        <span role="status" style={{ fontSize: 12.5, color: fetchStatus.kind === "error" ? "var(--color-bad)" : "var(--color-text-faintest)" }}>
+          {fetchStatus.kind === "error"
+            ? fetchStatus.message
+            : live
+              ? `Read ${live.capped ? "the first " : ""}${live.images.length} image${live.images.length === 1 ? "" : "s"} from ${live.url}. Nothing is saved on our end.`
+              : "Product pages work best. Works on any site, Shopify or not. Images added later by JavaScript aren’t included, just as many crawlers miss them."}
+        </span>
+      </form>
+
+      {live && counts && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {live.images.length === 0 ? (
+            <CheckRow tone="warn">No images found in the page&rsquo;s HTML. They may be loaded by JavaScript, which crawlers often don&rsquo;t run.</CheckRow>
+          ) : (
+            <>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                <span className={`pill pill-${counts.missing ? "bad" : "ok"}`}>{counts.missing} missing alt</span>
+                <span className={`pill pill-${counts.problems ? "warn" : "ok"}`}>{counts.problems} to improve</span>
+                <span className="pill">{counts.empty} decorative (empty)</span>
+                <span className="pill pill-ok">{counts.good} good</span>
+              </div>
+              <ul style={{ listStyle: "none", margin: 0, padding: 0, maxHeight: 360, overflowY: "auto", border: "1px solid var(--color-border-soft)", borderRadius: 10 }}>
+                {live.images.map((img) => (
+                  <li key={img.src} style={{ borderBottom: "1px solid var(--color-border-soft)" }}>
+                    <button
+                      type="button"
+                      onClick={() => setAlt(img.alt ?? "")}
+                      aria-pressed={img.alt !== null && img.alt === alt}
+                      style={{ display: "flex", gap: 12, alignItems: "center", width: "100%", padding: "10px 12px", background: "none", border: 0, textAlign: "left", cursor: "pointer", font: "inherit", color: "inherit" }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element -- arbitrary third-party images, not ours to optimise */}
+                      <img src={img.src} alt="" loading="lazy" referrerPolicy="no-referrer" width={44} height={44} style={{ objectFit: "cover", borderRadius: 6, flex: "none", background: "var(--color-border-soft)" }} />
+                      <span style={{ minWidth: 0, flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+                        <span style={{ fontSize: 13.5, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {img.alt === null ? <em>No alt</em> : img.alt.trim() ? img.alt : <em>alt=&quot;&quot;</em>}
+                        </span>
+                        <span style={{ fontSize: 12.5, color: "var(--color-text-faint)" }}>{img.issue}</span>
+                        <span className="mono" style={{ fontSize: 11, color: "var(--color-text-faintest)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {fileName(img.src)}
+                        </span>
+                      </span>
+                      <span className={`pill pill-${img.tone}`} style={{ fontSize: 11, flex: "none" }}>
+                        {img.alt === null ? "Missing" : img.alt.trim() ? img.score : "Empty"}
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <span style={{ fontSize: 12.5, color: "var(--color-text-faintest)" }}>Click an image to see the full breakdown below, or edit its alt text to try a better version.</span>
+            </>
+          )}
+        </div>
+      )}
+
       <div className="field">
         <label htmlFor={`${id}-alt`}>Alt text for a product photo</label>
         <input id={`${id}-alt`} value={alt} onChange={(e) => setAlt(e.target.value)} placeholder="Describe the image" />

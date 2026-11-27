@@ -49,7 +49,7 @@ export const AI_TOOLS = [
   {
     href: "/ai-tools/alt-text-checker",
     label: "Alt text checker",
-    text: "Catch file names, keyword stuffing and vague wording in product image alt text.",
+    text: "Audit every image's alt text on a live page: missing alt, file names, stuffing and vague wording.",
   },
   {
     href: "/ai-tools/shopify-url-inspector",

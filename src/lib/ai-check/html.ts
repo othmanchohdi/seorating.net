@@ -4,7 +4,11 @@
 // A tag, allowing ">" inside quoted attribute values (Alpine/Vue attributes
 // like @click="a => b" are common on storefronts).
 const TAG = /<(?:[^>"']|"[^"]*"|'[^']*')*>/g;
-const stripTags = (s: string) => s.replace(TAG, " ");
+export const stripTags = (s: string) => s.replace(TAG, " ");
+
+// The markup with scripts and styles removed, so template strings inside
+// them aren't mistaken for real tags.
+export const withoutScripts = (html: string) => html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ");
 
 export const attr = (tag: string, name: string) =>
   tag.match(new RegExp(`\\b${name}\\s*=\\s*("([^"]*)"|'([^']*)'|([^\\s"'>]+))`, "i"))?.slice(2).find((v) => v !== undefined) ?? null;
@@ -165,8 +169,7 @@ export function looksLikeAppShell(html: string, words: number) {
 // as are <img> strings inside scripts (client-side templates, not real images).
 export function pageImages(html: string, base: string, max = 80): { src: string; alt: string | null }[] {
   const out = new Map<string, string | null>();
-  const markup = html.replace(/<(script|style)\b[\s\S]*?<\/\1>/gi, " ");
-  for (const tag of markup.match(/<img\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi) ?? []) {
+  for (const tag of withoutScripts(html).match(/<img\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi) ?? []) {
     if (attr(tag, "width") === "1" || attr(tag, "height") === "1") continue;
     const raw = attr(tag, "src") ?? attr(tag, "data-src") ?? attr(tag, "srcset")?.split(/\s+/)[0] ?? attr(tag, "data-srcset")?.split(/\s+/)[0];
     if (!raw || raw.startsWith("data:")) continue;

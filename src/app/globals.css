@@ -1828,3 +1828,95 @@ p > a:not(.btn) {
   padding-top: 16px;
   padding-bottom: 16px;
 }
+
+/* ---------- Free SEO tools: result lists and tables ---------- */
+
+.result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 420px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 10px;
+}
+
+.result-list > li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-border-soft);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+
+.result-list > li:last-child {
+  border-bottom: 0;
+}
+
+.result-main {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.result-sub {
+  font-size: 12.5px;
+  color: var(--color-text-faint);
+}
+
+.result-url {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--color-text-faintest);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tool-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border-soft);
+  border-radius: 10px;
+}
+
+.tool-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.tool-table th,
+.tool-table td {
+  padding: 9px 12px;
+  border-top: 1px solid var(--color-border-soft);
+  text-align: left;
+  vertical-align: top;
+}
+
+.tool-table thead th {
+  border-top: 0;
+  background: var(--color-surface);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tool-section-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Tables with several columns scroll sideways on phones instead of squashing. */
+.tool-table-wide {
+  min-width: 560px;
+}

@@ -92,19 +92,18 @@ export default function AiTools() {
 
         <section style={{ marginTop: 64 }} aria-labelledby="tools-title">
           <span className="eyebrow">The toolkit</span>
-          <h2 id="tools-title" className="h-section" style={{ margin: "12px 0 24px" }}>
+          <h2 id="tools-title" className="h-section" style={{ margin: "12px 0 24px", scrollMarginTop: 90 }}>
             Everything you need to get found by AI
           </h2>
-          <ul className="crawler-grid">
-            {AI_TOOLS.filter((t) => !t.href.startsWith("/ai-tools#")).map((t) => (
-              <li key={t.href}>
-                <Link href={t.href} className="card crawler-card" style={{ padding: "20px 22px" }}>
-                  <span style={{ fontSize: 16.5, fontWeight: 600, color: "var(--color-text)" }}>{t.label} →</span>
-                  <span style={{ fontSize: 14.5, lineHeight: 1.55, color: "var(--color-text-softer)" }}>{t.text}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <ToolGrid tools={AI_TOOLS.filter((t) => t.group === "ai" && !t.href.startsWith("/ai-tools#"))} />
+        </section>
+
+        <section style={{ marginTop: 64 }} aria-labelledby="seo-tools-title">
+          <span className="eyebrow">SEO tools</span>
+          <h2 id="seo-tools-title" className="h-section" style={{ margin: "12px 0 24px" }}>
+            Free SEO tools for your store
+          </h2>
+          <ToolGrid tools={AI_TOOLS.filter((t) => t.group === "seo")} />
         </section>
 
         <div style={{ marginTop: 80 }}>
@@ -137,5 +136,20 @@ export default function AiTools() {
         </div>
       </section>
     </>
+  );
+}
+
+function ToolGrid({ tools }: { tools: typeof AI_TOOLS }) {
+  return (
+    <ul className="crawler-grid">
+      {tools.map((t) => (
+        <li key={t.href}>
+          <Link href={t.href} className="card crawler-card" style={{ padding: "20px 22px" }}>
+            <span style={{ fontSize: 16.5, fontWeight: 600, color: "var(--color-text)" }}>{t.label} →</span>
+            <span style={{ fontSize: 14.5, lineHeight: 1.55, color: "var(--color-text-softer)" }}>{t.text}</span>
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }

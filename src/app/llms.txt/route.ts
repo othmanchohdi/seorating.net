@@ -22,6 +22,8 @@ export async function GET() {
 - [AI crawler directory](${absoluteUrl("/ai-tools/ai-crawlers")}): What ${CRAWLERS.length} AI bots do, their user agents and IP lists, and whether to block them
 - [llms.txt generator](${absoluteUrl("/ai-tools/llms-txt-generator")}): Build a valid llms.txt
 - [robots.txt tester](${absoluteUrl("/ai-tools/robots-txt-tester")}): Test AI and search crawlers against robots.txt rules
+- [Shopify theme & app detector](${absoluteUrl("/ai-tools/shopify-theme-detector")}): See any Shopify store's theme, version and installed apps
+- [Free SEO tools](${absoluteUrl("/ai-tools#seo-tools-title")}): Image size, heading, keyword density, broken link, redirect, sitemap, hreflang and social preview checkers, plus schema and UTM builders
 ${INSTALL_URL ? `- [Install on Shopify](${INSTALL_URL}): Shopify App Store listing` : "- Shopify App Store listing: coming soon, not yet live"}
 
 ## Pricing

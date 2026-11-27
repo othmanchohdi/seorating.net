@@ -24,6 +24,7 @@ export function ToolPage({
   guide: React.ReactNode;
   faqs: { q: string; a: string }[];
 }) {
+  const group = AI_TOOLS.find((t) => t.href === path)?.group ?? "ai";
   return (
     <>
       <JsonLd
@@ -80,10 +81,10 @@ export function ToolPage({
 
         <section style={{ marginTop: 56 }} aria-labelledby="more-tools">
           <h2 id="more-tools" style={{ margin: "0 0 14px", fontSize: 20, fontWeight: 600 }}>
-            More free AI tools
+            {group === "seo" ? "More free SEO tools" : "More free AI tools"}
           </h2>
           <ul className="crawler-grid">
-            {AI_TOOLS.filter((t) => t.href !== path).map((t) => (
+            {AI_TOOLS.filter((t) => t.href !== path && t.group === group).map((t) => (
               <li key={t.href}>
                 <Link href={t.href} className="card crawler-card">
                   <span style={{ fontSize: 15, fontWeight: 600, color: "var(--color-text)" }}>{t.label}</span>
@@ -92,6 +93,9 @@ export function ToolPage({
               </li>
             ))}
           </ul>
+          <p style={{ margin: "16px 0 0", fontSize: 14.5 }}>
+            <Link href="/ai-tools#tools-title">See all {AI_TOOLS.length} free tools →</Link>
+          </p>
         </section>
       </div>
     </>

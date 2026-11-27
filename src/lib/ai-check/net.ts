@@ -133,3 +133,124 @@ export function textFile(f: Fetched | null): string | null {
   if (/text\/html/i.test(f.contentType) || /^\s*<(!doctype|html)/i.test(f.body)) return null;
   return f.body;
 }
+
+export type Hop = { url: string; status: number | null; location: string | null; ms: number };
+
+// Follows redirects one hop at a time and records each one, for the
+// redirect checker and the link/sitemap spot checks. Same safety rules as
+// safeFetch; the final hop's body is not read. status null = unreachable.
+export async function traceUrl(start: URL, { userAgent = CHECKER_UA, maxHops = 8, timeoutMs = TIMEOUT_MS } = {}): Promise<Hop[]> {
+  const hops: Hop[] = [];
+  let url = start;
+  for (let i = 0; i <= maxHops; i++) {
+    const began = Date.now();
+    try {
+      await assertPublicHost(url.hostname);
+      const res = await fetch(url, {
+        redirect: "manual",
+        headers: { "User-Agent": userAgent, Accept: "text/html,*/*;q=0.8" },
+        signal: AbortSignal.timeout(timeoutMs),
+        cache: "no-store",
+      });
+      res.body?.cancel().catch(() => {});
+      const location = res.headers.get("location");
+      hops.push({ url: url.toString(), status: res.status, location, ms: Date.now() - began });
+      if (res.status < 300 || res.status >= 400 || !location) return hops;
+      const next = new URL(location, url);
+      if (next.protocol !== "https:" && next.protocol !== "http:") return hops;
+      if (hops.some((h) => h.url === next.toString())) {
+        hops.push({ url: next.toString(), status: null, location: null, ms: 0 });
+        return hops; // redirect loop
+      }
+      url = next;
+    } catch (err) {
+      if (err instanceof CheckError && i === 0) throw err;
+      hops.push({ url: url.toString(), status: null, location: null, ms: Date.now() - began });
+      return hops;
+    }
+  }
+  return hops;
+}
+
+// totalBytes: the full size when known (Content-Length, or counted while
+// streaming up to measureUpTo), else null.
+export type FetchedBytes = { status: number; contentType: string; totalBytes: number | null; bytes: Uint8Array; finalUrl: string };
+
+// Reads the first `maxBytes` of a binary resource (an image), following
+// redirects with the same checks as safeFetch. Sends a browser-like Accept
+// header so CDNs (Shopify's included) serve the format visitors get.
+// Without a Content-Length it keeps streaming (discarding) up to
+// measureUpTo bytes to learn the real file size.
+export async function safeFetchBytes(start: URL, { keep = 131_072, measureUpTo = 4_000_000 } = {}): Promise<FetchedBytes | null> {
+  let url = start;
+  try {
+    for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+      await assertPublicHost(url.hostname);
+      const res = await fetch(url, {
+        redirect: "manual",
+        headers: { "User-Agent": CHECKER_UA, Accept: "image/avif,image/webp,image/apng,image/*,*/*;q=0.8" },
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+        cache: "no-store",
+      });
+      const location = res.headers.get("location");
+      if (res.status >= 300 && res.status < 400 && location) {
+        res.body?.cancel().catch(() => {});
+        url = new URL(location, url);
+        if (url.protocol !== "https:" && url.protocol !== "http:") return null;
+        continue;
+      }
+      const length = Number(res.headers.get("content-length"));
+      const known = Number.isFinite(length) && length > 0 && !res.headers.get("content-encoding");
+      const { head, total, complete } = await readBytes(res, keep, known ? keep : measureUpTo);
+      return {
+        status: res.status,
+        contentType: res.headers.get("content-type") ?? "",
+        totalBytes: known ? length : complete ? total : null,
+        bytes: head,
+        finalUrl: url.toString(),
+      };
+    }
+  } catch (err) {
+    if (err instanceof CheckError) throw err;
+  }
+  return null;
+}
+
+// Keeps the first `keep` bytes and counts the rest up to `limit`.
+async function readBytes(res: Response, keep: number, limit: number): Promise<{ head: Uint8Array; total: number; complete: boolean }> {
+  if (!res.body) return { head: new Uint8Array(), total: 0, complete: true };
+  const reader = res.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let kept = 0;
+  let total = 0;
+  let complete = false;
+  while (total < limit) {
+    const { done, value } = await reader.read();
+    if (done) {
+      complete = true;
+      break;
+    }
+    total += value.byteLength;
+    if (kept < keep) {
+      chunks.push(value);
+      kept += value.byteLength;
+    }
+  }
+  reader.cancel().catch(() => {});
+  return { head: new Uint8Array(Buffer.concat(chunks).subarray(0, keep)), total, complete };
+}
+
+// Runs `fn` over `items` with at most `limit` in flight, keeping order.
+export async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+  const out: R[] = new Array(items.length);
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(limit, items.length) }, async () => {
+      while (next < items.length) {
+        const i = next++;
+        out[i] = await fn(items[i]);
+      }
+    }),
+  );
+  return out;
+}

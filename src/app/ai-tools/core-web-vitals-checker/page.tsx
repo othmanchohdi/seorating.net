@@ -6,8 +6,8 @@ import { pageMetadata } from "@/lib/metadata";
 const PATH = "/ai-tools/core-web-vitals-checker";
 
 export const metadata = pageMetadata({
-  title: "Core Web Vitals Checker: LCP, INP & CLS Thresholds",
-  description: "See Google's good/needs-improvement/poor thresholds for LCP, INP and CLS, and test your own numbers against them at the 75th percentile Google actually uses.",
+  title: "Core Web Vitals Checker: Test LCP, INP & CLS for Any Site",
+  description: "Enter a domain to see its real LCP, INP and CLS from Google's Chrome UX Report, judged against the good/needs-improvement/poor thresholds at the 75th percentile Google actually uses.",
   path: PATH,
 });
 
@@ -17,8 +17,8 @@ const FAQS = [
     a: "LCP (Largest Contentful Paint) is how long until the main content appears, good at 2.5s or less. INP (Interaction to Next Paint) is how quickly the page responds to a tap or click, good at 200ms or less. CLS (Cumulative Layout Shift) is how much the page jumps while loading, good at 0.1 or less.",
   },
   {
-    q: "Where do I get my site's real numbers?",
-    a: "PageSpeed Insights and Search Console's Core Web Vitals report use real visitor data (the Chrome User Experience Report) for sites with enough traffic. Lighthouse and PageSpeed's lab test simulate a single load instead, which is useful for debugging but isn't what Google ranks on.",
+    q: "Where do the live numbers come from?",
+    a: "From Google's PageSpeed Insights, which reports real visitor data (the Chrome User Experience Report) for the last 28 days on mobile. If the exact URL doesn't have enough traffic we show the whole site's data, and if the site has none we fall back to a single simulated lab load. The lab test is useful for debugging but isn't what Google ranks on, and it can't measure INP.",
   },
   {
     q: "Does a perfect PageSpeed score mean I pass Core Web Vitals?",
@@ -32,7 +32,7 @@ export default function CoreWebVitalsChecker() {
       path={PATH}
       name="Core Web Vitals checker"
       title="Core Web Vitals checker"
-      lead="Drag the sliders or pick a scenario to see how LCP, INP and CLS combine into a pass or fail, judged at the 75th percentile of real visits like Google does."
+      lead="Enter your domain to see its real LCP, INP and CLS from Google’s Chrome visitor data, or drag the sliders to see how the three combine into a pass or fail at the 75th percentile, like Google judges it."
       faqs={FAQS}
       widget={<VitalsMeter />}
       guide={

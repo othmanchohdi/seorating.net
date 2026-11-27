@@ -44,7 +44,7 @@ export const AI_TOOLS = [
   {
     href: "/ai-tools/core-web-vitals-checker",
     label: "Core Web Vitals checker",
-    text: "Test LCP, INP and CLS against Google's thresholds at the 75th percentile.",
+    text: "Check any site's real LCP, INP and CLS against Google's thresholds at the 75th percentile.",
   },
   {
     href: "/ai-tools/alt-text-checker",
